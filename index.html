@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ブルアカ 絆ランク皮算用</title>
+    <link rel="stylesheet" href="calculate_bond.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ブルーアーカイブ 絆ランク計算</h1>
+        </header>
+        <main>
+            <section class="description">
+                <p>
+                    キャラクターの絆ランクに関して、目標ランク到達にどれほど時間がかかるかを推測します。<br>
+                    「贈り物の種類」には、下記の英字のどれかを入力してください。<br><br>
+                    ・橙色贈り物(小~特大)：gift_orange_s, gift_orange_m, gift_orange_l, gift_orange_ex_l <br>
+                    ・紫色贈り物(小~特大)：gift_purple_s, gift_purple_m, gift_purple_l, gift_purple_ex_l <br><br>
+                    完全に個人用で作りました。キャラごとの詳細情報などは、ARONA.AIさんのへ...<br>
+                    今後、勉強のために改善していく予定です。お問い合わせは(X：@5atsukigomeari)
+                </p>
+            </section>
+            <section class="input-section">
+                <form id="dynamic-form">
+                    <label for="input1">現在の絆ランク（1~100）:</label>
+                    <input type="text" id="input1" name="input1" value=1>
+                   
+                    <label for="input2">目標の絆ランク（1~100）:</label>
+                    <input type="text" id="input2" name="input2" value=100>
+                   
+                    <label for="input3">贈り物の種類:</label>
+                    <input type="text" id="input3" name="input3" value="gift_orange_l">
+                   
+                    <label for="input4">1ヶ月に送る贈り物の想定個数</label>
+                    <input type="text" id="input4" name="input4" value=167>
+                   
+                    <label for="input5">1日あたりのカフェタッチ回数:</label>
+                    <input type="text" id="input5" name="input5" value=7>
+                   
+                    <label for="input6">1日当たりのスケジュール訪問回数:</label>
+                    <input type="text" id="input6" name="input6" value=1>
+                   
+                    <button type="button" onclick="updateResult()">想定日数を表示</button>
+                </form>
+            </section>
+            <section class="result">
+                <p id="result-display">ここに結果が表示されます。</p>
+            </section>
+        </main>
+    </div>
+    <script src="calculate_bond.js"></script>
+</body>
+</html>
