@@ -8,6 +8,7 @@ body {
 
 .container {
     max-width: 1000px;
+    min-width: 330px;
     margin: 50px auto;
     background: #fff;
     padding: 20px;
@@ -135,9 +136,49 @@ form button:hover {
     top: 10px;
 }
 
-.grid-form3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+.flex-form1 {
+    display: flex;
+}
+
+.flex-form1-1 {
+    gap: 200px;
+    flex: 1;
+}
+
+.flex-form1-2 {
+    gap: 200px;
+    flex: 1;
+}
+
+.flex-form2 {
+    display: flex;
+    gap: 10px;
+}
+
+.grid-form3_label {
+    display: flex;
+}
+
+.grid-form3_label1 {
+    /* width: 10px; */
+    gap: 200px;
+    flex: 1;
+}
+
+.grid-form3_label2 {
+    /* width: 10px; */
+    gap: 200px;
+    flex: 1;
+}
+
+.grid-form3_label3 {
+    /* width: 10px; */
+    gap: 200px;
+    flex: 1;
+}
+
+.grid-form3_input {
+    display: flex;
     gap: 10px;
 }
 
@@ -155,6 +196,7 @@ form button:hover {
 .radio-grid div {
     display: flex;
     align-items: center;
+    margin-right: 10;
 }
 
 .radio-grid input, .radio-grid label {
