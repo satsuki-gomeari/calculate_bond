@@ -16,7 +16,7 @@ body {
 }
 
 header h1 {
-    font-size: 2.0em;
+    font-size: 2.5em;
     margin: 0 0 20px;
     text-align: center;
     color: #2c3e50;
@@ -29,22 +29,64 @@ header h1 {
     margin-bottom: 20px;
 }
 
-.input-section label {
+nav {
+    margin-bottom: 20px;
+}
+
+.tabs {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: flex-start;
+    border-bottom: 2px solid #ccc;
+}
+
+.tab {
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    background: #ecf0f1;
+    border-radius: 5px 5px 0 0;
+    margin-right: 5px;
+}
+
+.tab:hover {
+    background: #bdc3c7;
+}
+
+.tab.active {
+    background: #3498db;
+    color: #fff;
+    border-bottom: none;
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+    background: #ecf0f1;
+    border-radius: 0 5px 5px 5px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+form label {
     display: block;
     margin: 10px 0 5px;
     font-weight: bold;
 }
 
-.input-section input {
+form input {
     width: calc(100% - 20px);
-    padding: 8px;
+    padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1em;
 }
 
-.input-section button {
+form button {
     display: block;
     width: 100%;
     padding: 10px;
@@ -53,10 +95,9 @@ header h1 {
     border: none;
     border-radius: 5px;
     font-size: 1.2em;
-    cursor: pointer;
 }
 
-.input-section button:hover {
+form button:hover {
     background: #2980b9;
 }
 
@@ -65,4 +106,66 @@ header h1 {
     padding: 15px;
     border-radius: 5px;
     margin-top: 20px;
+}
+
+.grid-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.grid-form div {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid-form2 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.grid-form2 div {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid-form2-label {
+    position: relative;
+    top: 10px;
+}
+
+.grid-form3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.grid-form2 div {
+    display: flex;
+    flex-direction: column;
+}
+
+.radio-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0px;
+}
+
+.radio-grid div {
+    display: flex;
+    align-items: center;
+}
+
+.radio-grid input {
+    /* margin-bottom: 30px; */
+    position: relative;
+    right: 15px;
+}
+
+.radio-grid label {
+    white-space: nowrap;
+    position: relative;
+    right: 45px;
+    bottom: 6px;
 }
