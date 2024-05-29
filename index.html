@@ -20,8 +20,8 @@
         </section>
         <nav>
             <ul class="tabs">
-                <li class="tab" onclick="openTab(event, 'tab3')">何日必要?</li>
                 <li class="tab" onclick="openTab(event, 'tab2')">何個必要?</li>
+                <li class="tab" onclick="openTab(event, 'tab3')">何日必要?</li>
                 <li class="tab" onclick="openTab(event, 'tab1')">どれだけ上がる?</li>
             </ul>
         </nav>
@@ -80,16 +80,14 @@
                     </div>
                 </form>
                 <form class="grid-form3">
-                    <div>
-                        <label for="input11-tab1">カフェタッチ回数(/日):</label>
+                    <div class="grid-form3_label">
+                        <label class="grid-form3_label1" for="input11-tab1">カフェタッチ回数(/日):</label>
+                        <label class="grid-form3_label2" for="input12-tab1">スケジュール訪問回数(/日):</label>
+                        <label class="grid-form3_label3" for="input13-tab1">タッチ・訪問日数:</label>
+                    </div>
+                    <div class="grid-form3_input">
                         <input type="text" id="input11-tab1" name="input11-tab1" value=7>
-                    </div>
-                    <div>
-                        <label for="input12-tab1">スケジュール訪問回数(/日):</label>
                         <input type="text" id="input12-tab1" name="input12-tab1" value=1>
-                    </div>
-                    <div>
-                        <label for="input13-tab1">タッチ・訪問日数:</label>
                         <input type="text" id="input13-tab1" name="input13-tab1" value=0>
                     </div>
                 </form>
@@ -124,12 +122,14 @@
                         <label for="input4-tab2">目標の絆ランク(1~100):</label>
                         <input type="text" id="input4-tab2" name="input4-tab2" value=100>
                     </div>
-                    <div>
-                        <label for="input5-tab2">1日あたりのカフェタッチ回数:</label>
-                        <input type="text" id="input5-tab2" name="input5-tab2" value=7>
+                </form>
+                <form class="flex-form">
+                    <div class="flex-form1">
+                        <label class="flex-form1-1" for="input5-tab2">1日あたりのカフェタッチ回数:</label>
+                        <label class="flex-form1-2" for="input6-tab2">1日あたりのスケジュール訪問回数:</label>
                     </div>
-                    <div>
-                        <label for="input6-tab2">1日あたりのスケジュール訪問回数:</label>
+                    <div class="flex-form2">
+                        <input type="text" id="input5-tab2" name="input5-tab2" value=7>
                         <input type="text" id="input6-tab2" name="input6-tab2" value=1>
                     </div>
                 </form>
