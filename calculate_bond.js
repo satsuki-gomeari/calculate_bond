@@ -1,44 +1,218 @@
-function updateResult() {
-    const current_lv = document.getElementById('input1').value;
-    const target_lv = document.getElementById('input2').value;
-    const gift_type = document.getElementById('input3').value;
-    const gift_per_month = document.getElementById('input4').value;
-    const cafe_touch_per_day = document.getElementById('input5').value;
-    const schedule_touch_per_day = document.getElementById('input6').value;
+function openTab(evt, tabName) {
+    // 全てのタブコンテンツを非表示にする
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tab-content");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+        tabcontent[i].classList.remove("active");
+    }
 
-    let required_ex = calculator.calculateRequiredEx(
-        current_lv,
-        target_lv
-    );
-    let required_day = calculator.calculateTime(
-        current_lv, 
-        target_lv, 
-        gift_type, 
-        gift_per_month, 
-        cafe_touch_per_day, 
-        schedule_touch_per_day
-    );
-    console.log(required_day)
+    // 全てのタブリンクのactiveクラスを削除する
+    tablinks = document.getElementsByClassName("tab");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+    }
 
+    // 指定されたタブコンテンツを表示し、タブリンクをactiveにする
+    document.getElementById(tabName).style.display = "block";
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+
+    // 日付の取得
+    var today = new Date();
+    today.setDate(today.getDate());
+    var yyyy = today.getFullYear();
+    var mm = ("0"+(today.getMonth()+1)).slice(-2);
+    var dd = ("0"+today.getDate()).slice(-2);
+    document.getElementById("input1-tab2").value=yyyy+'-'+mm+'-'+dd;
+    document.getElementById("input2-tab2").value=yyyy+'-'+"08"+'-'+"05";
+}
+
+// 初期状態で最初のタブを開く
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelector(".tab").click();
+});
+
+
+function updateResult(tabId) {
+    const resultDisplay = document.getElementById(`result-display-${tabId}`);
     let result = '';
-    if (required_day >= 0) {
-        result = `
+
+    if (tabId === 'tab1') {
+        
+        const current_lv = Number(document.getElementById('input1-tab1').value);
+        const gift_o_s_num = Number(document.getElementById('input3-tab1').value);
+        const gift_o_m_num = Number(document.getElementById('input4-tab1').value);
+        const gift_o_l_num = Number(document.getElementById('input5-tab1').value);
+        const gift_o_ex_num = Number(document.getElementById('input6-tab1').value);
+        const gift_p_s_num = Number(document.getElementById('input7-tab1').value);
+        const gift_p_m_num = Number(document.getElementById('input8-tab1').value);
+        const gift_p_l_num = Number(document.getElementById('input9-tab1').value);
+        const gift_p_ex_num = Number(document.getElementById('input10-tab1').value);
+        const cafe_touch_per_day = Number(document.getElementById('input11-tab1').value);
+        const schedule_touch_per_day = Number(document.getElementById('input12-tab1').value);
+        const number_of_day = Number(document.getElementById('input13-tab1').value);
+
+        let gift2ex = calculator.calculateGift2Ex(
+            gift_o_s_num,
+            gift_o_m_num,
+            gift_o_l_num,
+            gift_o_ex_num,
+            gift_p_s_num,
+            gift_p_m_num,
+            gift_p_l_num,
+            gift_p_ex_num,
+            cafe_touch_per_day,
+            schedule_touch_per_day,
+            number_of_day
+        )
+        let current_ex = calculator.getCurrentEx(current_lv);
+
+        let target_lv = calculator.calculateEx2Lv(gift2ex+current_ex)
+
+        if (current_lv > 0 && current_lv <= 100 && cafe_touch_per_day >= 0 && schedule_touch_per_day >= 0 && number_of_day >= 0 && gift2ex >= 0 && Number.isInteger(current_lv)) {
+            result = `
+            ・保有している贈り物で、絆ランク<b>${current_lv}</b>から<b>${target_lv}</b>まで到達できます。<br>
+            ・<b>${gift2ex}</b>の経験値が獲得できます。
+        `;
+        }
+        else {
+            result = `
+                下記の点を確認してください。 <br>
+                ・「現在の絆ランク」は、1~100(半角整数)の値となっているか <br>
+                ・「贈り物保有数」は、0~9999(半角整数)の値となっているか <br>
+                ・「カフェタッチ回数」は、0以上(半角整数)の値となっているか <br>
+                ・「スケジュール訪問回数」は、0以上(半角)となっているか <br>
+                ・「タッチ・訪問日数」は、0以上(半角整数)の値となっているか
+            `;
+        }
+
+    } else if (tabId === 'tab2') {
+        const current_day = document.getElementById('input1-tab2').value;
+        const target_day = document.getElementById('input2-tab2').value;
+        const current_lv = document.getElementById('input3-tab2').value;
+        const target_lv = document.getElementById('input4-tab2').value;
+        const cafe_touch_per_day = document.getElementById('input5-tab2').value;
+        const schedule_touch_per_day = document.getElementById('input6-tab2').value;
+
+        let diff = calculator.calculateDiffDate(current_day, target_day);
+        let required_o_s_num = calculator.calculateGiftNum(current_lv, target_lv, "gift_orange_s", cafe_touch_per_day, schedule_touch_per_day, diff);
+        let required_o_m_num = calculator.calculateGiftNum(current_lv, target_lv, "gift_orange_m", cafe_touch_per_day, schedule_touch_per_day, diff);
+        let required_o_l_num = calculator.calculateGiftNum(current_lv, target_lv, "gift_orange_l", cafe_touch_per_day, schedule_touch_per_day, diff);
+        let required_o_ex_num = calculator.calculateGiftNum(current_lv, target_lv, "gift_orange_ex_l", cafe_touch_per_day, schedule_touch_per_day, diff);
+        let required_p_s_num = calculator.calculateGiftNum(current_lv, target_lv, "gift_purple_s", cafe_touch_per_day, schedule_touch_per_day, diff);
+        let required_p_m_num = calculator.calculateGiftNum(current_lv, target_lv, "gift_purple_m", cafe_touch_per_day, schedule_touch_per_day, diff);
+        let required_p_l_num = calculator.calculateGiftNum(current_lv, target_lv, "gift_purple_l", cafe_touch_per_day, schedule_touch_per_day, diff);
+        let required_p_ex_num = calculator.calculateGiftNum(current_lv, target_lv, "gift_purple_ex_l", cafe_touch_per_day, schedule_touch_per_day, diff);
+        
+        let required_ex = calculator.calculateRequiredEx(
+            current_lv,
+            target_lv
+        );
+
+        if (required_ex >= 0 && cafe_touch_per_day >= 0 && schedule_touch_per_day >= 0 && diff >= 0 && Number.isInteger(Number(cafe_touch_per_day))) {
+            result = `
+            ・目標日までに到達するには、以下が必要数となります。 <br>
+            &emsp;&emsp;橙-小の場合：<b>${Math.ceil(required_o_s_num/diff)}</b>個/日、合計<b>${required_o_s_num}</b>個、
+             紫-小の場合：<b>${Math.ceil(required_p_s_num/diff)}</b>個/日、合計<b>${required_p_s_num}</b>個<br>
+            &emsp;&emsp;橙-中の場合：<b>${Math.ceil(required_o_m_num/diff)}</b>個/日、合計<b>${required_o_m_num}</b>個、
+             紫-中の場合：<b>${Math.ceil(required_p_m_num/diff)}</b>個/日、合計<b>${required_p_m_num}</b>個<br>
+            &emsp;&emsp;橙-大の場合：<b>${Math.ceil(required_o_l_num/diff)}</b>個/日、合計<b>${required_o_l_num}</b>個、
+             紫-大の場合：<b>${Math.ceil(required_p_l_num/diff)}</b>個/日、合計<b>${required_p_l_num}</b>個<br>
+            &emsp;&emsp;橙-特大の場合：<b>${Math.ceil(required_o_ex_num/diff)}</b>個/日、合計<b>${required_o_ex_num}</b>個、
+             紫-特大の場合：<b>${Math.ceil(required_p_ex_num/diff)}</b>個/日、合計<b>${required_p_ex_num}</b>個<br><br>
+            ・目標の絆ランク到達には、およそ <b>${required_ex}</b> 経験値が必要です。 <br>
+            ・橙-大の贈り物 5, 6個/日がおおよそ現実的な数値になります。 <br><br>
+            カフェRANKは最大値, スケジュールBOUNUSは無しの想定で計算しています。
+        `;
+        }
+        else {
+            result = `
+                下記の点を確認してください。 <br>
+                ・「本日の日付」<=「目標日」となっているか <br>
+                ・「現在の絆ランク」<=「目標の絆ランク」となっているか <br>
+                ・「現在の絆ランク」と「目標の絆ランク」は、1~100(半角整数)の値となっているか <br>
+                ・「カフェタッチ回数」は、0以上(半角整数)の値となっているか <br>
+                ・「スケジュール訪問回数」は、0以上(半角)となっているか
+            `;
+        }
+    } else if (tabId === 'tab3') {
+        
+        const current_lv = document.getElementById('input1-tab3').value;
+        const target_lv = document.getElementById('input2-tab3').value;
+        const gift_per_day = document.getElementById('input3-tab3').value;
+        const cafe_touch_per_day = document.getElementById('input4-tab3').value;
+        const schedule_touch_per_day = document.getElementById('input5-tab3').value;
+        let gift_type = '';
+
+        let giftRadio = document.getElementsByName('radio-tab3');
+        let giftRadioLen = giftRadio.length;
+        let checkValue = '';
+        for (let i = 0; i < giftRadioLen; i++){
+            if (giftRadio.item(i).checked){
+              checkValue = giftRadio.item(i).value;
+            }
+        }
+        if (checkValue == 'radio1'){
+            gift_type = 'gift_orange_s';
+        }
+        else if (checkValue == 'radio2'){
+            gift_type = 'gift_orange_m';
+        }
+        else if (checkValue == 'radio3'){
+            gift_type = 'gift_orange_l';
+        }
+        else if (checkValue == 'radio4'){
+            gift_type = 'gift_orange_ex_l';
+        }
+        else if (checkValue == 'radio5'){
+            gift_type = 'gift_purple_s';
+        }
+        else if (checkValue == 'radio6'){
+            gift_type = 'gift_purple_m';
+        }
+        else if (checkValue == 'radio7'){
+            gift_type = 'gift_purple_l';
+        }
+        else if(checkValue == 'radio8'){
+            gift_type = 'gift_purple_ex_l';
+        };
+
+        let required_day = calculator.calculateTime(
+            current_lv, 
+            target_lv, 
+            gift_type, 
+            gift_per_day, 
+            cafe_touch_per_day, 
+            schedule_touch_per_day
+        );
+        let required_ex = calculator.calculateRequiredEx(
+            current_lv,
+            target_lv
+        );
+        console.log(required_day)
+
+        if (required_day >= 0 && required_ex >= 0 && cafe_touch_per_day >= 0 && schedule_touch_per_day >= 0 && gift_per_day >= 0 && Number.isInteger(Number(gift_per_day)) && Number.isInteger(Number(cafe_touch_per_day))) {
+            result = `
             ・目標の絆ランク到達には、およそ <b>${required_day}</b> 日が必要です。 <br>
             ・目標の絆ランク到達には、およそ <b>${required_ex}</b> 経験値が必要です。 <br><br>
-            1ヶ月=30日, カフェRANKは最大値, スケジュールBOUNUSはなし 想定で計算しています。<br>間違えていたらすみません。
+            カフェRANKは最大値, スケジュールBOUNUSは無しの想定で計算しています。
         `;
+        }
+        else {
+            result = `
+                下記の点を確認してください。 <br>
+                ・「現在の絆ランク」<=「目標の絆ランク」となっているか <br>
+                ・「現在の絆ランク」と「目標の絆ランク」が1~100(半角整数)の値となっているか <br>
+                ・「1日に送る贈り物の想定個数」は、0以上(半角整数)の値となっているか <br>
+                ・「カフェタッチ回数」は、0以上(半角整数)の値となっているか <br>
+                ・「スケジュール訪問回数」は、0以上(半角)となっているか
+            `;
+        }
     }
-    else {
-        result = `
-            下記の点を確認してください。 <br>
-            ・「現在の絆ランク」<=「目標の絆ランク」となっているか <br>
-            ・「現在の絆ランク」と「目標の絆ランク」が1~100の値となっているか <br>
-            ・「贈り物の種類」が指定の文字列となっているか <br>
-        `;
-    }
-
-    document.getElementById('result-display').innerHTML = result;
+    resultDisplay.innerHTML = result;
 }
+
 
 const BOND_EX_TABLE_PATH = './../02_dataset/bond_experience_point.txt';
 const GIFT_TYPE_TABLE_PATH = './../02_dataset/gift_type.txt';
@@ -47,6 +221,8 @@ class CalculateBond {
     constructor() {
         this.bondTablePath = BOND_EX_TABLE_PATH;
         this.giftTablePath = GIFT_TYPE_TABLE_PATH;
+        this.giftNumMax = 9999;
+        this.giftNumMin = 0;
         this.bond2exDict = {
             1:[15,0],
             2:[30,15],
@@ -173,28 +349,152 @@ class CalculateBond {
         console.log("gift type table num:", Object.keys(this.giftType2exDict).length);
     }
 
-    checkSum(currentLv, targetLv, giftType) {
+    checkLv(currentLv, targetLv) {
         if (!(currentLv in this.bond2exDict) || !(targetLv in this.bond2exDict)) {
             console.log('Specified bond Lv is out of range');
             return false;
-        } else if (!(giftType in this.giftType2exDict)) {
-            console.log('Specified gift type is out of range');
-            return false;
-        } else if (this.bond2exDict[targetLv][1] - this.bond2exDict[currentLv][1] < 0) {
+        }
+        else if (this.bond2exDict[targetLv][1] - this.bond2exDict[currentLv][1] < 0) {
             console.log('Make target_lv more than current_lv.');
             return false;
-        } else {
+        }
+        else {
+            return true;
+        }
+    }
+
+    checkGiftType(giftType) {
+        if (!(giftType in this.giftType2exDict)) {
+            console.log('Specified gift type is out of range');
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    checkDate(diff) {
+        if (diff <= 0) {
+            console.log('Target date must be later than today');
+            return false;
+        }
+        else {
             return true;
         }
     }
 
     calculateRequiredEx(currentLv, targetLv) {
-        return this.bond2exDict[targetLv][1] - this.bond2exDict[currentLv][1];
+        if (this.checkLv(currentLv, targetLv)){
+            return this.bond2exDict[targetLv][1] - this.bond2exDict[currentLv][1];
+        }
+        return -1;
     }
 
-    calculateGiftNum(currentLv, targetLv, giftType) {
-        if (this.checkSum(currentLv, targetLv, giftType)) {
-            const requiredEx = this.calculateRequiredEx(currentLv, targetLv);
+    calculateGift2Ex(
+        gift_o_s_num,
+        gift_o_m_num,
+        gift_o_l_num,
+        gift_o_ex_num,
+        gift_p_s_num,
+        gift_p_m_num,
+        gift_p_l_num,
+        gift_p_ex_num,
+        cafe_touch_per_day,
+        schedule_touch_per_day,
+        number_of_day
+    ) {
+        if (
+            Number.isInteger(gift_o_s_num) != true ||
+            Number.isInteger(gift_o_m_num) != true ||
+            Number.isInteger(gift_o_l_num) != true ||
+            Number.isInteger(gift_o_ex_num) != true||
+            Number.isInteger(gift_p_s_num) != true ||
+            Number.isInteger(gift_p_m_num) != true ||
+            Number.isInteger(gift_p_l_num) != true ||
+            Number.isInteger(gift_p_ex_num) != true||
+            Number.isInteger(cafe_touch_per_day) != true ||
+            // Number.isInteger(schedule_touch_per_day) != true ||
+            Number.isInteger(number_of_day) != true
+        ){ return -1}
+        else if (
+            gift_o_s_num < this.giftNumMin ||
+            gift_o_m_num < this.giftNumMin ||
+            gift_o_l_num < this.giftNumMin ||
+            gift_o_ex_num < this.giftNumMin||
+            gift_p_s_num < this.giftNumMin ||
+            gift_p_m_num < this.giftNumMin ||
+            gift_p_l_num < this.giftNumMin ||
+            gift_p_ex_num < this.giftNumMin||
+            cafe_touch_per_day < 0 ||
+            schedule_touch_per_day < 0 ||
+            number_of_day < 0
+        ){ return -1}
+        else if (
+            gift_o_s_num > this.giftNumMax ||
+            gift_o_m_num > this.giftNumMax ||
+            gift_o_l_num > this.giftNumMax ||
+            gift_o_ex_num > this.giftNumMax||
+            gift_p_s_num > this.giftNumMax ||
+            gift_p_m_num > this.giftNumMax ||
+            gift_p_l_num > this.giftNumMax ||
+            gift_p_ex_num > this.giftNumMax
+        ){ return -1}
+
+        let ex =
+                gift_o_s_num * this.giftType2exDict["gift_orange_s"] + 
+                gift_o_m_num * this.giftType2exDict["gift_orange_m"] + 
+                gift_o_l_num * this.giftType2exDict["gift_orange_l"] + 
+                gift_o_ex_num * this.giftType2exDict["gift_orange_ex_l"] + 
+                gift_p_s_num * this.giftType2exDict["gift_purple_s"] + 
+                gift_p_m_num * this.giftType2exDict["gift_purple_m"] + 
+                gift_p_l_num * this.giftType2exDict["gift_purple_l"] + 
+                gift_p_ex_num * this.giftType2exDict["gift_purple_ex_l"] + 
+                cafe_touch_per_day * this.giftType2exDict["cafe_ex"] * number_of_day +
+                schedule_touch_per_day * this.giftType2exDict["schedule_ex"] * number_of_day
+                
+
+        return ex
+    }
+
+    calculateEx2Lv(ex) {
+        let diff = [];
+        let idx = 0;
+
+        if (ex < 0) {
+            return -1;
+        }
+        for (var i = 0; i < Object.keys(this.bond2exDict).length; i++) {
+            diff[i] = Math.abs((this.bond2exDict[i+1][1] - ex));
+            idx = (diff[idx] <= diff[i]) ? idx : i;
+        }
+
+        if (this.bond2exDict[idx+1][1] > ex) {
+            return idx;
+        }
+
+        return idx+1;
+    }
+
+    getCurrentEx(current_lv) {
+        if (!(current_lv in this.bond2exDict)) {
+            return -1;
+        }
+        else {
+            return this.bond2exDict[current_lv][1];
+        }
+    }
+
+    calculateGiftNum(
+        currentLv, 
+        targetLv, 
+        giftType, 
+        cafe_touch_per_day, 
+        schedule_touch_per_day,
+        date_diff
+    ) {
+        if (this.checkLv(currentLv, targetLv) && this.checkGiftType(giftType) && date_diff != -1 && cafe_touch_per_day >= 0 && schedule_touch_per_day >= 0) {
+            let requiredEx = this.calculateRequiredEx(currentLv, targetLv);
+            requiredEx = requiredEx - (this.giftType2exDict["cafe_ex"] * cafe_touch_per_day * date_diff + this.giftType2exDict["schedule_ex"] * schedule_touch_per_day * date_diff);
             const requiredGiftNum = requiredEx / this.giftType2exDict[giftType];
             return Math.ceil(requiredGiftNum);
         } else {
@@ -202,11 +502,11 @@ class CalculateBond {
         }
     }
 
-    calculateTime(currentLv, targetLv, giftType, giftPerMonth, cafeTouchPerDay, scheduleTouchPerDay) {
-        if (this.checkSum(currentLv, targetLv, giftType)) {
+    calculateTime(currentLv, targetLv, giftType, giftPerDay, cafeTouchPerDay, scheduleTouchPerDay) {
+        if (this.checkLv(currentLv, targetLv) && this.checkGiftType(giftType)) {
             const requiredEx = this.calculateRequiredEx(currentLv, targetLv);
             const requiredDay = requiredEx / (
-                (this.giftType2exDict[giftType] * giftPerMonth / 30) +
+                (this.giftType2exDict[giftType] * giftPerDay) +
                 (this.giftType2exDict["cafe_ex"] * cafeTouchPerDay) +
                 (this.giftType2exDict["schedule_ex"] * scheduleTouchPerDay)
             );
@@ -214,6 +514,16 @@ class CalculateBond {
         } else {
             return -1;
         }
+    }
+
+    calculateDiffDate(current_day, target_day) {
+        var startDate = new Date(current_day);
+        var endDate = new Date(target_day);
+        let diff = Math.floor((endDate - startDate + 86400000)/86400000);
+        if (this.checkDate(diff)) {
+            return diff;
+        }
+        return -1;
     }
 }
 
