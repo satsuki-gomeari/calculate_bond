@@ -187,25 +187,133 @@ form button:hover {
     flex-direction: column;
 }
 
-.radio-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0px;
-}
-
-.radio-grid div {
+.radio-grid1 {
     display: flex;
     align-items: center;
-    margin-right: 10;
 }
 
-.radio-grid input, .radio-grid label {
+.radio-grid1-1 {
+    /* gap: 10px; */
+    flex: 1;
+}
+
+.radio-grid1-2 {
+    /* gap: 10px; */
+    flex: 1;
+    position: relative;
+    bottom: 6px;
+}
+
+.radio-grid1-3 {
+    /* gap: 10px; */
+    flex: 1;
+}
+
+.radio-grid1-4 {
+    /* gap: 10px; */
+    flex: 1;
+    position: relative;
+    bottom: 6px;
+}
+
+.radio-grid1-5 {
+    /* gap: 10px; */
+    flex: 1;
+}
+
+.radio-grid1-6 {
+    /* gap: 10px; */
+    flex: 1;
+    position: relative;
+    bottom: 6px;
+}
+
+.radio-grid1-7 {
+    /* gap: 10px; */
+    flex: 1;
+}
+
+.radio-grid1-8 {
+    /* gap: 10px; */
+    flex: 1;
+    position: relative;
+    bottom: 6px;
+}
+
+.radio-grid2 {
+    display: flex;
+    align-items: center;
+}
+
+.radio-grid2-1 {
+    /* gap: 10px; */
+    flex: 1;
+}
+
+.radio-grid2-2 {
+    /* gap: 10px; */
+    flex: 1;
+    position: relative;
+    bottom: 6px;
+}
+
+.radio-grid2-3 {
+    /* gap: 10px; */
+    flex: 1;
+}
+
+.radio-grid2-4 {
+    /* gap: 10px; */
+    flex: 1;
+    position: relative;
+    bottom: 6px;
+}
+
+.radio-grid2-5 {
+    /* gap: 10px; */
+    flex: 1;
+}
+
+.radio-grid2-6 {
+    /* gap: 10px; */
+    flex: 1;
+    position: relative;
+    bottom: 6px;
+}
+
+.radio-grid2-7 {
+    /* gap: 10px; */
+    flex: 1;
+}
+
+.radio-grid2-8 {
+    /* gap: 10px; */
+    flex: 1;
+    position: relative;
+    bottom: 6px;
+}
+
+.radio-grid2 {
+    display: flex;
+}
+
+/* .radio-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0px;
+} */
+
+/* .radio-grid div {
+    display: flex;
+} */
+
+/* .radio-grid input, .radio-grid label {
     white-space: nowrap;
     position: relative;
     right: 15px;
     
-}
+} */
 
-.radio-grid label {
+/* .radio-grid label {
     bottom: 6px;
-}
+} */
