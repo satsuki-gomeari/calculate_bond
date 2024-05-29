@@ -157,15 +157,13 @@ form button:hover {
     align-items: center;
 }
 
-.radio-grid input {
-    /* margin-bottom: 30px; */
+.radio-grid input, .radio-grid label {
+    white-space: nowrap;
     position: relative;
     right: 15px;
+    
 }
 
 .radio-grid label {
-    white-space: nowrap;
-    position: relative;
-    right: 45px;
     bottom: 6px;
 }
