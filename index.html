@@ -3,50 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ブルアカ 絆ランク皮算用</title>
+    <title>スタイリッシュなWebサイト</title>
     <link rel="stylesheet" href="calculate_bond.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>ブルーアーカイブ 絆ランク計算</h1>
+            <h1>ブルーアーカイブ<br>絆ランク計算機</h1>
         </header>
+        <section class="description">
+            <p>
+                ブルーアーカイブの絆関連の計算サイトです。<br>
+                キャラごとの詳細情報などは、ARONA.AIさんのへ...<br>
+                今後、勉強のために改善していく予定です。お問い合わせとバグ報告は(X：@5atsukigomeari)
+            </p>
+        </section>
+        <nav>
+            <ul class="tabs">
+                <li class="tab" onclick="openTab(event, 'tab3')">何日必要?</li>
+                <li class="tab" onclick="openTab(event, 'tab2')">何個必要?</li>
+                <li class="tab" onclick="openTab(event, 'tab1')">どれだけ上がる?</li>
+            </ul>
+        </nav>
         <main>
-            <section class="description">
-                <p>
-                    キャラクターの絆ランクに関して、目標ランク到達にどれほど時間がかかるかを推測します。<br>
-                    「贈り物の種類」には、下記の英字のどれかを入力してください。<br><br>
-                    ・橙色贈り物(小~特大)：gift_orange_s, gift_orange_m, gift_orange_l, gift_orange_ex_l <br>
-                    ・紫色贈り物(小~特大)：gift_purple_s, gift_purple_m, gift_purple_l, gift_purple_ex_l <br><br>
-                    完全に個人用で作りました。キャラごとの詳細情報などは、ARONA.AIさんのへ...<br>
-                    今後、勉強のために改善していく予定です。お問い合わせは(X：@5atsukigomeari)
-                </p>
-            </section>
-            <section class="input-section">
-                <form id="dynamic-form">
-                    <label for="input1">現在の絆ランク（1~100）:</label>
-                    <input type="text" id="input1" name="input1" value=1>
-                   
-                    <label for="input2">目標の絆ランク（1~100）:</label>
-                    <input type="text" id="input2" name="input2" value=100>
-                   
-                    <label for="input3">贈り物の種類:</label>
-                    <input type="text" id="input3" name="input3" value="gift_orange_l">
-                   
-                    <label for="input4">1ヶ月に送る贈り物の想定個数</label>
-                    <input type="text" id="input4" name="input4" value=167>
-                   
-                    <label for="input5">1日あたりのカフェタッチ回数:</label>
-                    <input type="text" id="input5" name="input5" value=7>
-                   
-                    <label for="input6">1日当たりのスケジュール訪問回数:</label>
-                    <input type="text" id="input6" name="input6" value=1>
-                   
-                    <button type="button" onclick="updateResult()">想定日数を表示</button>
+            <section id="tab1" class="tab-content">
+                <section class="description">
+                    <p>
+                        現在保有している贈り物で、どれほど絆ランクが上がるかを計算します。<br>
+                        また、カフェタッチとスケジュールでの経験値も考慮して計算できます。
+                    </p>
+                </section>
+                <form>
+                <!-- <form class="grid-form"> -->
+                    <!-- <div> -->
+                        <label for="input1-tab1">現在の絆ランク(1~100):</label>
+                        <input type="text" id="input1-tab1" name="input1-tab1" value=1>
+                    <!-- </div> -->
+                    <!-- <div>
+                        <label for="input2-tab1">入力2:</label>
+                        <input type="text" id="input2-tab1" name="input2-tab1">
+                    </div> -->
                 </form>
+                <label class="grid-form2-label"><b>贈り物保有数:</b></label>
+                <form class="grid-form2">
+                    <div>
+                        <label for="input3-tab1">橙-小:</label>
+                        <input type="text" id="input3-tab1" name="input3-tab1" value=0>
+                    </div>
+                    <div>
+                        <label for="input4-tab1">橙-中:</label>
+                        <input type="text" id="input4-tab1" name="input4-tab1" value=0>
+                    </div>
+                    <div>
+                        <label for="input5-tab1">橙-大:</label>
+                        <input type="text" id="input5-tab1" name="input5-tab1" value=0>
+                    </div>
+                    <div>
+                        <label for="input6-tab1">橙-特大:</label>
+                        <input type="text" id="input6-tab1" name="input6-tab1" value=0>
+                    </div>
+                    <div>
+                        <label for="input7-tab1">紫-小:</label>
+                        <input type="text" id="input7-tab1" name="input7-tab1" value=0>
+                    </div>
+                    <div>
+                        <label for="input8-tab1">紫-中:</label>
+                        <input type="text" id="input8-tab1" name="input8-tab1" value=0>
+                    </div>
+                    <div>
+                        <label for="input9-tab1">紫-大:</label>
+                        <input type="text" id="input9-tab1" name="input9-tab1" value=0>
+                    </div>
+                    <div>
+                        <label for="input10-tab1">紫-特大:</label>
+                        <input type="text" id="input10-tab1" name="input10-tab1" value=0>
+                    </div>
+                </form>
+                <form class="grid-form3">
+                    <div>
+                        <label for="input11-tab1">カフェタッチ回数(/日):</label>
+                        <input type="text" id="input11-tab1" name="input11-tab1" value=7>
+                    </div>
+                    <div>
+                        <label for="input12-tab1">スケジュール訪問回数(/日):</label>
+                        <input type="text" id="input12-tab1" name="input12-tab1" value=1>
+                    </div>
+                    <div>
+                        <label for="input13-tab1">タッチ・訪問日数:</label>
+                        <input type="text" id="input13-tab1" name="input13-tab1" value=0>
+                    </div>
+                </form>
+                <form>
+                    <button type="button" onclick="updateResult('tab1')">ランク上昇幅を計算</button>
+                </form>
+                <section class="result">
+                    <p id="result-display-tab1">ここに結果が表示されます。</p>
+                </section>
             </section>
-            <section class="result">
-                <p id="result-display">ここに結果が表示されます。</p>
+            <section id="tab2" class="tab-content" style="display:none;">
+                <section class="description">
+                    <p>
+                        指定日までに目標の絆ランクを達成したい場合、どれほど贈り物が必要になるか計算します。<br>
+                        「カズサの誕生日までに絆100達成できる?」などの目安に使えます。
+                    </p>
+                </section>
+                <form class="grid-form">
+                    <div>
+                        <label for="input1-tab2">本日の日付:</label>
+                        <input type="date" id="input1-tab2" name="input1-tab2">
+                    </div>
+                    <div>
+                        <label for="input2-tab2">目標日:</label>
+                        <input type="date" id="input2-tab2" name="input2-tab2">
+                    </div>
+                    <div>
+                        <label for="input3-tab2">現在の絆ランク(1~100):</label>
+                        <input type="text" id="input3-tab2" name="input3-tab2" value=1>
+                    </div>
+                    <div>
+                        <label for="input4-tab2">目標の絆ランク(1~100):</label>
+                        <input type="text" id="input4-tab2" name="input4-tab2" value=100>
+                    </div>
+                    <div>
+                        <label for="input5-tab2">1日あたりのカフェタッチ回数:</label>
+                        <input type="text" id="input5-tab2" name="input5-tab2" value=7>
+                    </div>
+                    <div>
+                        <label for="input6-tab2">1日あたりのスケジュール訪問回数:</label>
+                        <input type="text" id="input6-tab2" name="input6-tab2" value=1>
+                    </div>
+                </form>
+                <form>
+                    <button type="button" onclick="updateResult('tab2')">想定個数を計算</button>
+                </form>
+                <section class="result">
+                    <p id="result-display-tab2">ここに結果が表示されます。</p>
+                </section>
+            </section>
+            <section id="tab3" class="tab-content" style="display:none;">
+                <section class="description">
+                    <p>
+                        目標の絆ランク到達に、どれほど時間がかかるかを計算します。<br>
+                        初期値は、おおよそ現実的な数値かな?と思います。
+                    </p>
+                </section>
+                <form class="grid-form">
+                    <div>
+                        <label for="input1-tab3">現在の絆ランク(1~100):</label>
+                        <input type="text" id="input1-tab3" name="input1-tab3" value=1>                        
+                    </div>
+                    <div>
+                        <label for="input2-tab3">目標の絆ランク(1~100):</label>
+                        <input type="text" id="input2-tab3" name="input2-tab3" value=100>
+                    </div>
+                </form>
+                <form>
+                    <label for="radio-grid1">贈り物の種類:</label>
+                    <div class="radio-grid" id="radio-grid1">
+                        <div>
+                            <input type="radio" id="radio1-tab3" name="radio-tab3" value="radio1">
+                            <label for="radio1-tab3">橙-小</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="radio2-tab3" name="radio-tab3" value="radio2">
+                            <label for="radio2-tab3">橙-中</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="radio3-tab3" name="radio-tab3" value="radio3" checked>
+                            <label for="radio3-tab3">橙-大</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="radio4-tab3" name="radio-tab3" value="radio4">
+                            <label for="radio4-tab3">橙-特大</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="radio5-tab3" name="radio-tab3" value="radio5">
+                            <label for="radio5-tab3">紫-小</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="radio6-tab3" name="radio-tab3" value="radio6">
+                            <label for="radio6-tab3">紫-中</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="radio7-tab3" name="radio-tab3" value="radio7">
+                            <label for="radio7-tab3">紫-大</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="radio8-tab3" name="radio-tab3" value="radio8">
+                            <label for="radio8-tab3">紫-特大</label>
+                        </div>
+                    </div>
+                    <label for="input3-tab3">1日に送る贈り物の想定個数:</label>
+                    <input type="text" id="input3-tab3" name="input3-tab3" value=5>
+                    
+                    <label for="input4-tab3">1日あたりのカフェタッチ回数:</label>
+                    <input type="text" id="input4-tab3" name="input4-tab3" value=7>
+                    
+                    <label for="input5-tab3">1日あたりのスケジュール訪問回数:</label>
+                    <input type="text" id="input5-tab3" name="input5-tab3" value=1>
+                    
+                    <button type="button" onclick="updateResult('tab3')">想定日数を計算</button>
+                </form>
+                <section class="result">
+                    <p id="result-display-tab3">ここに結果が表示されます。</p>
+                </section>
             </section>
         </main>
     </div>
