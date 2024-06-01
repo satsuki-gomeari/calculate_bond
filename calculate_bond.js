@@ -147,34 +147,30 @@ function updateResult(tabId) {
 
         let giftRadio = document.getElementsByName('radio-tab3');
         let giftRadioLen = giftRadio.length;
-        let checkValue = '';
-        for (let i = 0; i < giftRadioLen; i++){
-            if (giftRadio.item(i).checked){
-              checkValue = giftRadio.item(i).value;
-            }
-        }
-        if (checkValue == 'radio1'){
+        let checkValue = document.getElementById('select-gift-type').value;
+        
+        if (checkValue == 'gift_o_s'){
             gift_type = 'gift_orange_s';
         }
-        else if (checkValue == 'radio2'){
+        else if (checkValue == 'gift_o_m'){
             gift_type = 'gift_orange_m';
         }
-        else if (checkValue == 'radio3'){
+        else if (checkValue == 'gift_o_l'){
             gift_type = 'gift_orange_l';
         }
-        else if (checkValue == 'radio4'){
+        else if (checkValue == 'gift_o_ex'){
             gift_type = 'gift_orange_ex_l';
         }
-        else if (checkValue == 'radio5'){
+        else if (checkValue == 'gift_p_s'){
             gift_type = 'gift_purple_s';
         }
-        else if (checkValue == 'radio6'){
+        else if (checkValue == 'gift_p_m'){
             gift_type = 'gift_purple_m';
         }
-        else if (checkValue == 'radio7'){
+        else if (checkValue == 'gift_p_l'){
             gift_type = 'gift_purple_l';
         }
-        else if(checkValue == 'radio8'){
+        else if(checkValue == 'gift_p_ex'){
             gift_type = 'gift_purple_ex_l';
         };
 
