@@ -113,14 +113,14 @@ function updateResult(tabId) {
         if (required_ex >= 0 && cafe_touch_per_day >= 0 && schedule_touch_per_day >= 0 && diff >= 0 && Number.isInteger(Number(cafe_touch_per_day))) {
             result = `
             ・目標日までに到達するには、以下が必要数となります。 <br>
-            &emsp;&emsp;橙-小の場合：<b>${Math.ceil(required_o_s_num/diff)}</b>個/日、合計<b>${required_o_s_num}</b>個、
-             紫-小の場合：<b>${Math.ceil(required_p_s_num/diff)}</b>個/日、合計<b>${required_p_s_num}</b>個<br>
-            &emsp;&emsp;橙-中の場合：<b>${Math.ceil(required_o_m_num/diff)}</b>個/日、合計<b>${required_o_m_num}</b>個、
-             紫-中の場合：<b>${Math.ceil(required_p_m_num/diff)}</b>個/日、合計<b>${required_p_m_num}</b>個<br>
-            &emsp;&emsp;橙-大の場合：<b>${Math.ceil(required_o_l_num/diff)}</b>個/日、合計<b>${required_o_l_num}</b>個、
-             紫-大の場合：<b>${Math.ceil(required_p_l_num/diff)}</b>個/日、合計<b>${required_p_l_num}</b>個<br>
-            &emsp;&emsp;橙-特大の場合：<b>${Math.ceil(required_o_ex_num/diff)}</b>個/日、合計<b>${required_o_ex_num}</b>個、
-             紫-特大の場合：<b>${Math.ceil(required_p_ex_num/diff)}</b>個/日、合計<b>${required_p_ex_num}</b>個<br><br>
+            &emsp;&emsp;橙小の場合：<b>${Math.ceil(required_o_s_num/diff)}</b>個/日、合計<b>${required_o_s_num}</b>個、
+             紫小の場合：<b>${Math.ceil(required_p_s_num/diff)}</b>個/日、合計<b>${required_p_s_num}</b>個<br>
+            &emsp;&emsp;橙中の場合：<b>${Math.ceil(required_o_m_num/diff)}</b>個/日、合計<b>${required_o_m_num}</b>個、
+             紫中の場合：<b>${Math.ceil(required_p_m_num/diff)}</b>個/日、合計<b>${required_p_m_num}</b>個<br>
+            &emsp;&emsp;橙大の場合：<b>${Math.ceil(required_o_l_num/diff)}</b>個/日、合計<b>${required_o_l_num}</b>個、
+             紫大の場合：<b>${Math.ceil(required_p_l_num/diff)}</b>個/日、合計<b>${required_p_l_num}</b>個<br>
+            &emsp;&emsp;橙特大の場合：<b>${Math.ceil(required_o_ex_num/diff)}</b>個/日、合計<b>${required_o_ex_num}</b>個、
+             紫特大の場合：<b>${Math.ceil(required_p_ex_num/diff)}</b>個/日、合計<b>${required_p_ex_num}</b>個<br><br>
             ・目標の絆ランク到達には、およそ <b>${required_ex}</b> 経験値が必要です。 <br>
             ・橙-大の贈り物 5, 6個/日がおおよそ現実的な数値になります。 <br><br>
             カフェRANKは最大値, スケジュールBOUNUSは無しの想定で計算しています。
