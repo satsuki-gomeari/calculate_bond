@@ -25,6 +25,14 @@ function openTab(evt, tabName) {
     var mm = ("0"+(today.getMonth()+1)).slice(-2);
     var dd = ("0"+today.getDate()).slice(-2);
     document.getElementById("input1-tab2").value=yyyy+'-'+mm+'-'+dd;
+    if (mm > "08") {
+        yyyy = yyyy + 1;
+        document.getElementById("input2-tab2").value=yyyy+'-'+"08"+'-'+"05";
+    }
+    else if (mm == "08" && dd > "05") {
+        yyyy = yyyy + 1;
+        document.getElementById("input2-tab2").value=yyyy+'-'+"08"+'-'+"05";
+    }
     document.getElementById("input2-tab2").value=yyyy+'-'+"08"+'-'+"05";
 }
 
