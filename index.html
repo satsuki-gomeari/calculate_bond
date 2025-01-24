@@ -17,11 +17,29 @@
                 今後、勉強のために改善していく予定です。お問い合わせとバグ報告は(X：@5atsukigomeari)
             </p>
         </section>
+
+        <nav id="hamburger-menu">
+            <header class="header">
+                <div class="navtext-container">
+                <div class="navtext"></div>
+                </div>
+                <input type="checkbox" class="menu-btn" id="menu-btn">
+                <label for="menu-btn" class="menu-icon"><span class="navicon"></span></label>
+                <ul class="menu">
+                    <li class="menu_tab" onclick="openTab(event, 'tab1')">どれだけ上がる?</li>
+                    <li class="menu_tab" onclick="openTab(event, 'tab4')">何が好き?</li>
+                    <li class="menu_tab" onclick="openTab(event, 'tab3')">何日必要?</li>
+                    <li class="menu_tab" onclick="openTab(event, 'tab2')">何個必要?</li>
+                </ul>
+            </header>
+        </nav>
+
         <nav>
             <ul class="tabs">
-                <li class="tab" onclick="openTab(event, 'tab1')">どれだけ上がる?</li>
-                <li class="tab" onclick="openTab(event, 'tab3')">何日必要?</li>
-                <li class="tab" onclick="openTab(event, 'tab2')">何個必要?</li>
+                <li class="tab" data-tab="tab1" onclick="openTab(event, 'tab1')">どれだけ上がる?</li>
+                <li class="tab" data-tab="tab4" onclick="openTab(event, 'tab4')">何が好き?</li>
+                <li class="tab" data-tab="tab3" onclick="openTab(event, 'tab3')">何日必要?</li>
+                <li class="tab" data-tab="tab2" onclick="openTab(event, 'tab2')">何個必要?</li>
             </ul>
         </nav>
         <main>
@@ -33,10 +51,13 @@
                     </p>
                 </section>
                 <form>
-                        <label for="input1-tab1">現在の絆ランク(1~100):</label>
-                        <input type="text" inputmode="decimal" id="input1-tab1" name="input1-tab1" value=1 onfocus="this.select();">
+                    <label for="input1-tab1">現在の絆ランク(1~100):</label>
+                    <input type="text" inputmode="decimal" id="input1-tab1" name="input1-tab1" value=1 onfocus="this.select();">
                 </form>
-                <label class="grid-form2-label"><b>贈り物保有数:</b></label>
+                <form>
+
+                    <label class="grid-form2-label"><b>贈り物保有数:</b></label>
+                </form>
                 <form class="grid-form2">
                     <div>
                         <label for="input3-tab1">橙小:</label>
@@ -182,6 +203,57 @@
                 <section class="result">
                     <p id="result-display-tab3">ここに結果が表示されます。</p>
                 </section>
+            </section>
+            <section id="tab4" class="tab-content" style="display:none;">
+                <section class="description">
+                    <p>
+                        どの生徒がどの贈り物を好きなのか、どの贈り物を製造に使ってよいのかを一覧にします<br><br>
+                        Coming Soon...?
+                    </p>
+                <!-- </section>
+                <form class="grid-form">
+                    <div>
+                        <label for="input1-tab4">現在の絆ランク(1~100):</label>
+                        <input type="text" inputmode="decimal" id="input1-tab4" name="input1-tab4" value=1 onfocus="this.select();">                        
+                    </div>
+                    <div>
+                        <label for="input2-tab4">目標の絆ランク(1~100):</label>
+                        <input type="text" inputmode="decimal" id="input2-tab4" name="input2-tab4" value=100 onfocus="this.select();">
+                    </div>
+                </form>
+                <form>
+                    <div class="tab3_form_label" id="radio-grid1">
+                        <label class="tab3_form_label_1" for="radio-grid1">贈り物の種類:</label>
+                        <label class="tab3_form_label_2" for="input3-tab4">1日に送る贈り物の想定個数:</label>
+                    </div>
+                    <div class="tab3_form_content">
+                        <select class="gift-type" name="gift-type" id="select-gift-type">
+                            <option value="gift_o_s">橙小</option>
+                            <option value="gift_o_m">橙中</option>
+                            <option value="gift_o_l" selected>橙大</option>
+                            <option value="gift_o_ex">橙特大</option>
+                            <option value="gift_p_s">紫小</option>
+                            <option value="gift_p_m">紫中</option>
+                            <option value="gift_p_l">紫大</option>
+                            <option value="gift_p_ex">紫特大</option>
+                        </select>
+                        <input type="text" inputmode="decimal" id="input3-tab4" name="input3-tab4" value=5 onfocus="this.select();">
+                    </div>
+                    <div class="tab3_form_content">
+                        <label class="tab3_form_label_1" for="input4-tab4">1日あたりのカフェタッチ回数:</label>
+                        <label class="tab3_form_label_2" for="input5-tab4">1日あたりのスケジュール訪問回数:</label>
+                    </div>
+                    <div class="tab3_form_content">
+                        <input type="text" inputmode="decimal" id="input4-tab4" name="input4-tab4" value=7 onfocus="this.select();">
+                        <input type="text" inputmode="decimal" id="input5-tab4" name="input5-tab4" value=0.5 onfocus="this.select();">
+                    </div>                  
+                </form>
+                <form>
+                    <button type="button" onclick="updateResult('tab3')">想定日数を計算</button>
+                </form>
+                <section class="result">
+                    <p id="result-display-tab3">ここに結果が表示されます。</p>
+                </section> -->
             </section>
         </main>
     </div>

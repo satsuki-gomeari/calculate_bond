@@ -1,4 +1,8 @@
+var menuChangeFlag = false
+var selectedTab = "tab1"
+
 function openTab(evt, tabName) {
+    selectedTab = tabName
     // 全てのタブコンテンツを非表示にする
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tab-content");
@@ -36,10 +40,65 @@ function openTab(evt, tabName) {
     document.getElementById("input2-tab2").value=yyyy+'-'+"08"+'-'+"05";
 }
 
+function updateLayout() {
+    const width = window.innerWidth; // 現在の画面幅を取得
+    const tab = document.querySelector(".tabs");
+    const hamburger = document.querySelector("#hamburger-menu");
+
+    if (width <= 768) {
+        // tab.display = "none"; // 小さい画面ではメニューを隠す
+        // hamburger.display = "block"; // ハンバーガーを表示
+        // CSS で対応
+    } else {
+        tab.display = "flex"; // 大きい画面ではメニューを表示
+        hamburger.display = "none"; // ハンバーガーを非表示
+        var temp = ".tab[data-tab='" + selectedTab + "']";
+        document.querySelector(temp).classList.add("active");
+        // var tabcontent = document.getElementsByClassName("tab-content");
+        // var temp = tabcontent.namedItem(selectedTab)
+    }
+}
+
+updateLayout();
+
 // 初期状態で最初のタブを開く
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelector(".tab").click();
+
+    const menuCheckbox = document.getElementById("menu-btn");
+    const menu = document.querySelector(".menu");
+
+    document.addEventListener("click", function (event) {
+        // CSS でハンバーガーメニューのアニメーションをしている関係で、メニューボタンクリック時に
+        // 「メニューボタンクリック」と「メニューボタンとメニューの中身以外のクリック」２種が発生してしまう。
+        // menuChangeFlag を利用して、専用の処理をしている
+
+        const checked = menuCheckbox.checked
+        if (!menu.contains(event.target) && !menuCheckbox.contains(event.target)) {
+            if (checked == true) {
+                menuChangeFlag = true
+            }
+            else {
+                menuChangeFlag = false
+            }
+            menuCheckbox.checked = false;
+        }
+        else if(!menu.contains(event.target) && menuCheckbox.contains(event.target)) {
+            if (menuChangeFlag == true) {
+                menuCheckbox.checked = false;
+            }
+        }
+    });
+
+    menu.querySelectorAll("li").forEach(link => {
+        link.addEventListener("click", function () {
+            menuCheckbox.checked = false;
+        });
+    });
 });
+
+// 画面サイズが変更されたときに処理を実行
+window.addEventListener("resize", updateLayout);
 
 
 function updateResult(tabId) {
