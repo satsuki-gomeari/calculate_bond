@@ -1,5 +1,7 @@
-var menuChangeFlag = false
-var selectedTab = "tab1"
+var menuChangeFlag = false;
+var selectedTab = "tab1";
+var giftCompatibilityList = [];
+var giftImgPathList = []
 
 function openTab(evt, tabName) {
     selectedTab = tabName
@@ -40,6 +42,27 @@ function openTab(evt, tabName) {
     document.getElementById("input2-tab2").value=yyyy+'-'+"08"+'-'+"05";
 }
 
+function changeStudentsList(listNum) {
+    const studentNum = document.getElementById("select-student-name" + String(listNum)).value;
+
+    // 現存するテーブルの削除
+    var student = "student" + String(listNum);
+    var form = document.getElementById(student);
+    form.innerHTML = '';
+
+    var result = document.getElementById("available-gift");
+    result.innerHTML = '';
+
+    // 新規テーブルの作成
+    if (studentNum != "default") {
+        const giftCompatibility = giftCompatibilityList[Number(studentNum)].split('\r')[0];
+        addGiftImgTable(listNum, giftCompatibility, student)
+    }
+
+    // 現存するすべてのテーブルから製造に使ってよい贈り物を算出
+    setAvailableGifts()
+}
+
 function updateLayout() {
     const width = window.innerWidth; // 現在の画面幅を取得
     const tab = document.querySelector(".tabs");
@@ -58,12 +81,251 @@ function updateLayout() {
         // var temp = tabcontent.namedItem(selectedTab)
     }
 }
-
 updateLayout();
+
+function parseGiftCSV(data) {
+    giftCompatibilityList = data.split('\n');
+    addStudentsList();
+}
+
+function parseGiftImgPathCSV(data) {
+    var giftPathPairList = data.split('\n');
+    for (let i=0; i<giftPathPairList.length; i++) {
+        var path = giftPathPairList[i].split(',')[1].split('\r')[0]
+        giftImgPathList[i] = path
+    }
+
+}
+
+function addStudentsList() {
+    const list1 = document.getElementById("select-student-name1");
+    const list2 = document.getElementById("select-student-name2");
+    const list3 = document.getElementById("select-student-name3");
+    const list4 = document.getElementById("select-student-name4");
+    const list5 = document.getElementById("select-student-name5");
+    
+    if (giftCompatibilityList.length > 0) {
+        for (let i = 1; i < giftCompatibilityList.length; i++) {
+            // 下記の newOptionX を1つにまとめると、最後に add したものだけ有効になる
+            const newOption1 = document.createElement("option");
+            studentName = giftCompatibilityList[i].split(',')[0]
+            newOption1.value = String(i);
+            newOption1.text = studentName;
+            list1.add(newOption1);
+            const newOption2 = document.createElement("option");
+            studentName = giftCompatibilityList[i].split(',')[0]
+            newOption2.value = String(i);
+            newOption2.text = studentName;
+            list2.add(newOption2);
+            const newOption3 = document.createElement("option");
+            studentName = giftCompatibilityList[i].split(',')[0]
+            newOption3.value = String(i);
+            newOption3.text = studentName;
+            list3.add(newOption3);
+            const newOption4 = document.createElement("option");
+            studentName = giftCompatibilityList[i].split(',')[0]
+            newOption4.value = String(i);
+            newOption4.text = studentName;
+            list4.add(newOption4);
+            const newOption5 = document.createElement("option");
+            studentName = giftCompatibilityList[i].split(',')[0]
+            newOption5.value = String(i);
+            newOption5.text = studentName;
+            list5.add(newOption5);
+        }
+    }
+}
+
+function addGiftImgTable(listNum, giftCompatibility, student) {
+
+    const tableArea = document.getElementById(student);
+    const tableNum = tableArea.querySelectorAll("table").length;
+
+    // ボタンでリストを増やす際の処理
+    // if (tableNum < 1) {
+    //     var form = document.getElementById(student);
+    //     form.innerHTML = '';
+    //     form.appendChild(createStudentGiftTable(giftCompatibility));
+    // }
+    
+    // HTML に直で table の記載場所を配置している際の処理
+    var form = document.getElementById(student);
+    form.appendChild(createStudentGiftTable(giftCompatibility));
+
+}
+
+function createStudentGiftTable(giftCompatibility) {
+    var table = document.createElement("table");
+    var tr1 = document.createElement("tr");
+    var tr2 = document.createElement("tr");
+    var tr3 = document.createElement("tr");
+    var td1 = document.createElement("td");
+    var td2 = document.createElement("td");
+    var td3 = document.createElement("td");
+    var td4 = document.createElement("td");
+    var td5 = document.createElement("td");
+    var td6 = document.createElement("td");
+    var giftImgLL = document.createElement("img");
+    var giftImgL = document.createElement("img");
+    var giftImgM = document.createElement("img");
+    var giftImgS1 = document.createElement("img");
+    var giftImgS2 = document.createElement("img");
+    var llGiftList = [];
+    var lGiftList = [];
+    var mGiftList = [];
+
+    table.setAttribute("class", "student-gift-type-table");
+    td1.setAttribute("class", "td_gift_type_img");
+    td3.setAttribute("class", "td_gift_type_img");
+    td5.setAttribute("class", "td_gift_type_img");
+    td2.setAttribute("class", "td_gift_type");
+    td4.setAttribute("class", "td_gift_type");
+    td6.setAttribute("class", "td_gift_type");
+
+    giftImgLL.setAttribute("src", "./img/gift_type/gift_ll.png");
+    giftImgLL.setAttribute("class", "img_gift_type");
+    giftImgL.setAttribute("src", "./img/gift_type/gift_l.png");
+    giftImgL.setAttribute("class", "img_gift_type");
+    giftImgM.setAttribute("src", "./img/gift_type/gift_m.png");
+    giftImgM.setAttribute("class", "img_gift_type");
+
+    giftImgS1.setAttribute("src", "./img/gift_type/gift_s.png");
+    giftImgS2.setAttribute("src", "./img/gift/wave_cat.png");
+
+    var giftCompatibilityList = giftCompatibility.split(',');
+    if (giftCompatibilityList.length != giftImgPathList.length) {
+        return table;
+    }
+
+    for (let i = 1; i < giftCompatibilityList.length; i++) {
+        var giftType = giftCompatibilityList[i];
+        var giftPath = giftImgPathList[i];
+
+        var giftImg = document.createElement("img");
+        giftImg.setAttribute("src", giftPath);
+        giftImg.setAttribute("class", "img_gift");
+
+        if (giftType == 1 || giftType == 5 || giftType == 6) {
+            // 贈り物小
+        }
+        else if (giftType == 2) {
+            // 贈り物中　紫贈り物は除く
+            mGiftList.push(giftImg);
+        }
+        else if (giftType == 3 || giftType == 7) {
+            // 贈り物大
+            lGiftList.push(giftImg);
+            
+        }
+        else if (giftType == 4 || giftType == 8) {
+            // 贈り物特大
+            llGiftList.push(giftImg);
+
+        }
+    }
+
+    // appendChild() で同じオブジェクトを追加すると最後の追加分だけ有効になる
+    td1.appendChild(giftImgLL);
+    for (let i=0; i<llGiftList.length; i++) {
+        td2.appendChild(llGiftList[i]);
+    }
+    td3.appendChild(giftImgL);
+    for (let i=0; i<lGiftList.length; i++) {
+        td4.appendChild(lGiftList[i]);
+    }
+    td5.appendChild(giftImgM);
+    for (let i=0; i<mGiftList.length; i++) {
+        td6.appendChild(mGiftList[i]);
+    }
+
+    tr1.appendChild(td1);
+    tr1.appendChild(td2);
+    tr2.appendChild(td3);
+    tr2.appendChild(td4);
+    tr3.appendChild(td5);
+    tr3.appendChild(td6);
+
+    table.appendChild(tr1);
+    table.appendChild(tr2);
+    table.appendChild(tr3);
+
+    return table;
+}
+
+function setAvailableGifts() {
+    const select1 = document.getElementById("select-student-name1")
+    const select2 = document.getElementById("select-student-name2")
+    const select3 = document.getElementById("select-student-name3")
+    const select4 = document.getElementById("select-student-name4")
+    const select5 = document.getElementById("select-student-name5")
+
+    // 選択した要素のテキストを取得する処理
+    const select1Num = select1.selectedIndex;
+    const student1Name = select1.options[select1Num].innerText;
+    const select2Num = select2.selectedIndex;
+    const student2Name = select2.options[select2Num].innerText;
+    const select3Num = select3.selectedIndex;
+    const student3Name = select3.options[select3Num].innerText;
+    const select4Num = select4.selectedIndex;
+    const student4Name = select4.options[select4Num].innerText;
+    const select5Num = select5.selectedIndex;
+    const student5Name = select5.options[select5Num].innerText;
+
+    var selecttedStudentGiftList = []
+    for (let i=1; i<giftCompatibilityList.length; i++) {
+        var tempSudentName = giftCompatibilityList[i].split(',')[0]
+        if (tempSudentName == student1Name ||
+            tempSudentName == student2Name ||
+            tempSudentName == student3Name ||
+            tempSudentName == student4Name ||
+            tempSudentName == student5Name
+        ) {
+            selecttedStudentGiftList.push(giftCompatibilityList[i].split('\r')[0].split(','));
+        }
+    }
+
+    var selecttedStudentNum = selecttedStudentGiftList.length;
+    var availableGiftsIdxList = [];
+    if (selecttedStudentNum <= 0) {
+        return;
+    }
+    else if (selecttedStudentNum == 1) {
+        for (let idx=0; idx<selecttedStudentGiftList[0].length; idx++) {
+            if (selecttedStudentGiftList[0][idx] == "1")
+                availableGiftsIdxList.push(idx)
+        }
+    }
+    else {
+        for (let i=0; i<selecttedStudentGiftList[0].length; i++) {
+            const allEqual = selecttedStudentGiftList.every(row => row[i] === "1"); // すべての配列で贈り物小かどうか確認
+
+            if (allEqual) {
+                availableGiftsIdxList.push(i);
+            }
+        }
+    }
+    setAvailableGiftsImg(availableGiftsIdxList);
+}
+
+function setAvailableGiftsImg(availableGiftsIdxList) {
+    var form = document.getElementById("available-gift");
+    for (let i=0; i<availableGiftsIdxList.length; i++) {
+        var giftPath = giftImgPathList[availableGiftsIdxList[i]];
+
+        var giftImg = document.createElement("img");
+        giftImg.setAttribute("src", giftPath);
+        giftImg.setAttribute("class", "img_gift");
+
+        form.appendChild(giftImg)
+    }
+}
+
 
 // 初期状態で最初のタブを開く
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelector(".tab").click();
+    fetch('blue_archive_gift.csv').then(response => response.text()).then(data => parseGiftCSV(data));
+    fetch('blue_archive_gift_img_path.csv').then(response => response.text()).then(data => parseGiftImgPathCSV(data));
 
     const menuCheckbox = document.getElementById("menu-btn");
     const menu = document.querySelector(".menu");

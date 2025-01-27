@@ -496,3 +496,53 @@ form button:hover {
     color: #fff;
     border-bottom: none;
 } */
+
+.student-name {
+	overflow: hidden;
+    width: calc(100%);
+    padding: 10px;
+	text-align: left;
+    margin-bottom: 15px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.student-gift-type-table{
+    width:100%;
+    border-collapse:collapse;
+    border:none;
+    /* border:1px solid #ccc; */
+    background-color: #ecf0f1;
+    margin-bottom: 10px;
+    th,td{
+      padding:10px;
+      /* border:1px solid #ccc; */
+      border:none;
+      border-left: 1px solid #ccc;
+      border-top: 1px solid #ccc;
+    }
+    td:first-child,th:first-child{
+        border-left:none;
+    }
+    tr:first-child td,tr:first-child th{
+        border-top:none;
+    }
+}
+.td_gift_type_img {
+    text-align: center;
+    width: 30%;
+}
+/* .td_gift_type{
+    width: 152px;
+    height: 120px;
+} */
+
+.img_gift_type{
+    width: 35px;
+    height: 35px;
+}
+.img_gift{
+    width: 34px;
+    height: 27px;
+}

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ブルアカ 絆ランク皮算用</title>
     <link rel="stylesheet" href="./calculate_bond.css">
+    <!-- <link rel="stylesheet" href="./select2.min.css"> -->
 </head>
 <body>
     <div class="container">
@@ -207,56 +208,64 @@
             <section id="tab4" class="tab-content" style="display:none;">
                 <section class="description">
                     <p>
-                        どの生徒がどの贈り物を好きなのか、どの贈り物を製造に使ってよいのかを一覧にします<br><br>
-                        Coming Soon...?
+                        どの生徒がどの贈り物を好きなのか、どの贈り物を製造に使ってよいのかを一覧にします。<br>
                     </p>
-                <!-- </section>
-                <form class="grid-form">
-                    <div>
-                        <label for="input1-tab4">現在の絆ランク(1~100):</label>
-                        <input type="text" inputmode="decimal" id="input1-tab4" name="input1-tab4" value=1 onfocus="this.select();">                        
-                    </div>
-                    <div>
-                        <label for="input2-tab4">目標の絆ランク(1~100):</label>
-                        <input type="text" inputmode="decimal" id="input2-tab4" name="input2-tab4" value=100 onfocus="this.select();">
-                    </div>
-                </form>
-                <form>
+                </section>
+                <form id="student-gift-type_form">
                     <div class="tab3_form_label" id="radio-grid1">
-                        <label class="tab3_form_label_1" for="radio-grid1">贈り物の種類:</label>
-                        <label class="tab3_form_label_2" for="input3-tab4">1日に送る贈り物の想定個数:</label>
+                        <label class="tab3_form_label_1" for="radio-grid1">生徒:</label>
                     </div>
                     <div class="tab3_form_content">
-                        <select class="gift-type" name="gift-type" id="select-gift-type">
-                            <option value="gift_o_s">橙小</option>
-                            <option value="gift_o_m">橙中</option>
-                            <option value="gift_o_l" selected>橙大</option>
-                            <option value="gift_o_ex">橙特大</option>
-                            <option value="gift_p_s">紫小</option>
-                            <option value="gift_p_m">紫中</option>
-                            <option value="gift_p_l">紫大</option>
-                            <option value="gift_p_ex">紫特大</option>
+                        <select class="student-name" name="student-name" id="select-student-name1" onchange="changeStudentsList(1)">
+                            <option value="default" selected>生徒を選んでください</option>
                         </select>
-                        <input type="text" inputmode="decimal" id="input3-tab4" name="input3-tab4" value=5 onfocus="this.select();">
                     </div>
+                    <div id="student1">
+                    </div>           
                     <div class="tab3_form_content">
-                        <label class="tab3_form_label_1" for="input4-tab4">1日あたりのカフェタッチ回数:</label>
-                        <label class="tab3_form_label_2" for="input5-tab4">1日あたりのスケジュール訪問回数:</label>
+                        <select class="student-name" name="student-name" id="select-student-name2" onchange="changeStudentsList(2)">
+                            <option value="default" selected>生徒を選んでください</option>
+                        </select>
                     </div>
+                    <div id="student2">
+                    </div>           
                     <div class="tab3_form_content">
-                        <input type="text" inputmode="decimal" id="input4-tab4" name="input4-tab4" value=7 onfocus="this.select();">
-                        <input type="text" inputmode="decimal" id="input5-tab4" name="input5-tab4" value=0.5 onfocus="this.select();">
-                    </div>                  
-                </form>
-                <form>
-                    <button type="button" onclick="updateResult('tab3')">想定日数を計算</button>
+                        <select class="student-name" name="student-name" id="select-student-name3" onchange="changeStudentsList(3)">
+                            <option value="default" selected>生徒を選んでください</option>
+                        </select>
+                    </div>
+                    <div id="student3">
+                    </div>           
+                    <div class="tab3_form_content">
+                        <select class="student-name" name="student-name" id="select-student-name4" onchange="changeStudentsList(4)">
+                            <option value="default" selected>生徒を選んでください</option>
+                        </select>
+                    </div>
+                    <div id="student4">
+                    </div>           
+                    <div class="tab3_form_content">
+                        <select class="student-name" name="student-name" id="select-student-name5" onchange="changeStudentsList(5)">
+                            <option value="default" selected>生徒を選んでください</option>
+                        </select>
+                    </div>
+                    <div id="student5">
+                    </div>           
                 </form>
                 <section class="result">
-                    <p id="result-display-tab3">ここに結果が表示されます。</p>
-                </section> -->
+                    <p id="result-display-tab3">以下の贈り物を製造素材にしてください。</p>
+                </section>
+                <div id="available-gift">
+                </div>
             </section>
         </main>
     </div>
     <script src="calculate_bond.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <!-- <script src="select2.min.js"></script> -->
+    <!-- <script>
+        $(document).ready(function() {
+            $('.student-name').select2();
+        });
+    </script> -->
 </body>
 </html>
