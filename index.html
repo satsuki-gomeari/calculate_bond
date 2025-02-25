@@ -15,14 +15,14 @@
         <section class="description">
             <p>
                 ブルーアーカイブの絆関連の計算サイトです。<br>
-                今後、勉強のために改善していく予定です。お問い合わせとバグ報告は(X：@5atsukigomeari)
+                お問い合わせとバグ報告は Xへ (@5atsukigomeari)
             </p>
         </section>
 
         <nav id="hamburger-menu">
             <header class="header">
                 <div class="navtext-container">
-                <div class="navtext"></div>
+                    <div class="navtext"></div>
                 </div>
                 <input type="checkbox" class="menu-btn" id="menu-btn">
                 <label for="menu-btn" class="menu-icon"><span class="navicon"></span></label>
@@ -45,6 +45,16 @@
         </nav>
         <main>
             <section id="tab1" class="tab-content">
+                <form class="checkbox-detail_change_btn">
+                    <label class="checkbox-label" id="label-detail_change_btn"><b>詳細表示</b></label>
+                    <div class="btn btn-pill" id="detail_change_btn">
+                        <input type="checkbox" class="checkbox" id="checkbox_detail_change_btn" onchange="changeDetail()" checked="checked"/>
+                        <div class="knob">
+                            <span></span>
+                        </div>
+                        <div class="btn-bg"></div>
+                    </div>
+                </form>
                 <section class="description">
                     <p>
                         現在保有している贈り物で、どれほど絆ランクが上がるかを計算します。<br>
@@ -53,44 +63,49 @@
                 </section>
                 <form>
                     <label for="input1-tab1">現在の絆ランク(1~100):</label>
-                    <input type="text" inputmode="decimal" id="input1-tab1" name="input1-tab1" value=1 onfocus="this.select();">
+                    <input type="number" min="1" max="100" inputmode="decimal" id="input1-tab1" name="input1-tab1" value=1 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 3);">
                 </form>
                 <form>
-
-                    <label class="grid-form2-label"><b>贈り物保有数:</b></label>
+                    <label class="grid-gift_normal-detail_label"><b>贈り物保有数:</b></label>
                 </form>
-                <form class="grid-form2">
+                <form class="grid-gift_detail">
+                    <div>
+                        <label for="input-detail1">coming soon!</label>
+                        <!-- <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail1" name="input-detail1" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);"> -->
+                    </div>
+                </form>
+                <form class="grid-gift_normal">
                     <div>
                         <label for="input3-tab1">橙小:</label>
-                        <input type="text" inputmode="decimal" id="input3-tab1" name="input3-tab1" value=0 onfocus="this.select();">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input3-tab1" name="input3-tab1" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                     </div>
                     <div>
                         <label for="input4-tab1">橙中:</label>
-                        <input type="text" inputmode="decimal" id="input4-tab1" name="input4-tab1" value=0 onfocus="this.select();">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input4-tab1" name="input4-tab1" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                     </div>
                     <div>
                         <label for="input5-tab1">橙大:</label>
-                        <input type="text" inputmode="decimal" id="input5-tab1" name="input5-tab1" value=0 onfocus="this.select();">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input5-tab1" name="input5-tab1" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                     </div>
                     <div>
                         <label for="input6-tab1">橙特大:</label>
-                        <input type="text" inputmode="decimal" id="input6-tab1" name="input6-tab1" value=0 onfocus="this.select();">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input6-tab1" name="input6-tab1" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                     </div>
                     <div>
                         <label for="input7-tab1">紫小:</label>
-                        <input type="text" inputmode="decimal" id="input7-tab1" name="input7-tab1" value=0 onfocus="this.select();">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input7-tab1" name="input7-tab1" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                     </div>
                     <div>
                         <label for="input8-tab1">紫中:</label>
-                        <input type="text" inputmode="decimal" id="input8-tab1" name="input8-tab1" value=0 onfocus="this.select();">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input8-tab1" name="input8-tab1" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                     </div>
                     <div>
                         <label for="input9-tab1">紫大:</label>
-                        <input type="text" inputmode="decimal" id="input9-tab1" name="input9-tab1" value=0 onfocus="this.select();">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input9-tab1" name="input9-tab1" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                     </div>
                     <div>
                         <label for="input10-tab1">紫特大:</label>
-                        <input type="text" inputmode="decimal" id="input10-tab1" name="input10-tab1" value=0 onfocus="this.select();">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input10-tab1" name="input10-tab1" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                     </div>
                 </form>
                 <form class="grid-form3">
@@ -100,13 +115,13 @@
                         <label class="grid-form3_label3" for="input13-tab1">タッチ・訪問日数:</label>
                     </div>
                     <div class="grid-form3_input">
-                        <input type="text" inputmode="decimal" id="input11-tab1" name="input11-tab1" value=7 onfocus="this.select();">
-                        <input type="text" inputmode="decimal" id="input12-tab1" name="input12-tab1" value=0.5 onfocus="this.select();">
-                        <input type="text" inputmode="decimal" id="input13-tab1" name="input13-tab1" value=0 onfocus="this.select();">
+                        <input type="number" min="0" max="10" inputmode="decimal" id="input11-tab1" name="input11-tab1" value=7 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 2);">
+                        <input type="number" min="0" max="100" step="0.1" inputmode="decimal" id="input12-tab1" name="input12-tab1" value=0.5 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                        <input type="number" min="0" max="1000" inputmode="decimal" id="input13-tab1" name="input13-tab1" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                     </div>
                 </form>
                 <form>
-                    <button type="button" onclick="updateResult('tab1')">ランク上昇幅を計算</button>
+                    <button type="button" id="calc-button" onclick="updateResult('tab1')">ランク上昇幅を計算</button>
                 </form>
                 <section class="result">
                     <p id="result-display-tab1">ここに結果が表示されます。</p>
@@ -130,11 +145,11 @@
                     </div>
                     <div>
                         <label for="input3-tab2">現在の絆ランク(1~100):</label>
-                        <input type="text" inputmode="decimal" id="input3-tab2" name="input3-tab2" value=1 onfocus="this.select();">
+                        <input type="number" min="1" max="100" inputmode="decimal" id="input3-tab2" name="input3-tab2" value=1 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 3);">
                     </div>
                     <div>
                         <label for="input4-tab2">目標の絆ランク(1~100):</label>
-                        <input type="text" inputmode="decimal" id="input4-tab2" name="input4-tab2" value=100 onfocus="this.select();">
+                        <input type="number" min="1" max="100" inputmode="decimal" id="input4-tab2" name="input4-tab2" value=100 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 3);">
                     </div>
                 </form>
                 <form class="flex-form">
@@ -143,8 +158,8 @@
                         <label class="flex-form1-2" for="input6-tab2">1日あたりのスケジュール訪問回数:</label>
                     </div>
                     <div class="flex-form2">
-                        <input type="text" inputmode="decimal" id="input5-tab2" name="input5-tab2" value=7 onfocus="this.select();">
-                        <input type="text" inputmode="decimal" id="input6-tab2" name="input6-tab2" value=0.5 onfocus="this.select();">
+                        <input type="number" min="0" max="10" inputmode="decimal" id="input5-tab2" name="input5-tab2" value=7 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 2);">
+                        <input type="number" min="0" max="100" step="0.1" inputmode="decimal" id="input6-tab2" name="input6-tab2" value=0.5 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                     </div>
                 </form>
                 <form>
@@ -164,11 +179,11 @@
                 <form class="grid-form">
                     <div>
                         <label for="input1-tab3">現在の絆ランク(1~100):</label>
-                        <input type="text" inputmode="decimal" id="input1-tab3" name="input1-tab3" value=1 onfocus="this.select();">                        
+                        <input type="number" min="1" max="100" inputmode="decimal" id="input1-tab3" name="input1-tab3" value=1 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 3);">                        
                     </div>
                     <div>
                         <label for="input2-tab3">目標の絆ランク(1~100):</label>
-                        <input type="text" inputmode="decimal" id="input2-tab3" name="input2-tab3" value=100 onfocus="this.select();">
+                        <input type="number" min="1" max="100" inputmode="decimal" id="input2-tab3" name="input2-tab3" value=100 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 3);">
                     </div>
                 </form>
                 <form>
@@ -187,15 +202,15 @@
                             <option value="gift_p_l">紫大</option>
                             <option value="gift_p_ex">紫特大</option>
                         </select>
-                        <input type="text" inputmode="decimal" id="input3-tab3" name="input3-tab3" value=5 onfocus="this.select();">
+                        <input type="number" min="1" max="9999" inputmode="decimal" id="input3-tab3" name="input3-tab3" value=5 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                     </div>
                     <div class="tab3_form_content">
                         <label class="tab3_form_label_1" for="input4-tab3">1日あたりのカフェタッチ回数:</label>
                         <label class="tab3_form_label_2" for="input5-tab3">1日あたりのスケジュール訪問回数:</label>
                     </div>
                     <div class="tab3_form_content">
-                        <input type="text" inputmode="decimal" id="input4-tab3" name="input4-tab3" value=7 onfocus="this.select();">
-                        <input type="text" inputmode="decimal" id="input5-tab3" name="input5-tab3" value=0.5 onfocus="this.select();">
+                        <input type="number" min="0" max="10" inputmode="decimal" id="input4-tab3" name="input4-tab3" value=7 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 2);">
+                        <input type="number" min="0" max="100" step="0.1" inputmode="decimal" id="input5-tab3" name="input5-tab3" value=0.5 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                     </div>                  
                 </form>
                 <form>

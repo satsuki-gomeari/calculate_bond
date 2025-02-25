@@ -23,6 +23,13 @@ function openTab(evt, tabName) {
     document.getElementById(tabName).style.display = "block";
     document.getElementById(tabName).classList.add("active");
     evt.currentTarget.classList.add("active");
+    
+    const detail_change_btn = document.getElementById("detail_change_btn");
+    const label = document.getElementById("label-detail_change_btn");
+    if (tabName == 'tab1') {
+        detail_change_btn.style.display = 'block';
+        label.style.display = 'block';
+    }
 
     // 日付の取得
     var today = new Date();
@@ -320,6 +327,31 @@ function setAvailableGiftsImg(availableGiftsIdxList) {
     }
 }
 
+function changeDetail() {
+    var detail_change_btn_condition = document.getElementById('checkbox_detail_change_btn').checked;
+    console.log(detail_change_btn_condition);  // checked=true=normal
+    var detail_form = document.getElementsByClassName("grid-gift_detail");
+    var normal_from = document.getElementsByClassName("grid-gift_normal");
+    var normal_detail_from = document.getElementsByClassName("grid-form3");
+    var grid_gift_normal_detail_label = document.getElementsByClassName("grid-gift_normal-detail_label");
+    var calc_button = document.getElementById("calc-button");
+
+    if (detail_change_btn_condition == true) {
+        detail_form[0].style.display = "none";
+        grid_gift_normal_detail_label[0].style.display = "grid";
+        normal_from[0].style.display = "grid";
+        calc_button.disabled = false;
+    }
+    else {
+        normal_from[0].style.display = "none";
+        normal_detail_from[0].style.display = "none";
+        grid_gift_normal_detail_label[0].style.display = "none";
+        detail_form[0].style.display = "grid";
+        calc_button.disabled = true;
+        
+    }
+}
+
 
 // 初期状態で最初のタブを開く
 document.addEventListener("DOMContentLoaded", function() {
@@ -336,8 +368,12 @@ document.addEventListener("DOMContentLoaded", function() {
         // menuChangeFlag を利用して、専用の処理をしている
 
         const checked = menuCheckbox.checked
+        const detail_change_btn = document.getElementById("detail_change_btn");
+        const label = document.getElementById("label-detail_change_btn");
         if (!menu.contains(event.target) && !menuCheckbox.contains(event.target)) {
             if (checked == true) {
+                detail_change_btn.style.display = 'block';
+                label.style.display = 'block';
                 menuChangeFlag = true
             }
             else {
@@ -348,6 +384,12 @@ document.addEventListener("DOMContentLoaded", function() {
         else if(!menu.contains(event.target) && menuCheckbox.contains(event.target)) {
             if (menuChangeFlag == true) {
                 menuCheckbox.checked = false;
+                detail_change_btn.style.display = 'block';
+                label.style.display = 'block';
+            }
+            else {
+                detail_change_btn.style.display = 'none';
+                label.style.display = 'none';
             }
         }
     });
