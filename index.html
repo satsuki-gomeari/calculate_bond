@@ -61,17 +61,15 @@
                         また、カフェタッチとスケジュールでの経験値も考慮して計算できます。
                     </p>
                 </section>
-                <form class="tab1-init-info">
-                    <div>
-                        <label for="input1-tab1">現在の絆ランク(1~100):</label>
-                        <input type="number" min="1" max="100" inputmode="decimal" id="input1-tab1" name="input1-tab1" value=1 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 3);">
-                    </div>
-                    <div>
-                        <label id="label-student-name-tab1" for="select-student-name-tab1">生徒:</label>
-                        <select class="student-name" name="student-name" id="select-student-name-tab1">
-                            <option value="default" selected>生徒を選んでください</option>
-                        </select>
-                    </div>
+                <form>
+                    <label id="label-student-name-tab1" for="select-student-name-tab1">生徒:</label>
+                    <select class="student-name" name="student-name" id="select-student-name-tab1">
+                        <option value="default" selected>生徒を選んでください</option>
+                    </select>
+                </form>
+                <form>
+                    <label for="input1-tab1">現在の絆ランク(1~100):</label>
+                    <input type="number" min="1" max="100" inputmode="decimal" id="input1-tab1" name="input1-tab1" value=1 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 3);">
                 </form>
                 <form>
                     <label class="grid-gift_normal-detail_label"><b>贈り物保有数:</b></label>

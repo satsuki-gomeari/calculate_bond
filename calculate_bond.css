@@ -149,14 +149,7 @@ form button:hover {
 
 .grid-gift_detail {
   display: none;
-  /* display: grid; */
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
-
-.tab1-init-info {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
   gap: 10px;
 }
 
@@ -184,8 +177,6 @@ form button:hover {
 }
 
 .grid-gift_normal-detail_label {
-    /* position: relative; */
-    /* top: 10px; */
     margin-bottom: -10px;
 }
 
@@ -213,19 +204,16 @@ form button:hover {
 }
 
 .grid-form3_label1 {
-    /* width: 10px; */
     gap: 200px;
     flex: 1;
 }
 
 .grid-form3_label2 {
-    /* width: 10px; */
     gap: 200px;
     flex: 1;
 }
 
 .grid-form3_label3 {
-    /* width: 10px; */
     gap: 200px;
     flex: 1;
 }
@@ -581,10 +569,6 @@ form button:hover {
     text-align: center;
     width: 30%;
 }
-/* .td_gift_type{
-    width: 152px;
-    height: 120px;
-} */
 
 .img_gift_type{
     width: 35px;

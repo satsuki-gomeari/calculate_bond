@@ -340,7 +340,6 @@ function changeDetail() {
     var normal_from = document.getElementsByClassName("grid-gift_normal");
     var normal_detail_from = document.getElementsByClassName("grid-form3");
     var grid_gift_normal_detail_label = document.getElementsByClassName("grid-gift_normal-detail_label");
-    var grid_gift_normal_detail_info = document.getElementsByClassName("tab1-init-info");
     var result_button_tab1 = document.getElementsByClassName("result-button-tab1");
     const label_student_name_tab1 = document.getElementById("label-student-name-tab1");
     const selelct_student_name_tab1 = document.getElementById("select-student-name-tab1");
@@ -348,7 +347,6 @@ function changeDetail() {
     const resultDisplay = document.getElementById(`result-display-tab1`);
 
     if (detail_change_btn_condition == true) {
-        grid_gift_normal_detail_info[0].style.gridTemplateColumns = "repeat(1, 1fr)";
         result_button_tab1[0].style.gridTemplateColumns = "repeat(1, 1fr)";
         label_student_name_tab1.style.display = 'none'
         selelct_student_name_tab1.style.display = 'none'
@@ -359,7 +357,6 @@ function changeDetail() {
         normal_detail_from[0].style.display = "grid";
     }
     else {
-        grid_gift_normal_detail_info[0].style.gridTemplateColumns = "repeat(2, 1fr)";
         result_button_tab1[0].style.gridTemplateColumns = "repeat(2, 1fr)";
         label_student_name_tab1.style.display = 'block'
         selelct_student_name_tab1.style.display = 'block'
