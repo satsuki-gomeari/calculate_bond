@@ -99,7 +99,22 @@ form button {
 }
 
 form button:hover {
-    background: #2980b9;
+  background: #2980b9;
+}
+
+#input_reset-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: #818181;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+}
+
+#input_reset-button:hover {
+    background: #707070;
 }
 
 .result {
@@ -136,6 +151,30 @@ form button:hover {
   display: none;
   /* display: grid; */
   grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.tab1-init-info {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 10px;
+}
+
+#label-student-name-tab1 {
+  display: none;
+}
+
+#select-student-name-tab1 {
+  display: none;
+}
+
+#input_reset-button {
+  display: none;
+}
+
+.result-button-tab1 {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
   gap: 10px;
 }
 
@@ -556,35 +595,12 @@ form button:hover {
     height: 27px;
 }
 
+.grid-gift_detail_img {
+  width: 35px;
+  height: 35px;
+}
+
 /* トグルボタン */
-/* .toggle-button-container {
-    position: relative;
-    width: 200px;
-    height: 140px;
-    box-sizing: border-box;
-  } */
-  
-  /* .toggle-button {
-    position: relative;
-    height: 100px;
-    margin: 20px;
-    background-color: #fff;
-    box-shadow: 0 10px 20px -8px #c5d6d6;
-    border-radius: 4px;
-  } */
-  
-  /* .toggle-button:before {
-    counter-increment: button-counter;
-    content: counter(button-counter);
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    color: #d7e3e3;
-    font-size: 12px;
-    line-height: 1;
-    padding: 5px;
-  } */
-  
   .knob,
   .btn-bg {
     position: absolute;

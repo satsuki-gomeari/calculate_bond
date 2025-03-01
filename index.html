@@ -61,17 +61,234 @@
                         また、カフェタッチとスケジュールでの経験値も考慮して計算できます。
                     </p>
                 </section>
-                <form>
-                    <label for="input1-tab1">現在の絆ランク(1~100):</label>
-                    <input type="number" min="1" max="100" inputmode="decimal" id="input1-tab1" name="input1-tab1" value=1 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 3);">
+                <form class="tab1-init-info">
+                    <div>
+                        <label for="input1-tab1">現在の絆ランク(1~100):</label>
+                        <input type="number" min="1" max="100" inputmode="decimal" id="input1-tab1" name="input1-tab1" value=1 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 3);">
+                    </div>
+                    <div>
+                        <label id="label-student-name-tab1" for="select-student-name-tab1">生徒:</label>
+                        <select class="student-name" name="student-name" id="select-student-name-tab1">
+                            <option value="default" selected>生徒を選んでください</option>
+                        </select>
+                    </div>
                 </form>
                 <form>
                     <label class="grid-gift_normal-detail_label"><b>贈り物保有数:</b></label>
                 </form>
                 <form class="grid-gift_detail">
                     <div>
-                        <label for="input-detail1">coming soon!</label>
-                        <!-- <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail1" name="input-detail1" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);"> -->
+                        <!-- <label for="input-detail1">coming soon!</label> -->
+                        <img class="grid-gift_detail_img" src="./img/gift/wave_cat.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-wave_cat" name="input-detail-wave_cat" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/roller.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-roller" name="input-detail-roller" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/e-pod.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-e-pod" name="input-detail-e-pod" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/forbidden_love.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-forbidden_love" name="input-detail-forbidden_love" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/game_magazine.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-game_magazine" name="input-detail-game_magazine" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/gloss.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-gloss" name="input-detail-gloss" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/bb_cream.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-bb_cream" name="input-detail-bb_cream" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/camouflage_cream.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-camouflage_cream" name="input-detail-camouflage_cream" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/cookie.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-cookie" name="input-detail-cookie" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/guns_cute.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-guns_cute" name="input-detail-guns_cute" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/scope.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-scope" name="input-detail-scope" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/game_girl.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-game_girl" name="input-detail-game_girl" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/ration.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-ration" name="input-detail-ration" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/soda.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-soda" name="input-detail-soda" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/jellies_pillow.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-jellies_pillow" name="input-detail-jellies_pillow" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/rabbit.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-rabbit" name="input-detail-rabbit" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/o_fit.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-o_fit" name="input-detail-o_fit" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/map.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-map" name="input-detail-map" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/glasses.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-glasses" name="input-detail-glasses" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/mechanism_box.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-mechanism_box" name="input-detail-mechanism_box" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/teddy_bear.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-teddy_bear" name="input-detail-teddy_bear" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/pair_ticket.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-pair_ticket" name="input-detail-pair_ticket" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/30paints.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-30paints" name="input-detail-30paints" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/poem_book.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-poem_book" name="input-detail-poem_book" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/cute_tableware.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-cute_tableware" name="input-detail-cute_tableware" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/cube_puzzle.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-cube_puzzle" name="input-detail-cube_puzzle" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/cake.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-cake" name="input-detail-cake" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/buffet_ticket.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-buffet_ticket" name="input-detail-buffet_ticket" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/flowerpot.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-flowerpot" name="input-detail-flowerpot" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/pot_of_desire.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-pot_of_desire" name="input-detail-pot_of_desire" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/music_box.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-music_box" name="input-detail-music_box" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/handkerchief.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-handkerchief" name="input-detail-handkerchief" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/encyclopaedia.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-encyclopaedia" name="input-detail-encyclopaedia" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/supplement.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-supplement" name="input-detail-supplement" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/float.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-float" name="input-detail-float" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/lace_pillow.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-lace_pillow" name="input-detail-lace_pillow" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/yankee.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-yankee" name="input-detail-yankee" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/the_beyond.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-the_beyond" name="input-detail-the_beyond" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/egg_crafts.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-egg_crafts" name="input-detail-egg_crafts" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/parfait.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-parfait" name="input-detail-parfait" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/laptop.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-laptop" name="input-detail-laptop" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/comb.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-comb" name="input-detail-comb" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/vitamin_jelly.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-vitamin_jelly" name="input-detail-vitamin_jelly" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/maple.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-maple" name="input-detail-maple" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/sewing_kit.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-sewing_kit" name="input-detail-sewing_kit" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/concert_tickets.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-concert_tickets" name="input-detail-concert_tickets" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/dumbbell.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-dumbbell" name="input-detail-dumbbell" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/the_life.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-the_life" name="input-detail-the_life" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/miku_photo_card.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-miku_photo_card" name="input-detail-miku_photo_card" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/sparkling_bouquet.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-sparkling_bouquet" name="input-detail-sparkling_bouquet" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/beautiful_bouquet.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-beautiful_bouquet" name="input-detail-beautiful_bouquet" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/refreshing_bouquet.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail-refreshing_bouquet" name="input-detail-refreshing_bouquet" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                    </div>
+                    <div>
+                        <img class="grid-gift_detail_img" src="./img/gift/gift_box.png">
+                        <input type="number" min="0" max="9999" inputmode="decimal" id="input-detail_gift_box" name="input-detail_gift_box" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                     </div>
                 </form>
                 <form class="grid-gift_normal">
@@ -116,12 +333,17 @@
                     </div>
                     <div class="grid-form3_input">
                         <input type="number" min="0" max="10" inputmode="decimal" id="input11-tab1" name="input11-tab1" value=7 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 2);">
-                        <input type="number" min="0" max="100" step="0.1" inputmode="decimal" id="input12-tab1" name="input12-tab1" value=0.5 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                        <input type="number" min="0" max="100" step="0.1" inputmode="decimal" id="input12-tab1" name="input12-tab1" value=0.2 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                         <input type="number" min="0" max="1000" inputmode="decimal" id="input13-tab1" name="input13-tab1" value=0 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                     </div>
                 </form>
-                <form>
-                    <button type="button" id="calc-button" onclick="updateResult('tab1')">ランク上昇幅を計算</button>
+                <form class="result-button-tab1">
+                    <div>
+                        <button type="button" id="calc-button" onclick="updateResult('tab1')">ランク上昇幅を計算</button>
+                    </div>
+                    <div>
+                        <button type="button" id="input_reset-button" onclick="resetGiftNum()">贈り物数リセット</button>
+                    </div>
                 </form>
                 <section class="result">
                     <p id="result-display-tab1">ここに結果が表示されます。</p>
@@ -159,7 +381,7 @@
                     </div>
                     <div class="flex-form2">
                         <input type="number" min="0" max="10" inputmode="decimal" id="input5-tab2" name="input5-tab2" value=7 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 2);">
-                        <input type="number" min="0" max="100" step="0.1" inputmode="decimal" id="input6-tab2" name="input6-tab2" value=0.5 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                        <input type="number" min="0" max="100" step="0.1" inputmode="decimal" id="input6-tab2" name="input6-tab2" value=0.2 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                     </div>
                 </form>
                 <form>
@@ -210,7 +432,7 @@
                     </div>
                     <div class="tab3_form_content">
                         <input type="number" min="0" max="10" inputmode="decimal" id="input4-tab3" name="input4-tab3" value=7 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 2);">
-                        <input type="number" min="0" max="100" step="0.1" inputmode="decimal" id="input5-tab3" name="input5-tab3" value=0.5 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
+                        <input type="number" min="0" max="100" step="0.1" inputmode="decimal" id="input5-tab3" name="input5-tab3" value=0.2 onfocus="this.select();" oninput="javascript: this.value = this.value.slice(0, 4);">
                     </div>                  
                 </form>
                 <form>

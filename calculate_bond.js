@@ -110,6 +110,7 @@ function addStudentsList() {
     const list3 = document.getElementById("select-student-name3");
     const list4 = document.getElementById("select-student-name4");
     const list5 = document.getElementById("select-student-name5");
+    const list_tab1 = document.getElementById("select-student-name-tab1");
     
     if (giftCompatibilityList.length > 0) {
         for (let i = 1; i < giftCompatibilityList.length; i++) {
@@ -139,6 +140,11 @@ function addStudentsList() {
             newOption5.value = String(i);
             newOption5.text = studentName;
             list5.add(newOption5);
+            const newOption_tab1 = document.createElement("option");
+            studentName = giftCompatibilityList[i].split(',')[0]
+            newOption_tab1.value = String(i);
+            newOption_tab1.text = studentName;
+            list_tab1.add(newOption_tab1);
         }
     }
 }
@@ -280,12 +286,12 @@ function setAvailableGifts() {
 
     var selecttedStudentGiftList = []
     for (let i=1; i<giftCompatibilityList.length; i++) {
-        var tempSudentName = giftCompatibilityList[i].split(',')[0]
-        if (tempSudentName == student1Name ||
-            tempSudentName == student2Name ||
-            tempSudentName == student3Name ||
-            tempSudentName == student4Name ||
-            tempSudentName == student5Name
+        var tempStudentName = giftCompatibilityList[i].split(',')[0]
+        if (tempStudentName == student1Name ||
+            tempStudentName == student2Name ||
+            tempStudentName == student3Name ||
+            tempStudentName == student4Name ||
+            tempStudentName == student5Name
         ) {
             selecttedStudentGiftList.push(giftCompatibilityList[i].split('\r')[0].split(','));
         }
@@ -334,22 +340,45 @@ function changeDetail() {
     var normal_from = document.getElementsByClassName("grid-gift_normal");
     var normal_detail_from = document.getElementsByClassName("grid-form3");
     var grid_gift_normal_detail_label = document.getElementsByClassName("grid-gift_normal-detail_label");
-    var calc_button = document.getElementById("calc-button");
+    var grid_gift_normal_detail_info = document.getElementsByClassName("tab1-init-info");
+    var result_button_tab1 = document.getElementsByClassName("result-button-tab1");
+    const label_student_name_tab1 = document.getElementById("label-student-name-tab1");
+    const selelct_student_name_tab1 = document.getElementById("select-student-name-tab1");
+    const input_reset_button = document.getElementById("input_reset-button");
+    const resultDisplay = document.getElementById(`result-display-tab1`);
 
     if (detail_change_btn_condition == true) {
+        grid_gift_normal_detail_info[0].style.gridTemplateColumns = "repeat(1, 1fr)";
+        result_button_tab1[0].style.gridTemplateColumns = "repeat(1, 1fr)";
+        label_student_name_tab1.style.display = 'none'
+        selelct_student_name_tab1.style.display = 'none'
+        input_reset_button.style.display = 'none'
         detail_form[0].style.display = "none";
         grid_gift_normal_detail_label[0].style.display = "grid";
         normal_from[0].style.display = "grid";
-        calc_button.disabled = false;
+        normal_detail_from[0].style.display = "grid";
     }
     else {
+        grid_gift_normal_detail_info[0].style.gridTemplateColumns = "repeat(2, 1fr)";
+        result_button_tab1[0].style.gridTemplateColumns = "repeat(2, 1fr)";
+        label_student_name_tab1.style.display = 'block'
+        selelct_student_name_tab1.style.display = 'block'
+        input_reset_button.style.display = 'block'
         normal_from[0].style.display = "none";
-        normal_detail_from[0].style.display = "none";
         grid_gift_normal_detail_label[0].style.display = "none";
         detail_form[0].style.display = "grid";
-        calc_button.disabled = true;
+        normal_detail_from[0].style.display = "grid";
         
     }
+    resultDisplay.innerHTML = `ここに結果が表示されます。`;
+}
+
+function resetGiftNum() {
+    for (let i=1; i<giftImgPathList.length; i++) {
+        let gift_name = giftImgPathList[i].split('/')[3].split('.')[0];
+        document.getElementById('input-detail-' + gift_name).value = 0;
+    }
+    document.getElementById('input-detail_gift_box').value = 0;
 }
 
 
@@ -406,24 +435,105 @@ window.addEventListener("resize", updateLayout);
 
 
 function updateResult(tabId) {
+
     const resultDisplay = document.getElementById(`result-display-${tabId}`);
-    let result = '';
+    let result = 'init';
+    let current_lv = 0;
+    let gift_o_s_num = 0;
+    let gift_o_m_num = 0;
+    let gift_o_l_num = 0;
+    let gift_o_ex_num = 0;
+    let gift_p_s_num = 0;
+    let gift_p_m_num = 0;
+    let gift_p_l_num = 0;
+    let gift_p_ex_num = 0;
+    let cafe_touch_per_day = 0;
+    let schedule_touch_per_day = 0;
+    let number_of_day = 0;
 
     if (tabId === 'tab1') {
-        
-        const current_lv = Number(document.getElementById('input1-tab1').value);
-        const gift_o_s_num = Number(document.getElementById('input3-tab1').value);
-        const gift_o_m_num = Number(document.getElementById('input4-tab1').value);
-        const gift_o_l_num = Number(document.getElementById('input5-tab1').value);
-        const gift_o_ex_num = Number(document.getElementById('input6-tab1').value);
-        const gift_p_s_num = Number(document.getElementById('input7-tab1').value);
-        const gift_p_m_num = Number(document.getElementById('input8-tab1').value);
-        const gift_p_l_num = Number(document.getElementById('input9-tab1').value);
-        const gift_p_ex_num = Number(document.getElementById('input10-tab1').value);
-        const cafe_touch_per_day = Number(document.getElementById('input11-tab1').value);
-        const schedule_touch_per_day = Number(document.getElementById('input12-tab1').value);
-        const number_of_day = Number(document.getElementById('input13-tab1').value);
+        var detail_change_btn_condition = document.getElementById('checkbox_detail_change_btn').checked;
+        if (detail_change_btn_condition == true) {
+            // 通常モード
+            current_lv = Number(document.getElementById('input1-tab1').value);
+            gift_o_s_num = Number(document.getElementById('input3-tab1').value);
+            gift_o_m_num = Number(document.getElementById('input4-tab1').value);
+            gift_o_l_num = Number(document.getElementById('input5-tab1').value);
+            gift_o_ex_num = Number(document.getElementById('input6-tab1').value);
+            gift_p_s_num = Number(document.getElementById('input7-tab1').value);
+            gift_p_m_num = Number(document.getElementById('input8-tab1').value);
+            gift_p_l_num = Number(document.getElementById('input9-tab1').value);
+            gift_p_ex_num = Number(document.getElementById('input10-tab1').value);
+            cafe_touch_per_day = Number(document.getElementById('input11-tab1').value);
+            schedule_touch_per_day = Number(document.getElementById('input12-tab1').value);
+            number_of_day = Number(document.getElementById('input13-tab1').value);
+        }
+        else {
+            // 詳細モード
+            current_lv = Number(document.getElementById('input1-tab1').value);
+            gift_o_s_num = 0
+            gift_o_m_num = 0
+            gift_o_l_num = 0
+            gift_o_ex_num = 0
+            gift_p_s_num = 0
+            gift_p_m_num = 0
+            gift_p_l_num = 0
+            gift_p_ex_num = 0
+            cafe_touch_per_day = Number(document.getElementById('input11-tab1').value);
+            schedule_touch_per_day = Number(document.getElementById('input12-tab1').value);
+            number_of_day = Number(document.getElementById('input13-tab1').value);
 
+            // 選択した生徒ごとの贈り物数を合算する
+            const student_num = document.getElementById("select-student-name-tab1").value;
+            if (student_num != "default") {
+                const personalGiftCompatibility = giftCompatibilityList[Number(student_num)].split('\r')[0].split(',');
+                
+                for (let i=1; i<giftImgPathList.length; i++) {
+                    let gift_name = giftImgPathList[i].split('/')[3].split('.')[0];
+                    let gift_input_num = Number(document.getElementById('input-detail-' + gift_name).value);
+                    let gift_type_num = Number(personalGiftCompatibility[i]);
+
+                    if (gift_type_num == 1) {
+                        gift_o_s_num += gift_input_num;
+                    }
+                    else if(gift_type_num == 2) {
+                        gift_o_m_num += gift_input_num;
+                    }
+                    else if(gift_type_num == 3) {
+                        gift_o_l_num += gift_input_num;
+                    }
+                    else if(gift_type_num == 4) {
+                        gift_o_ex_num += gift_input_num;
+                    }
+                    else if(gift_type_num == 5) {
+                        gift_p_s_num += gift_input_num;
+                    }
+                    else if(gift_type_num == 6) {
+                        gift_p_m_num += gift_input_num;
+                    }
+                    else if(gift_type_num == 7) {
+                        gift_p_l_num += gift_input_num;
+                    }
+                    else if(gift_type_num == 8) {
+                        gift_p_ex_num += gift_input_num;
+                    }
+
+                }
+                const gift_box_num = Number(document.getElementById('input-detail_gift_box').value);
+                gift_o_l_num += gift_box_num;
+
+            }
+            else {
+                result = `
+                    下記の点を確認してください。 <br>
+                    ・生徒を選択してください
+                `;
+                resultDisplay.innerHTML = result;
+                return;
+            }
+        }
+        
+        // 経験値の計算
         let gift2ex = calculator.calculateGift2Ex(
             gift_o_s_num,
             gift_o_m_num,
