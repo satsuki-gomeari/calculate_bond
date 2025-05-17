@@ -176,7 +176,7 @@ form button:hover {
 .grid-gift_detail div {
   display: flex;
   flex-direction: column;
-  width: 80px;
+  width: 93px;
 }
 
 .grid-gift_normal-detail_label {
@@ -359,12 +359,17 @@ form button:hover {
 }
 
 @media (max-width: 768px) {
-    .tabs {
-        display: none;
-    }
-    #hamburger-menu {
-        display: block;
-    }
+  .grid-gift_detail div {
+    display: flex;
+    flex-direction: column;
+    width: 70px;
+  }
+  .tabs {
+      display: none;
+  }
+  #hamburger-menu {
+      display: block;
+  }
 }
 
 
