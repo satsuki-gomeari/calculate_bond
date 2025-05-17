@@ -362,7 +362,7 @@ form button:hover {
   .grid-gift_detail div {
     display: flex;
     flex-direction: column;
-    width: 70px;
+    width: 68px;
   }
   .tabs {
       display: none;
