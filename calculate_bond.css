@@ -176,7 +176,7 @@ form button:hover {
 .grid-gift_detail div {
   display: flex;
   flex-direction: column;
-  width: 93px;
+  width: 80px;
 }
 
 .grid-gift_normal-detail_label {
