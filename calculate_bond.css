@@ -7,7 +7,7 @@ body {
 }
 
 .container {
-    max-width: 1000px;
+    max-width: 1060px;
     min-width: 330px;
     margin: 50px auto;
     background: #fff;
@@ -149,8 +149,10 @@ form button:hover {
 
 .grid-gift_detail {
   display: none;
-  grid-template-columns: repeat(4, 1fr);
+  /* grid-template-columns: repeat(4, 1fr); */
   gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 #label-student-name-tab1 {
@@ -174,6 +176,7 @@ form button:hover {
 .grid-gift_detail div {
   display: flex;
   flex-direction: column;
+  width: 93px;
 }
 
 .grid-gift_normal-detail_label {

@@ -363,7 +363,7 @@ function changeDetail() {
         input_reset_button.style.display = 'block'
         normal_from[0].style.display = "none";
         grid_gift_normal_detail_label[0].style.display = "none";
-        detail_form[0].style.display = "grid";
+        detail_form[0].style.display = "flex";
         normal_detail_from[0].style.display = "grid";
         
     }
