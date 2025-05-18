@@ -376,6 +376,12 @@ function resetGiftNum() {
         document.getElementById('input-detail-' + gift_name).value = 0;
     }
     document.getElementById('input-detail_gift_box').value = 0;
+
+    // それぞれの要素の背景色もリセット
+    const inputs = document.querySelectorAll('.grid-gift_detail_input');
+    inputs.forEach(input => {
+    input.style.backgroundColor = ''; // 任意の色に変更
+    });
 }
 
 
@@ -419,6 +425,20 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
     });
+
+    const inputs = document.querySelectorAll(".grid-gift_detail_input");
+    inputs.forEach(input => {
+        input.addEventListener("input", function () {
+          // 最大4桁に制限
+          this.value = this.value.slice(0, 4);
+          // 数値が1以上のときだけ背景色を変更
+          this.style.backgroundColor = (parseInt(this.value) >= 1) ? "#90d7f8" : "";
+        });
+        
+        input.addEventListener("focus", function () {
+          this.select();
+        });
+      });
 
     menu.querySelectorAll("li").forEach(link => {
         link.addEventListener("click", function () {
