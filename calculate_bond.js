@@ -2,6 +2,9 @@ var menuChangeFlag = false;
 var selectedTab = "tab1";
 var giftCompatibilityList = [];
 var giftImgPathList = []
+var studentImgPathList = []
+
+var tempImgPath = "./img/peroro.png"
 
 function openTab(evt, tabName) {
     selectedTab = tabName
@@ -50,24 +53,46 @@ function openTab(evt, tabName) {
 }
 
 function changeStudentsList(listNum) {
-    const studentNum = document.getElementById("select-student-name" + String(listNum)).value;
 
-    // 現存するテーブルの削除
-    var student = "student" + String(listNum);
-    var form = document.getElementById(student);
-    form.innerHTML = '';
-
-    var result = document.getElementById("available-gift");
-    result.innerHTML = '';
-
-    // 新規テーブルの作成
-    if (studentNum != "default") {
-        const giftCompatibility = giftCompatibilityList[Number(studentNum)].split('\r')[0];
-        addGiftImgTable(listNum, giftCompatibility, student)
+    if (listNum != -1) {
+        const studentNum = document.getElementById("select-student-name" + String(listNum)).value;
+    
+        // 現存するテーブルの削除
+        var student = "student" + String(listNum);
+        var form = document.getElementById(student);
+        form.innerHTML = '';
+    
+        var result = document.getElementById("available-gift");
+        result.innerHTML = '';
+    
+        // 新規テーブルの作成
+        if (studentNum != "default") {
+            const giftCompatibility = giftCompatibilityList[Number(studentNum)].split('\r')[0];
+            addGiftImgTable(listNum, giftCompatibility, student)
+        }
+    
+        // 現存するすべてのテーブルから製造に使ってよい贈り物を算出
+        setAvailableGifts()
+    } else {
+        try {
+            // どれだけ上がる(詳細)の生徒リスト変化時の処理
+            const studentNum = document.getElementById("select-student-name-tab1").value;
+            let student_img_path = studentImgPathList[Number(studentNum)]
+            // const imgElement = document.querySelector(".result-display-tab1-img");
+            
+            if (typeof student_img_path === "string") {
+                student_img_path = student_img_path.split('\r')[0];
+            } else {
+                student_img_path = tempImgPath;
+            }
+    
+            // imgElement.src = student_img_path
+    
+            changeImageIfExists(".result-display-tab1-img", student_img_path)
+        } catch (e) {
+            console.error("changeStudentsList の処理中にエラー:", e);
+        }
     }
-
-    // 現存するすべてのテーブルから製造に使ってよい贈り物を算出
-    setAvailableGifts()
 }
 
 function updateLayout() {
@@ -100,6 +125,15 @@ function parseGiftImgPathCSV(data) {
     for (let i=0; i<giftPathPairList.length; i++) {
         var path = giftPathPairList[i].split(',')[1].split('\r')[0]
         giftImgPathList[i] = path
+    }
+
+}
+
+function parseStudentImgPathCSV(data) {
+    var studentPathPairList = data.split('\n');
+    for (let i=0; i<studentPathPairList.length; i++) {
+        var path = studentPathPairList[i].split(',')[1].split('\r')[0]
+        studentImgPathList[i] = path
     }
 
 }
@@ -228,7 +262,6 @@ function createStudentGiftTable(giftCompatibility) {
         else if (giftType == 3 || giftType == 7) {
             // 贈り物大
             lGiftList.push(giftImg);
-            
         }
         else if (giftType == 4 || giftType == 8) {
             // 贈り物特大
@@ -345,12 +378,14 @@ function changeDetail() {
     const selelct_student_name_tab1 = document.getElementById("select-student-name-tab1");
     const input_reset_button = document.getElementById("input_reset-button");
     const resultDisplay = document.getElementById(`result-display-tab1`);
+    const studentImg = document.querySelector('.result-display-tab1-img');
 
     if (detail_change_btn_condition == true) {
         result_button_tab1[0].style.gridTemplateColumns = "repeat(1, 1fr)";
         label_student_name_tab1.style.display = 'none'
         selelct_student_name_tab1.style.display = 'none'
         input_reset_button.style.display = 'none'
+        studentImg.style.display = "none"
         detail_form[0].style.display = "none";
         grid_gift_normal_detail_label[0].style.display = "grid";
         normal_from[0].style.display = "grid";
@@ -361,13 +396,14 @@ function changeDetail() {
         label_student_name_tab1.style.display = 'block'
         selelct_student_name_tab1.style.display = 'block'
         input_reset_button.style.display = 'block'
+        studentImg.style.display = "block"
         normal_from[0].style.display = "none";
         grid_gift_normal_detail_label[0].style.display = "none";
         detail_form[0].style.display = "flex";
         normal_detail_from[0].style.display = "grid";
         
     }
-    resultDisplay.innerHTML = `ここに結果が表示されます。`;
+    resultDisplay.innerHTML = `ここに結果が表示されます。<br>計算ボタンを押してください。`;
 }
 
 function resetGiftNum() {
@@ -384,12 +420,31 @@ function resetGiftNum() {
     });
 }
 
+function changeImageIfExists(className, newImgPath) {
+    // 画像の読み込みチェック 
+    const testImg = new Image();
+    const imgElement = document.querySelector(className);
+    
+    testImg.onload = function () {
+        // 画像の読み込みに成功した場合
+        imgElement.src = newImgPath;
+    };
+    
+    testImg.onerror = function () {
+        // 画像が存在しない、または読み込みに失敗した場合(絶対に読み込めることが確認できたパスを設定しておく)
+        imgElement.src = tempImgPath;
+    };
+  
+    testImg.src = newImgPath;
+  }
+
 
 // 初期状態で最初のタブを開く
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelector(".tab").click();
     fetch('blue_archive_gift.csv').then(response => response.text()).then(data => parseGiftCSV(data));
     fetch('blue_archive_gift_img_path.csv').then(response => response.text()).then(data => parseGiftImgPathCSV(data));
+    fetch('blue_archive_student_img_path.csv').then(response => response.text()).then(data => parseStudentImgPathCSV(data));
 
     const menuCheckbox = document.getElementById("menu-btn");
     const menu = document.querySelector(".menu");
@@ -570,7 +625,7 @@ function updateResult(tabId) {
 
         if (current_lv > 0 && current_lv <= 100 && cafe_touch_per_day >= 0 && schedule_touch_per_day >= 0 && number_of_day >= 0 && gift2ex >= 0 && Number.isInteger(current_lv)) {
             result = `
-            ・保有している贈り物で、絆ランク<b>${current_lv}</b>から<b>${target_lv}</b>まで到達できます。<br>
+            ・絆ランク<b>${current_lv}</b>から<b>${target_lv}</b>まで到達できます。<br>
             ・<b>${gift2ex}</b>の経験値が獲得できます。
         `;
         }

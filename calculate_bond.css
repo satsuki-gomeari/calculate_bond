@@ -124,6 +124,37 @@ form button:hover {
     margin-top: 20px;
 }
 
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+/* テキストを左上に配置 */
+#result-display-tab1 {
+  position: relative;
+  top: 0;
+  left: 0;
+  margin: 0;
+  /* color: white; */
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 25px;
+  z-index: 2;
+  color: black; /* 必要に応じて */
+}
+
+/* 画像を右上に配置、透明度調整 */
+.result-display-tab1-img {
+  position: absolute;
+  top: -15px;
+  right: 0;
+  width: 130px;
+  opacity: 0.8;  /* ←透明度 0.0 ～ 1.0 で調整可能 */
+  z-index: 1;
+}
+
 .grid-form {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

@@ -63,7 +63,7 @@
                 </section>
                 <form>
                     <label id="label-student-name-tab1" for="select-student-name-tab1">生徒:</label>
-                    <select class="student-name" name="student-name" id="select-student-name-tab1">
+                    <select class="student-name" name="student-name" id="select-student-name-tab1" onchange="changeStudentsList(-1)">
                         <option value="default" selected>生徒を選んでください</option>
                     </select>
                 </form>
@@ -343,7 +343,10 @@
                     </div>
                 </form>
                 <section class="result">
-                    <p id="result-display-tab1">ここに結果が表示されます。</p>
+                    <div class="image-wrapper">
+                        <p id="result-display-tab1">ここに結果が表示されます。<br>計算ボタンを押してください。</p>
+                        <img class="result-display-tab1-img">
+                    </div>
                 </section>
             </section>
             <section id="tab2" class="tab-content" style="display:none;">
@@ -385,7 +388,7 @@
                     <button type="button" onclick="updateResult('tab2')">想定個数を計算</button>
                 </form>
                 <section class="result">
-                    <p id="result-display-tab2">ここに結果が表示されます。</p>
+                    <p id="result-display-tab2">ここに結果が表示されます。<br>計算ボタンを押してください。</p>
                 </section>
             </section>
             <section id="tab3" class="tab-content" style="display:none;">
@@ -436,7 +439,7 @@
                     <button type="button" onclick="updateResult('tab3')">想定日数を計算</button>
                 </form>
                 <section class="result">
-                    <p id="result-display-tab3">ここに結果が表示されます。</p>
+                    <p id="result-display-tab3">ここに結果が表示されます。<br>計算ボタンを押してください。</p>
                 </section>
             </section>
             <section id="tab4" class="tab-content" style="display:none;">
