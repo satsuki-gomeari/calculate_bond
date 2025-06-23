@@ -151,7 +151,7 @@ form button:hover {
   top: -15px;
   right: 0;
   width: 130px;
-  opacity: 0.8;  /* ←透明度 0.0 ～ 1.0 で調整可能 */
+  opacity: 0.6;  /* ←透明度 0.0 ～ 1.0 で調整可能 */
   z-index: 1;
 }
 
