@@ -684,7 +684,7 @@ function updateResult(tabId) {
             &emsp;&emsp;橙特大の場合：<b>${Math.ceil(required_o_ex_num/diff)}</b>個/日、合計<b>${required_o_ex_num}</b>個、
              紫特大の場合：<b>${Math.ceil(required_p_ex_num/diff)}</b>個/日、合計<b>${required_p_ex_num}</b>個<br><br>
             ・目標の絆ランク到達には、およそ <b>${required_ex}</b> 経験値が必要です。 <br>
-            ・表示が 0個の場合、カフェ or スケジュールのみで到達可能です。 <br><br>
+            ・表示が <b>${0}</b>個の場合、カフェ or スケジュールのみで到達可能です。 <br><br>
             カフェRANKは最大値, スケジュールBOUNUSは無しの想定で計算しています。
         `;
         }
