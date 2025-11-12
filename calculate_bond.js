@@ -1,10 +1,12 @@
 var menuChangeFlag = false;
 var selectedTab = "tab1";
 var giftCompatibilityList = [];
-var giftImgPathList = []
-var studentImgPathList = []
+var giftImgPathList = [];
+var studentImgPathList = [];
 
-var tempImgPath = "./img/peroro.png"
+const TEMP_IMG_PATH = "./img/peroro.png";
+const ORANGE_GIFT_INDEX_MIN = 1;
+const ORANGE_GIFT_INDEX_MAX = 36;
 
 function openTab(evt, tabName) {
     selectedTab = tabName
@@ -83,7 +85,7 @@ function changeStudentsList(listNum) {
             if (typeof student_img_path === "string") {
                 student_img_path = student_img_path.split('\r')[0];
             } else {
-                student_img_path = tempImgPath;
+                student_img_path = TEMP_IMG_PATH;
             }
     
             // imgElement.src = student_img_path
@@ -432,7 +434,7 @@ function changeImageIfExists(className, newImgPath) {
     
     testImg.onerror = function () {
         // 画像が存在しない、または読み込みに失敗した場合(絶対に読み込めることが確認できたパスを設定しておく)
-        imgElement.src = tempImgPath;
+        imgElement.src = TEMP_IMG_PATH;
     };
   
     testImg.src = newImgPath;
@@ -591,8 +593,16 @@ function updateResult(tabId) {
                     }
 
                 }
+                // 贈り物選択 box は生徒が好む最もランクの高いものが選択されると想定
+                // 水着ハナコ → BBクリーム = 橙特大 = 4
+                let max_gift_type = 0;
                 const gift_box_num = Number(document.getElementById('input-detail_gift_box').value);
-                gift_o_l_num += gift_box_num;
+                max_gift_type = Math.max(...personalGiftCompatibility.slice(ORANGE_GIFT_INDEX_MIN, ORANGE_GIFT_INDEX_MAX).map(Number));
+
+                if(max_gift_type === 4) gift_o_ex_num += gift_box_num;
+                else if(max_gift_type === 3) gift_o_l_num += gift_box_num;
+                else if(max_gift_type === 2) gift_o_m_num += gift_box_num;
+                else if(max_gift_type === 1) gift_o_s_num += gift_box_num;
 
             }
             else {
