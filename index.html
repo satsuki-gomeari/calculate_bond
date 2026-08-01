@@ -62,10 +62,18 @@
                     </p>
                 </section>
                 <form>
-                    <label id="label-student-name-tab1" for="select-student-name-tab1">生徒:</label>
-                    <select class="student-name" name="student-name" id="select-student-name-tab1" onchange="changeStudentsList(-1)">
-                        <option value="default" selected>生徒を選んでください</option>
-                    </select>
+                    <label id="label-student-name-tab1" for="custom-student-select-tab1">生徒:</label>
+                    <div class="custom-select-wrapper" id="custom-student-select-tab1" style="display:none;">
+                        <div class="custom-select-trigger" tabindex="0">
+                            <span class="custom-select-placeholder">生徒を選んでください</span>
+                            <span class="custom-select-arrow">▾</span>
+                        </div>
+                        <div class="custom-options" id="custom-options-tab1">
+                            <input type="text" class="custom-option-search" id="custom-search-tab1" placeholder="検索">
+                            <div class="custom-option" data-value="default">生徒を選んでください</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="select-student-name-tab1" name="student-name" value="default">
                 </form>
                 <form>
                     <label for="input1-tab1">現在の絆ランク(1~100):</label>
@@ -453,40 +461,80 @@
                         <label class="tab3_form_label_1" for="radio-grid1">生徒:</label>
                     </div>
                     <div class="tab3_form_content">
-                        <select class="student-name" name="student-name" id="select-student-name1" onchange="changeStudentsList(1)">
-                            <option value="default" selected>生徒を選んでください</option>
-                        </select>
+                        <div class="custom-select-wrapper" id="custom-student-select-1">
+                            <div class="custom-select-trigger" tabindex="0">
+                                <span class="custom-select-placeholder">生徒を選んでください</span>
+                                <span class="custom-select-arrow">▾</span>
+                            </div>
+                            <div class="custom-options" id="custom-options-1">
+                                <input type="text" class="custom-option-search" placeholder="検索">
+                                <div class="custom-option" data-value="default">生徒を選んでください</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="select-student-name1" name="student-name" value="default">
                     </div>
                     <div id="student1">
-                    </div>           
+                    </div>
                     <div class="tab3_form_content">
-                        <select class="student-name" name="student-name" id="select-student-name2" onchange="changeStudentsList(2)">
-                            <option value="default" selected>生徒を選んでください</option>
-                        </select>
+                        <div class="custom-select-wrapper" id="custom-student-select-2">
+                            <div class="custom-select-trigger" tabindex="0">
+                                <span class="custom-select-placeholder">生徒を選んでください</span>
+                                <span class="custom-select-arrow">▾</span>
+                            </div>
+                            <div class="custom-options" id="custom-options-2">
+                                <input type="text" class="custom-option-search" placeholder="検索">
+                                <div class="custom-option" data-value="default">生徒を選んでください</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="select-student-name2" name="student-name" value="default">
                     </div>
                     <div id="student2">
-                    </div>           
+                    </div>
                     <div class="tab3_form_content">
-                        <select class="student-name" name="student-name" id="select-student-name3" onchange="changeStudentsList(3)">
-                            <option value="default" selected>生徒を選んでください</option>
-                        </select>
+                        <div class="custom-select-wrapper" id="custom-student-select-3">
+                            <div class="custom-select-trigger" tabindex="0">
+                                <span class="custom-select-placeholder">生徒を選んでください</span>
+                                <span class="custom-select-arrow">▾</span>
+                            </div>
+                            <div class="custom-options" id="custom-options-3">
+                                <input type="text" class="custom-option-search" placeholder="検索">
+                                <div class="custom-option" data-value="default">生徒を選んでください</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="select-student-name3" name="student-name" value="default">
                     </div>
                     <div id="student3">
-                    </div>           
+                    </div>
                     <div class="tab3_form_content">
-                        <select class="student-name" name="student-name" id="select-student-name4" onchange="changeStudentsList(4)">
-                            <option value="default" selected>生徒を選んでください</option>
-                        </select>
+                        <div class="custom-select-wrapper" id="custom-student-select-4">
+                            <div class="custom-select-trigger" tabindex="0">
+                                <span class="custom-select-placeholder">生徒を選んでください</span>
+                                <span class="custom-select-arrow">▾</span>
+                            </div>
+                            <div class="custom-options" id="custom-options-4">
+                                <input type="text" class="custom-option-search" placeholder="検索">
+                                <div class="custom-option" data-value="default">生徒を選んでください</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="select-student-name4" name="student-name" value="default">
                     </div>
                     <div id="student4">
-                    </div>           
+                    </div>
                     <div class="tab3_form_content">
-                        <select class="student-name" name="student-name" id="select-student-name5" onchange="changeStudentsList(5)">
-                            <option value="default" selected>生徒を選んでください</option>
-                        </select>
+                        <div class="custom-select-wrapper" id="custom-student-select-5">
+                            <div class="custom-select-trigger" tabindex="0">
+                                <span class="custom-select-placeholder">生徒を選んでください</span>
+                                <span class="custom-select-arrow">▾</span>
+                            </div>
+                            <div class="custom-options" id="custom-options-5">
+                                <input type="text" class="custom-option-search" placeholder="検索">
+                                <div class="custom-option" data-value="default">生徒を選んでください</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="select-student-name5" name="student-name" value="default">
                     </div>
                     <div id="student5">
-                    </div>           
+                    </div>
                 </form>
                 <section class="result">
                     <p id="result-display-tab3">以下の贈り物を製造素材にしてください。</p>

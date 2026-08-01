@@ -3,6 +3,8 @@ var selectedTab = "tab1";
 var giftCompatibilityList = [];
 var giftImgPathList = [];
 var studentImgPathList = [];
+var studentOptionsTab1 = [];
+var studentOptionsTab4 = [];
 
 const TEMP_IMG_PATH = "./img/peroro.png";
 const ORANGE_GIFT_INDEX_MIN = 1;
@@ -141,47 +143,219 @@ function parseStudentImgPathCSV(data) {
 }
 
 function addStudentsList() {
-    const list1 = document.getElementById("select-student-name1");
-    const list2 = document.getElementById("select-student-name2");
-    const list3 = document.getElementById("select-student-name3");
-    const list4 = document.getElementById("select-student-name4");
-    const list5 = document.getElementById("select-student-name5");
-    const list_tab1 = document.getElementById("select-student-name-tab1");
-    
+    studentOptionsTab1 = [{ value: "default", text: "生徒を選んでください" }];
+    studentOptionsTab4 = [{ value: "default", text: "生徒を選んでください" }];
+
     if (giftCompatibilityList.length > 0) {
         for (let i = 1; i < giftCompatibilityList.length; i++) {
-            // 下記の newOptionX を1つにまとめると、最後に add したものだけ有効になる
-            const newOption1 = document.createElement("option");
-            studentName = giftCompatibilityList[i].split(',')[0]
-            newOption1.value = String(i);
-            newOption1.text = studentName;
-            list1.add(newOption1);
-            const newOption2 = document.createElement("option");
-            studentName = giftCompatibilityList[i].split(',')[0]
-            newOption2.value = String(i);
-            newOption2.text = studentName;
-            list2.add(newOption2);
-            const newOption3 = document.createElement("option");
-            studentName = giftCompatibilityList[i].split(',')[0]
-            newOption3.value = String(i);
-            newOption3.text = studentName;
-            list3.add(newOption3);
-            const newOption4 = document.createElement("option");
-            studentName = giftCompatibilityList[i].split(',')[0]
-            newOption4.value = String(i);
-            newOption4.text = studentName;
-            list4.add(newOption4);
-            const newOption5 = document.createElement("option");
-            studentName = giftCompatibilityList[i].split(',')[0]
-            newOption5.value = String(i);
-            newOption5.text = studentName;
-            list5.add(newOption5);
-            const newOption_tab1 = document.createElement("option");
-            studentName = giftCompatibilityList[i].split(',')[0]
-            newOption_tab1.value = String(i);
-            newOption_tab1.text = studentName;
-            list_tab1.add(newOption_tab1);
+            const studentName = giftCompatibilityList[i].split(',')[0];
+            studentOptionsTab1.push({ value: String(i), text: studentName });
+            studentOptionsTab4.push({ value: String(i), text: studentName });
         }
+    }
+
+    renderCustomStudentOptions("custom-options-tab1", studentOptionsTab1);
+    renderCustomStudentOptionsForTab4();
+}
+
+function renderCustomStudentOptions(optionsId, optionsData) {
+    const optionsWrapper = document.getElementById(optionsId);
+    if (!optionsWrapper) return;
+
+    const searchInput = optionsWrapper.querySelector(".custom-option-search");
+    const existingOptions = Array.from(optionsWrapper.querySelectorAll(".custom-option"));
+    existingOptions.forEach(option => option.remove());
+
+    optionsData.forEach(optionData => {
+        const optionDOM = document.createElement("div");
+        optionDOM.className = "custom-option";
+        optionDOM.dataset.value = optionData.value;
+        optionDOM.textContent = optionData.text;
+        optionsWrapper.appendChild(optionDOM);
+    });
+
+    if (searchInput) {
+        optionsWrapper.insertBefore(searchInput, optionsWrapper.firstChild);
+    }
+}
+
+function renderCustomStudentOptionsForTab4() {
+    for (let i = 1; i <= 5; i++) {
+        renderCustomStudentOptions(`custom-options-${i}`, studentOptionsTab4);
+    }
+}
+
+function filterCustomStudentOptions(optionsId, query) {
+    const optionElements = document.querySelectorAll(`#${optionsId} .custom-option`);
+    let anyVisible = false;
+
+    optionElements.forEach(option => {
+        const text = option.textContent.toLowerCase();
+        const visible = query === "" || text.includes(query);
+        option.classList.toggle("hidden", !visible);
+        if (visible) {
+            anyVisible = true;
+        }
+    });
+
+    if (!anyVisible) {
+        const noResults = document.querySelector(`#${optionsId} .custom-no-results`);
+        if (!noResults) {
+            const message = document.createElement("div");
+            message.className = "custom-option custom-no-results disabled";
+            message.textContent = "一致する項目がありません";
+            document.getElementById(optionsId).appendChild(message);
+        }
+    } else {
+        const noResults = document.querySelector(`#${optionsId} .custom-no-results`);
+        if (noResults) {
+            noResults.remove();
+        }
+    }
+}
+
+function getCustomOptionsId(hiddenInputId) {
+    if (hiddenInputId === "select-student-name-tab1") {
+        return "custom-options-tab1";
+    }
+
+    const match = hiddenInputId.match(/^select-student-name(\d+)$/);
+    if (match) {
+        return `custom-options-${match[1]}`;
+    }
+
+    return hiddenInputId;
+}
+
+function selectCustomStudentOption(hiddenInputId, placeholderSelector, value, text, changeListNum) {
+    const hiddenInput = document.getElementById(hiddenInputId);
+    const placeholder = document.querySelector(placeholderSelector);
+
+    if (!hiddenInput || !placeholder) {
+        return;
+    }
+
+    hiddenInput.value = value;
+    placeholder.textContent = text;
+    closeCustomStudentOptions(getCustomOptionsId(hiddenInputId));
+    if (changeListNum !== null) {
+        changeStudentsList(changeListNum);
+    } else {
+        changeStudentsList(-1);
+    }
+}
+
+function closeCustomStudentOptions(optionsId) {
+    const optionsWrapper = document.getElementById(optionsId);
+    if (optionsWrapper) {
+        optionsWrapper.classList.remove("open");
+    }
+}
+
+function openCustomStudentOptions(optionsId) {
+    const optionsWrapper = document.getElementById(optionsId);
+    if (optionsWrapper) {
+        optionsWrapper.classList.add("open");
+    }
+}
+
+function initCustomStudentSelectTab1() {
+    const customSelect = document.getElementById("custom-student-select-tab1");
+    if (!customSelect) {
+        return;
+    }
+
+    const trigger = customSelect.querySelector(".custom-select-trigger");
+    const optionsWrapper = customSelect.querySelector(".custom-options");
+    const searchInput = customSelect.querySelector(".custom-option-search");
+
+    trigger.addEventListener("click", function (event) {
+        event.stopPropagation();
+        const isOpen = optionsWrapper.classList.contains("open");
+        if (isOpen) {
+            closeCustomStudentOptions("custom-options-tab1");
+            return;
+        }
+        openCustomStudentOptions("custom-options-tab1");
+        if (searchInput) {
+            searchInput.value = "";
+            filterCustomStudentOptions("custom-options-tab1", "");
+            searchInput.focus();
+        }
+    });
+
+    searchInput.addEventListener("click", function (event) {
+        event.stopPropagation();
+    });
+
+    searchInput.addEventListener("input", function () {
+        filterCustomStudentOptions("custom-options-tab1", this.value.trim().toLowerCase());
+    });
+
+    optionsWrapper.addEventListener("click", function (event) {
+        const option = event.target.closest(".custom-option");
+        if (!option || option.classList.contains("disabled")) {
+            return;
+        }
+        selectCustomStudentOption("select-student-name-tab1", "#custom-student-select-tab1 .custom-select-placeholder", option.dataset.value, option.textContent, null);
+    });
+
+    document.addEventListener("click", function (event) {
+        if (!customSelect.contains(event.target)) {
+            closeCustomStudentOptions("custom-options-tab1");
+        }
+    });
+}
+
+function initCustomStudentSelectTab4() {
+    for (let i = 1; i <= 5; i++) {
+        const customSelect = document.getElementById(`custom-student-select-${i}`);
+        if (!customSelect) {
+            continue;
+        }
+
+        const trigger = customSelect.querySelector(".custom-select-trigger");
+        const optionsWrapper = customSelect.querySelector(".custom-options");
+        const searchInput = customSelect.querySelector(".custom-option-search");
+        const optionsId = `custom-options-${i}`;
+        const hiddenInputId = `select-student-name${i}`;
+
+        trigger.addEventListener("click", function (event) {
+            event.stopPropagation();
+            const isOpen = optionsWrapper.classList.contains("open");
+            if (isOpen) {
+                closeCustomStudentOptions(optionsId);
+                return;
+            }
+            openCustomStudentOptions(optionsId);
+            if (searchInput) {
+                searchInput.value = "";
+                filterCustomStudentOptions(optionsId, "");
+                searchInput.focus();
+            }
+        });
+
+        searchInput.addEventListener("click", function (event) {
+            event.stopPropagation();
+        });
+
+        searchInput.addEventListener("input", function () {
+            filterCustomStudentOptions(optionsId, this.value.trim().toLowerCase());
+        });
+
+        optionsWrapper.addEventListener("click", function (event) {
+            const option = event.target.closest(".custom-option");
+            if (!option || option.classList.contains("disabled")) {
+                return;
+            }
+            selectCustomStudentOption(hiddenInputId, `#custom-student-select-${i} .custom-select-placeholder`, option.dataset.value, option.textContent, i);
+        });
+
+        document.addEventListener("click", function (event) {
+            if (!customSelect.contains(event.target)) {
+                closeCustomStudentOptions(optionsId);
+            }
+        });
     }
 }
 
@@ -300,34 +474,41 @@ function createStudentGiftTable(giftCompatibility) {
     return table;
 }
 
-function setAvailableGifts() {
-    const select1 = document.getElementById("select-student-name1")
-    const select2 = document.getElementById("select-student-name2")
-    const select3 = document.getElementById("select-student-name3")
-    const select4 = document.getElementById("select-student-name4")
-    const select5 = document.getElementById("select-student-name5")
+function getSelectedStudentNameFromInput(inputId) {
+    const hiddenInput = document.getElementById(inputId);
+    if (!hiddenInput || !hiddenInput.value || hiddenInput.value === "default") {
+        return null;
+    }
 
-    // 選択した要素のテキストを取得する処理
-    const select1Num = select1.selectedIndex;
-    const student1Name = select1.options[select1Num].innerText;
-    const select2Num = select2.selectedIndex;
-    const student2Name = select2.options[select2Num].innerText;
-    const select3Num = select3.selectedIndex;
-    const student3Name = select3.options[select3Num].innerText;
-    const select4Num = select4.selectedIndex;
-    const student4Name = select4.options[select4Num].innerText;
-    const select5Num = select5.selectedIndex;
-    const student5Name = select5.options[select5Num].innerText;
+    const studentIndex = Number(hiddenInput.value);
+    if (!Number.isInteger(studentIndex) || studentIndex < 1 || studentIndex >= giftCompatibilityList.length) {
+        return null;
+    }
+
+    return giftCompatibilityList[studentIndex].split(',')[0];
+}
+
+function setAvailableGifts() {
+    const studentNames = [
+        getSelectedStudentNameFromInput("select-student-name1"),
+        getSelectedStudentNameFromInput("select-student-name2"),
+        getSelectedStudentNameFromInput("select-student-name3"),
+        getSelectedStudentNameFromInput("select-student-name4"),
+        getSelectedStudentNameFromInput("select-student-name5")
+    ].filter(Boolean);
+
+    if (studentNames.length <= 0) {
+        const result = document.getElementById("available-gift");
+        if (result) {
+            result.innerHTML = '';
+        }
+        return;
+    }
 
     var selecttedStudentGiftList = []
-    for (let i=1; i<giftCompatibilityList.length; i++) {
+    for (let i = 1; i < giftCompatibilityList.length; i++) {
         var tempStudentName = giftCompatibilityList[i].split(',')[0]
-        if (tempStudentName == student1Name ||
-            tempStudentName == student2Name ||
-            tempStudentName == student3Name ||
-            tempStudentName == student4Name ||
-            tempStudentName == student5Name
-        ) {
+        if (studentNames.includes(tempStudentName)) {
             selecttedStudentGiftList.push(giftCompatibilityList[i].split('\r')[0].split(','));
         }
     }
@@ -338,14 +519,15 @@ function setAvailableGifts() {
         return;
     }
     else if (selecttedStudentNum == 1) {
-        for (let idx=0; idx<selecttedStudentGiftList[0].length; idx++) {
-            if (selecttedStudentGiftList[0][idx] == "1")
+        for (let idx = 0; idx < selecttedStudentGiftList[0].length; idx++) {
+            if (selecttedStudentGiftList[0][idx] == "1") {
                 availableGiftsIdxList.push(idx)
+            }
         }
     }
     else {
-        for (let i=0; i<selecttedStudentGiftList[0].length; i++) {
-            const allEqual = selecttedStudentGiftList.every(row => row[i] === "1"); // すべての配列で贈り物小かどうか確認
+        for (let i = 0; i < selecttedStudentGiftList[0].length; i++) {
+            const allEqual = selecttedStudentGiftList.every(row => row[i] === "1");
 
             if (allEqual) {
                 availableGiftsIdxList.push(i);
@@ -377,7 +559,7 @@ function changeDetail() {
     var grid_gift_normal_detail_label = document.getElementsByClassName("grid-gift_normal-detail_label");
     var result_button_tab1 = document.getElementsByClassName("result-button-tab1");
     const label_student_name_tab1 = document.getElementById("label-student-name-tab1");
-    const selelct_student_name_tab1 = document.getElementById("select-student-name-tab1");
+    const customStudentSelectTab1 = document.getElementById("custom-student-select-tab1");
     const input_reset_button = document.getElementById("input_reset-button");
     const resultDisplay = document.getElementById(`result-display-tab1`);
     const studentImg = document.querySelector('.result-display-tab1-img');
@@ -385,7 +567,7 @@ function changeDetail() {
     if (detail_change_btn_condition == true) {
         result_button_tab1[0].style.gridTemplateColumns = "repeat(1, 1fr)";
         label_student_name_tab1.style.display = 'none'
-        selelct_student_name_tab1.style.display = 'none'
+        customStudentSelectTab1.style.display = 'none'
         input_reset_button.style.display = 'none'
         studentImg.style.display = "none"
         detail_form[0].style.display = "none";
@@ -396,7 +578,7 @@ function changeDetail() {
     else {
         result_button_tab1[0].style.gridTemplateColumns = "repeat(2, 1fr)";
         label_student_name_tab1.style.display = 'block'
-        selelct_student_name_tab1.style.display = 'block'
+        customStudentSelectTab1.style.display = 'block'
         input_reset_button.style.display = 'block'
         studentImg.style.display = "block"
         normal_from[0].style.display = "none";
@@ -447,6 +629,9 @@ document.addEventListener("DOMContentLoaded", function() {
     fetch('blue_archive_gift.csv').then(response => response.text()).then(data => parseGiftCSV(data));
     fetch('blue_archive_gift_img_path.csv').then(response => response.text()).then(data => parseGiftImgPathCSV(data));
     fetch('blue_archive_student_img_path.csv').then(response => response.text()).then(data => parseStudentImgPathCSV(data));
+
+    initCustomStudentSelectTab1();
+    initCustomStudentSelectTab4();
 
     const menuCheckbox = document.getElementById("menu-btn");
     const menu = document.querySelector(".menu");
@@ -635,7 +820,7 @@ function updateResult(tabId) {
 
         if (current_lv > 0 && current_lv <= 100 && cafe_touch_per_day >= 0 && schedule_touch_per_day >= 0 && number_of_day >= 0 && gift2ex >= 0 && Number.isInteger(current_lv)) {
             result = `
-            ・絆ランク<b>${current_lv}</b>から<b>${target_lv}</b>まで到達できます。<br>
+            ・絆 <b>${current_lv}</b>から<b>${target_lv}</b>まで到達できます。<br>
             ・<b>${gift2ex}</b>の経験値が獲得できます。
         `;
         }
