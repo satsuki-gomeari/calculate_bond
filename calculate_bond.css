@@ -619,7 +619,7 @@ form button:hover {
 }
 
 .custom-option-search {
-    width: calc(100% - 20px);
+    width: calc(100% - 38px);
     margin: 8px 10px 0;
     padding: 8px;
     border: 1px solid #ccc;
