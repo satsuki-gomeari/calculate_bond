@@ -572,6 +572,80 @@ form button:hover {
     border-bottom: none;
 } */
 
+.student-select-wrapper, .custom-select-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.custom-select-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.custom-select-trigger:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+}
+
+.custom-select-arrow {
+    margin-left: 10px;
+    font-size: 0.85em;
+}
+
+.custom-options {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    max-height: 320px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    z-index: 10;
+}
+
+.custom-options.open {
+    display: block;
+}
+
+.custom-option-search {
+    width: calc(100% - 20px);
+    margin: 8px 10px 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.custom-option {
+    padding: 10px 12px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.custom-option:hover {
+    background: #f2f2f2;
+}
+
+.custom-option.hidden {
+    display: none;
+}
+
+.custom-option.disabled {
+    color: #999;
+    cursor: default;
+}
+
 .student-name {
 	overflow: hidden;
     width: calc(100%);
