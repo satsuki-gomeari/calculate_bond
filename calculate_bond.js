@@ -237,7 +237,8 @@ function selectCustomStudentOption(hiddenInputId, placeholderSelector, value, te
 
     hiddenInput.value = value;
     placeholder.textContent = text;
-    closeCustomStudentOptions(getCustomOptionsId(hiddenInputId));
+    // Close all open dropdowns now that a selection was made
+    closeAllCustomStudentOptions();
     if (changeListNum !== null) {
         changeStudentsList(changeListNum);
     } else {
@@ -259,6 +260,15 @@ function openCustomStudentOptions(optionsId) {
     }
 }
 
+// Close all custom-options panels, optionally keeping one open
+function closeAllCustomStudentOptions(exceptId) {
+    const all = document.querySelectorAll('.custom-options');
+    all.forEach(el => {
+        if (exceptId && el.id === exceptId) return;
+        el.classList.remove('open');
+    });
+}
+
 function initCustomStudentSelectTab1() {
     const customSelect = document.getElementById("custom-student-select-tab1");
     if (!customSelect) {
@@ -276,6 +286,8 @@ function initCustomStudentSelectTab1() {
             closeCustomStudentOptions("custom-options-tab1");
             return;
         }
+        // Close any other open dropdowns, then open this one
+        closeAllCustomStudentOptions("custom-options-tab1");
         openCustomStudentOptions("custom-options-tab1");
         if (searchInput) {
             searchInput.value = "";
@@ -283,6 +295,16 @@ function initCustomStudentSelectTab1() {
             searchInput.focus();
         }
     });
+
+    // Prevent Enter from submitting parent form (which reloads the page)
+    if (searchInput) {
+        searchInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+    }
 
     searchInput.addEventListener("click", function (event) {
         event.stopPropagation();
@@ -327,6 +349,8 @@ function initCustomStudentSelectTab4() {
                 closeCustomStudentOptions(optionsId);
                 return;
             }
+            // Close any other open dropdowns, then open this one
+            closeAllCustomStudentOptions(optionsId);
             openCustomStudentOptions(optionsId);
             if (searchInput) {
                 searchInput.value = "";
@@ -351,6 +375,15 @@ function initCustomStudentSelectTab4() {
             selectCustomStudentOption(hiddenInputId, `#custom-student-select-${i} .custom-select-placeholder`, option.dataset.value, option.textContent, i);
         });
 
+        // Prevent Enter key from submitting the surrounding form
+        if (searchInput) {
+            searchInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            });
+        }
         document.addEventListener("click", function (event) {
             if (!customSelect.contains(event.target)) {
                 closeCustomStudentOptions(optionsId);
