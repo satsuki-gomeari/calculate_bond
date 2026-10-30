@@ -10,6 +10,7 @@
 アコ,./img/student/face/ako.png
 アコ (ドレス),./img/student/face/ako_dress.png
 アズサ,./img/student/face/azusa.png
+アズサ (レーシング),./img/student/face/azusa_race.png
 アズサ (水着),./img/student/face/azusa_swim.png
 アスナ,./img/student/face/asuna.png
 アスナ (バニー),./img/student/face/asuna_bunny.png
@@ -141,6 +142,7 @@
 ツクヨ (ドレス),./img/student/face/tsukuyo_dress.png
 ツバキ,./img/student/face/tsubaki.png
 ツバキ (ガイド),./img/student/face/tsubaki_guide.png
+ツムギ,./img/student/face/tsumugi.png
 ツルギ,./img/student/face/tsurugi.png
 ツルギ (水着),./img/student/face/tsurugi_swim.png
 トキ,./img/student/face/toki.png
@@ -190,6 +192,7 @@
 ヒビキ,./img/student/face/hibiki.png
 ヒビキ (応援団),./img/student/face/hibiki_cheer.png
 ヒフミ,./img/student/face/hifumi.png
+ヒフミ (レーシング),./img/student/face/hifumi_race.png
 ヒフミ (水着),./img/student/face/hifumi_swim.png
 ヒマリ,./img/student/face/himari.png
 ヒマリ (臨戦),./img/student/face/himari_battle.png
@@ -256,6 +259,7 @@
 ユズ (臨戦),./img/student/face/yuzu_battle.png
 ヨシミ,./img/student/face/yoshimi.png
 ヨシミ (バンド),./img/student/face/yoshimi_band.png
+ラナ,./img/student/face/rana.png
 ラブ,./img/student/face/rabu.png
 リオ,./img/student/face/rio.png
 リオ (臨戦),./img/student/face/rio_battle.png
