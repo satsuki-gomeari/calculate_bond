@@ -31,6 +31,7 @@
                     <li class="menu_tab" onclick="openTab(event, 'tab4')">何が好き?</li>
                     <li class="menu_tab" onclick="openTab(event, 'tab3')">何日必要?</li>
                     <li class="menu_tab" onclick="openTab(event, 'tab2')">何個必要?</li>
+                    <li class="menu_tab" onclick="openTab(event, 'tab5')">贈り物配分</li>
                 </ul>
             </header>
         </nav>
@@ -41,6 +42,7 @@
                 <li class="tab" data-tab="tab4" onclick="openTab(event, 'tab4')">何が好き?</li>
                 <li class="tab" data-tab="tab3" onclick="openTab(event, 'tab3')">何日必要?</li>
                 <li class="tab" data-tab="tab2" onclick="openTab(event, 'tab2')">何個必要?</li>
+                <li class="tab" data-tab="tab5" onclick="openTab(event, 'tab5')">贈り物配分</li>
             </ul>
         </nav>
         <main>
@@ -542,9 +544,32 @@
                 <div id="available-gift">
                 </div>
             </section>
+            <section id="tab5" class="tab-content">
+                <form id="gift-allocation-form" novalidate>
+                    <section class="description">
+                        <p>
+                            選択した生徒との相性を考慮し、所持している贈り物を絆経験値が最も効率よく上がるように配分します。<br>
+                            配分結果が同じ場合は、上位の欄にいる生徒を優先します。
+                        </p>
+                    </section>
+                    <div id="allocation-students"></div>
+                    <button type="button" id="allocation-add" disabled>生徒を追加</button>
+                    <h3 id="allocation-stock-label">贈り物保有数</h3>
+                    <div class="grid-gift_detail" id="allocation-stock" aria-labelledby="allocation-stock-label" role="group"></div>
+                    <div class="grid-form allocation-actions">
+                        <button type="submit" id="allocation-calculate" disabled>計算する</button>
+                        <button type="button" id="allocation-reset" disabled>リセット</button>
+                    </div>
+                </form>
+                <section class="result" aria-label="配分結果">
+                    <p id="allocation-status" role="status">データを読み込んでいます。</p>
+                    <div id="allocation-results"></div>
+                </section>
+            </section>
         </main>
     </div>
     <script src="calculate_bond.js"></script>
+    <script src="gift-allocation.js"></script>
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
     <!-- <script src="select2.min.js"></script> -->
     <!-- <script>

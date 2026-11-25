@@ -659,9 +659,17 @@ function changeImageIfExists(className, newImgPath) {
 // 初期状態で最初のタブを開く
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelector(".tab").click();
-    fetch('blue_archive_gift.csv').then(response => response.text()).then(data => parseGiftCSV(data));
-    fetch('blue_archive_gift_img_path.csv').then(response => response.text()).then(data => parseGiftImgPathCSV(data));
-    fetch('blue_archive_student_img_path.csv').then(response => response.text()).then(data => parseStudentImgPathCSV(data));
+    const loadCSV = (path, parse) => fetch(path).then(response => {
+        if (!response.ok) throw new Error(`Could not load ${path}`);
+        return response.text();
+    }).then(data => parse(data.trimEnd()));
+    const studentImageDataReady = loadCSV('blue_archive_student_img_path.csv', parseStudentImgPathCSV).catch(console.error);
+    const giftDataReady = Promise.all([
+        loadCSV('blue_archive_gift.csv', parseGiftCSV),
+        loadCSV('blue_archive_gift_img_path.csv', parseGiftImgPathCSV),
+        studentImageDataReady,
+    ]);
+    initGiftAllocation(giftDataReady);
 
     initCustomStudentSelectTab1();
     initCustomStudentSelectTab4();

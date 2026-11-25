@@ -72,6 +72,53 @@ nav {
     display: block;
 }
 
+#allocation-stock { display: flex; }
+#allocation-stock input { box-sizing: border-box; width: 100%; }
+#allocation-stock .allocation-stock-filled { background: #90d7f8; }
+.allocation-student {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(4.5rem, 24%, 8rem) auto;
+  align-items: end;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.allocation-student .custom-select-wrapper { min-width: 0; margin-bottom: 0; }
+.allocation-student .custom-select-trigger {
+  background: white;
+  box-sizing: border-box;
+  color: #333;
+  font: inherit;
+  text-align: left;
+}
+.allocation-student .custom-select-trigger span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.allocation-student .custom-select-arrow { flex-shrink: 0; }
+.allocation-student .custom-select-trigger, .allocation-rank-field input, .allocation-remove { height: 42px; }
+.allocation-rank-field input { box-sizing: border-box; width: 100%; margin-bottom: 0; }
+.allocation-remove { padding: 0 8px; white-space: nowrap; font-size: 1em; }
+#tab5 button:disabled { opacity: .6; cursor: default; }
+#allocation-reset, .allocation-remove { background: #818181; }
+.allocation-results-list { padding-left: 1.4em; }
+.allocation-results-list img { vertical-align: middle; margin-right: .4em; }
+.allocation-student-result { min-height: 130px; }
+.allocation-result-student-name, .allocation-result-student-summary { position: relative; z-index: 2; }
+.allocation-result-student-image {
+  position: absolute;
+  top: -15px;
+  right: 0;
+  z-index: 1;
+  width: 130px;
+  height: 130px;
+  opacity: 0.6;
+  object-fit: contain;
+  object-position: right center;
+  pointer-events: none;
+}
+#tab5 [aria-invalid="true"] { outline: 2px solid #a13232; }
+
+@media (max-width: 768px) {
+  #tab5 { padding-top: 58px; }
+}
+
 form label {
     display: block;
     margin: 10px 0 5px;

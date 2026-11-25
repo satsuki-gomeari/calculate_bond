@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>F-05 贈り物配分 | 機能設計書</title>
+    <style>
+        :root { color-scheme: light; --ink: #203140; --accent: #09657b; --line: #cbd9df; }
+        body { margin: 0; color: var(--ink); background: #f5f8fa; font: 1rem/1.7 "Yu Gothic", Meiryo, sans-serif; }
+        main { box-sizing: border-box; max-width: 62rem; margin: auto; padding: 2rem 1rem 4rem; }
+        header { padding-bottom: 1rem; border-bottom: 2px solid var(--accent); }
+        h1, h2, h3 { line-height: 1.4; }
+        h1 { font-size: 1.9rem; margin: .25rem 0; }
+        h2 { font-size: 1.4rem; }
+        h3 { font-size: 1.08rem; margin-bottom: .35rem; }
+        a { color: var(--accent); }
+        section { margin-top: 2rem; padding-top: .5rem; border-top: 1px solid var(--line); }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: .45rem .65rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+        thead { background: #e6f0f3; }
+        code { overflow-wrap: anywhere; }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <p><a href="functional-design.html">現行機能設計書</a> / 追加機能</p>
+            <h1>F-05 贈り物配分</h1>
+            <p>複数の生徒へ手持ちの贈り物をどう分けるかを試算する。既存の4タブに加えて提供する。</p>
+        </header>
+
+        <nav aria-label="目次">
+            <h2>目次</h2>
+            <ol>
+                <li><a href="#screen">画面・操作</a></li>
+                <li><a href="#allocation">割り当てルール</a></li>
+                <li><a href="#implementation">実装方針・既存機能の流用</a></li>
+                <li><a href="#acceptance">受入条件</a></li>
+            </ol>
+        </nav>
+
+        <section id="screen">
+            <h2>1. 画面・操作</h2>
+            <p>既存4タブの末尾に「贈り物配分」を追加する。スマートフォンのハンバーガーメニューにも同じ順序で追加し、初期表示タブは現状のままとする。</p>
+            <table aria-label="画面項目">
+                <thead><tr><th scope="col">項目</th><th scope="col">仕様</th></tr></thead>
+                <tbody>
+                    <tr><th scope="row">生徒・現在ランク</th><td>検索付きの生徒選択欄を初期2行表示する。行の追加・削除ができ、2〜5人を指定する（上限5人は設計案）。選択肢は既存機能と同じ単位で、同じCSV行は重複不可。各行の現在ランクは1〜100の整数、初期値は1。生徒を変更・解除した行はランクを1に戻す。未選択の行は計算対象外。</td></tr>
+                    <tr><th scope="row">贈り物の在庫</th><td>「どれだけ上がる?」の詳細モードと同じ画像・順序で、贈り物の種類ごとに全生徒共通の在庫を入力する。選択ボックスも対象。各欄は0〜9999の整数、初期値は0。空欄は0として扱う。</td></tr>
+                    <tr><th scope="row">計算する / リセット</th><td>「計算する」で入力を検証し、配分を試算する。「リセット」はこのタブの在庫だけを0に戻し、旧結果を消す。生徒と現在ランクは維持する。</td></tr>
+                    <tr><th scope="row">生徒別の結果</th><td>入力順に、生徒名、現在ランク → 到達ランク、有効経験値を表示し、生徒画像をテキストの背面に重ねて表示する。続けて割り当てた贈り物の画像・個数を表示する。配分がない生徒も「割り当てなし」と表示し、ランクは変えない。選択ボックスは箱の画像と個数で表示する。</td></tr>
+                    <tr><th scope="row">未使用在庫</th><td>入力数から割当数を差し引き、残りが1個以上の種類と個数を表示する。残りがなければ「未使用なし」。入力欄の在庫は書き換えない。</td></tr>
+                </tbody>
+            </table>
+            <p>選択済みの生徒が2人未満、重複選択、空欄の現在ランク、範囲外や小数の入力は、対象欄と理由を示して計算しない。在庫がすべて0でも結果を表示する。入力変更時は結果を消し、再計算を促す。カフェ・スケジュール経験値、目標ランク、途中まで獲得済みの経験値はこの機能の対象外。</p>
+        </section>
+
+        <section id="allocation">
+            <h2>2. 割り当てルール</h2>
+            <h3>「最適」の定義</h3>
+            <ol>
+                <li><strong>全員の有効経験値の合計を最大化する。</strong> 生徒ごとの有効経験値は、割り当てた贈り物の経験値合計と、現在ランクから100までに必要な経験値の小さい方とする。ランク100の生徒には割り当てない。</li>
+                <li>有効経験値の合計が同じなら、割り当てた総経験値と有効経験値の差（上限超過分）が最も少ない案を採用する。上限超過は許容し、経験値を少量超える贈り物しかない場合でもランク100への到達を妨げない。</li>
+                <li>余剰経験値も同じなら、消費する贈り物の総数が最も少ない案を採用する。</li>
+                <li>それらが同点なら、生徒の入力順、次に贈り物の画面表示順で、先に並ぶ組み合わせへの割当個数が多い案を優先する。同じ入力で同じ結果になる。</li>
+            </ol>
+            <p>この基準は、絆ランクの上昇幅の合計や全員への均等配分を最大化するものではない。経験値だけ増えてランクが変わらない場合や、一部の生徒に配分がない場合もある。</p>
+            <h3>配分の制約と経験値換算</h3>
+            <ul>
+                <li>贈り物ごとに、全生徒への割当数の合計は入力在庫以下。1個を分割したり、同じ1個を複数人に割り当てたりしない。余りは未使用とする。</li>
+                <li>生徒ごとの1個あたりの経験値は、<a href="../blue_archive_gift.csv">相性CSV</a>のコードと<a href="functional-design.html#common">既存の経験値表</a>から求める。選択ボックスは受取人ごとに、現行の対象となる橙35種類の中で最高の相性に換算する。同率の贈り物はCSVの列順で先頭を表示する。箱の消費は箱の在庫からのみ差し引く。</li>
+                <li>到達ランクは、現在ランクの累積経験値に有効経験値を足し、既存のランク逆引きで求める。</li>
+            </ul>
+        </section>
+
+        <section id="implementation">
+            <h2>3. 実装方針・既存機能の流用</h2>
+            <ul>
+                <li><a href="../index.html">既存画面</a>のタブ切り替え、生徒検索、「どれだけ上がる?」の詳細入力レイアウトと、<a href="../calculate_bond.css">既存のCSS</a>のボタン・結果欄・レスポンシブ表示を再利用する。新タブの入力IDと状態は分離し、既存タブのリセットやセレクターの対象に混ぜない。</li>
+                <li><a href="../calculate_bond.js">既存のJavaScript</a>から、読み込み済みのCSV、画像パス、贈り物別経験値表、<code>getCurrentEx</code> と <code>calculateEx2Lv</code> を利用する。在庫上限は贈り物1種類ごとに検証する。カテゴリ合計の上限も検証する <code>calculateGift2Ex</code> には配分結果を通さない。</li>
+                <li>画面処理と配分計算は分離する。計算部は生徒と在庫のスナップショットを受け取り、割当数・有効経験値・未使用数を返す。CSVが準備できるまで計算を無効にし、取得失敗や不整合は結果欄に表示する。既存タブの入力やデータは変更しない。</li>
+                <li>最適化は整数計画として扱う。贈り物と生徒の組ごとの割当数を非負整数の変数にする。生徒別の有効経験値を「受け取った贈り物の経験値合計以下、かつランク100までの残り経験値以下」に制約する。目的関数は有効経験値合計の最大化、上限超過経験値の最小化、消費個数の最小化の順で最適化し、残る同点を表示順で解消する。上限超過分は有効経験値合計を固定した後で最小化するため、必要な贈り物を使ってランク100に到達する配分は可能。在庫0の種類はモデルから除外し、在庫を1個ずつ展開しない。</li>
+                <li><a href="../gift-allocation-solver.mjs">配分モデル</a>は glpk.js 4.0.2 の Web Worker で解く。必要になったときだけ jsDelivr からソルバーを取得し、入力データはブラウザ内で処理する。取得を含め10秒を上限とし、入力変更時は旧結果を反映しない。最適性を確認できなかった場合は「最適な配分を確定できませんでした」と表示し、暫定案を表示しない。</li>
+            </ul>
+        </section>
+
+        <section id="acceptance">
+            <h2>4. 受入条件</h2>
+            <table aria-label="代表的な受入テスト">
+                <thead><tr><th scope="col">条件</th><th scope="col">期待結果</th></tr></thead>
+                <tbody>
+                    <tr><th scope="row">2人、贈り物1個</th><td>ランク上限の影響がなく、同じ贈り物でAが20、Bが60経験値を得る場合は、Bのみに1個を割り当てる。Aも結果に表示する。</td></tr>
+                    <tr><th scope="row">目先の相性だけでは最適にならない</th><td>残り経験値がA・Bともに100の計算部テストで、贈り物XはAに80・Bに60、YはAに80・Bに20、各1個。XをB、YをAに割り当て、有効経験値の合計を140にする。</td></tr>
+                    <tr><th scope="row">上限超過を最小化</th><td>残り経験値がAは60、Bは0で、Aに80経験値の品1個と30経験値の品2個がある場合、2個を割り当てて有効経験値60・余剰0とする。80経験値の品しかない場合は1個を割り当て、余剰20を許容してランク100に到達する。</td></tr>
+                    <tr><th scope="row">選択ボックスと通常在庫</th><td>選択ボックス1個と通常の贈り物1個を指定した場合、箱を換算しても通常品の入力在庫と混ざらず、双方の割当数と未使用数がそれぞれ入力数に一致する。</td></tr>
+                    <tr><th scope="row">入力エラー・空在庫</th><td>選択1人、同一生徒の重複、範囲外のランク・在庫はエラー。2人以上を正しく選び在庫が全て0なら、全員のランクを変えず配分なしと表示する。</td></tr>
+                    <tr><th scope="row">操作と回帰</th><td>同点を含め同じ入力で同じ結果となる。計算中に入力を変更しても古い結果を表示しない。既存4タブの入力・計算・生徒検索と、スマートフォンでのタブ切り替えを維持する。</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>
