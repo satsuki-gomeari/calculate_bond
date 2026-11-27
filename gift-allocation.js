@@ -13,13 +13,11 @@ function initGiftAllocation(dataReady) {
     const results = document.getElementById('allocation-results');
     const pendingMessage = '計算ボタンを押してください。';
     const maxStudents = 5;
-    const timeLimit = 36000000;
     const giftKeys = ['gift_orange_s', 'gift_orange_m', 'gift_orange_l', 'gift_orange_ex_l',
         'gift_purple_s', 'gift_purple_m', 'gift_purple_l', 'gift_purple_ex_l'];
     const rows = [];
     const gifts = [];
     let sequence = 0;
-    let activeJob = null;
 
     function element(tag, attributes = {}, text = '') {
         const node = document.createElement(tag);
@@ -29,9 +27,6 @@ function initGiftAllocation(dataReady) {
     }
 
     function invalidate() {
-        const previous = activeJob;
-        activeJob = null;
-        if (previous) previous.cancel();
         form.querySelectorAll('[aria-invalid]').forEach(input => input.removeAttribute('aria-invalid'));
         results.replaceChildren();
         status.textContent = pendingMessage;
@@ -289,65 +284,21 @@ function initGiftAllocation(dataReady) {
         status.textContent = '配分結果';
     }
 
-    async function runAllocation(selection, inventory) {
+    function runAllocation(selection, inventory, allocateGifts) {
         const caps = selection.map(({ level }) => calculator.getCurrentEx(100) - calculator.getCurrentEx(level));
         const experience = selection.map(({ student }) => {
             const codes = giftCompatibilityList[student].replace(/\r$/, '').split(',').map(Number);
             const orange = codes.slice(ORANGE_GIFT_INDEX_MIN, ORANGE_GIFT_INDEX_MAX);
             const best = Math.max(...orange);
-            if (!Number.isInteger(best) || best < 1 || best > 4) throw new Error('Invalid gift box compatibility');
+            if (!Number.isInteger(best) || best < 1 || best > 4) throw new Error('選択ボックスの相性データに不整合があります。');
             const values = [...codes.slice(1), best].map(code => calculator.giftType2exDict[giftKeys[code - 1]]);
-            if (values.some(value => !Number.isInteger(value))) throw new Error('Invalid gift compatibility');
+            if (values.some(value => !Number.isInteger(value))) throw new Error('贈り物の相性データに不整合があります。');
             return values;
         });
-        if (!caps.some(Boolean) || !inventory.some(Boolean)) {
-            render(selection, { allocations: caps.map(() => inventory.map(() => 0)), earned: caps.map(() => 0), unused: inventory });
-            return;
-        }
-
-        let glpk;
-        let timer;
-        const deadline = performance.now() + timeLimit;
-        const job = {};
-        const cancellation = new Promise((resolve, reject) => {
-            job.cancel = () => reject(new Error('Allocation cancelled'));
-            timer = setTimeout(() => reject(new Error('Allocation timed out')), timeLimit);
-        });
-        activeJob = job;
-        calculate.disabled = true;
-        status.textContent = '配分を計算しています。';
-        const optimize = async () => {
-            const [{ default: createSolver }, { allocateGifts }] = await Promise.all([
-                import('https://cdn.jsdelivr.net/npm/glpk.js@4.0.2/dist/index.js'),
-                import('./gift-allocation-solver.mjs'),
-            ]);
-            if (activeJob !== job) return;
-            glpk = await createSolver();
-            if (activeJob !== job) {
-                glpk.terminate();
-                return;
-            }
-            return allocateGifts(glpk, inventory, caps, experience, deadline);
-        };
-        try {
-            const result = await Promise.race([optimize(), cancellation]);
-            if (activeJob === job) render(selection, result);
-        } catch (error) {
-            if (activeJob === job) {
-                console.error(error);
-                status.textContent = '最適な配分を確定できませんでした。時間をおいて再度お試しください。';
-            }
-        } finally {
-            clearTimeout(timer);
-            if (glpk) glpk.terminate();
-            if (activeJob === job) {
-                activeJob = null;
-                calculate.disabled = false;
-            }
-        }
+        render(selection, allocateGifts(inventory, caps, experience));
     }
 
-    dataReady.then(() => {
+    Promise.all([dataReady, import('./gift-allocation-solver.mjs')]).then(([, { allocateGifts }]) => {
         buildStock();
         addRow();
         addRow();
@@ -376,10 +327,7 @@ function initGiftAllocation(dataReady) {
             invalidate();
             try {
                 const { selection, inventory } = readInputs();
-                runAllocation(selection, inventory).catch(error => {
-                    console.error(error);
-                    status.textContent = '贈り物の相性データに不整合があります。';
-                });
+                runAllocation(selection, inventory, allocateGifts);
             } catch (error) {
                 status.textContent = error.message;
             }
