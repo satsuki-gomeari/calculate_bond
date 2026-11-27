@@ -97,9 +97,28 @@ nav {
 .allocation-remove { padding: 0 8px; white-space: nowrap; font-size: 1em; }
 #bond-detail button:disabled { opacity: .6; cursor: default; }
 #allocation-reset, .allocation-student .allocation-remove { background: #818181; }
-.allocation-file-actions, #allocation-file-status { max-width: calc(100vw - 80px); }
-.allocation-file-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
-.allocation-file-actions button { flex: 1 1 11rem; min-width: 0; min-height: 44px; }
+.allocation-stock-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 12px 0 8px; }
+#allocation-stock-label { font-size: inherit; margin: 0; }
+#allocation-file-status { max-width: calc(100vw - 80px); }
+.allocation-file-actions { display: flex; flex: none; gap: 8px; }
+button.allocation-icon-button { position: relative; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; }
+.allocation-icon-button > span {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 3;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #333;
+  color: #fff;
+  font-size: .75em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+}
+#allocation-add > span, #favorite-student-add > span { left: 0; right: auto; }
+.allocation-icon-button:enabled:hover > span,
+.allocation-icon-button:focus-visible > span { opacity: 1; }
 .allocation-results-list { padding-left: 1.4em; }
 .allocation-results-list img { vertical-align: middle; margin-right: .4em; }
 .allocation-student-result { min-height: 130px; }

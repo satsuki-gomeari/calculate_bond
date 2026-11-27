@@ -136,11 +136,29 @@
                             </p>
                         </section>
                         <div id="allocation-students"></div>
-                        <button type="button" id="allocation-add" disabled>生徒を追加</button>
-                        <h3 id="allocation-stock-label">贈り物保有数</h3>
-                        <div class="allocation-file-actions">
-                            <button type="button" id="allocation-export" disabled>個数を書き出す</button>
-                            <button type="button" id="allocation-import" disabled>個数を読み込む</button>
+                        <button type="button" id="allocation-add" class="allocation-icon-button" aria-labelledby="allocation-add-label" disabled>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2m4-13v6m-3-3h6"/>
+                            </svg>
+                            <span id="allocation-add-label">生徒を追加</span>
+                        </button>
+                        <div class="allocation-stock-header">
+                            <h3 id="allocation-stock-label">贈り物保有数</h3>
+                            <div class="allocation-file-actions">
+                                <button type="button" id="allocation-export" class="allocation-icon-button" aria-labelledby="allocation-export-label" disabled>
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m4-7 5-5 5 5m-5-5v12"/>
+                                    </svg>
+                                    <span id="allocation-export-label">個数を書き出す</span>
+                                </button>
+                                <button type="button" id="allocation-import" class="allocation-icon-button" aria-labelledby="allocation-import-label" disabled>
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m4-3 5 5 5-5m-5 5V3"/>
+                                    </svg>
+                                    <span id="allocation-import-label">個数を読み込む</span>
+                                </button>
+                            </div>
                         </div>
                         <input type="file" id="allocation-file" accept=".json,application/json" hidden>
                         <div id="allocation-file-status" role="status"></div>
@@ -288,7 +306,13 @@
                             <div class="favorite-student-gifts"></div>
                         </div>
                     </template>
-                    <button type="button" id="favorite-student-add">生徒を追加</button>
+                    <button type="button" id="favorite-student-add" class="allocation-icon-button" aria-labelledby="favorite-student-add-label">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2m4-13v6m-3-3h6"/>
+                        </svg>
+                        <span id="favorite-student-add-label">生徒を追加</span>
+                    </button>
                 </form>
                 <section class="result">
                     <p id="result-display-tab3">以下の贈り物を製造素材にしてください。</p>

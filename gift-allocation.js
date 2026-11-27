@@ -63,7 +63,7 @@ function initGiftAllocation(dataReady) {
         rank.addEventListener('input', () => {
             if (rank.value.length > 3) rank.value = rank.value.slice(0, 3);
         });
-        rankField.append(element('label', { for: rank.id }, '現在の絆ランク:'), rank);
+        rankField.append(element('label', { for: rank.id }, '現ランク:'), rank);
         const remove = element('button', { type: 'button', class: 'allocation-remove' }, '削除');
         container.append(wrapper, rankField, remove);
         students.append(container);
