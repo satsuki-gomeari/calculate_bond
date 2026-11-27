@@ -63,8 +63,6 @@ function changeStudentsList(listNum) {
     var form = document.getElementById(student);
     form.innerHTML = '';
 
-    var result = document.getElementById("available-gift");
-    result.innerHTML = '';
 
     // 新規テーブルの作成
     if (studentNum != "default") {
@@ -154,9 +152,9 @@ function renderCustomStudentOptions(optionsId, optionsData) {
 }
 
 function renderCustomStudentOptionsForTab4() {
-    for (let i = 1; i <= 5; i++) {
-        renderCustomStudentOptions(`custom-options-${i}`, studentOptionsTab4);
-    }
+    document.querySelectorAll('#favorite-students .custom-options').forEach(options => {
+        renderCustomStudentOptions(options.id, studentOptionsTab4);
+    });
 }
 
 function filterCustomStudentOptions(optionsId, query) {
@@ -227,17 +225,38 @@ function closeAllCustomStudentOptions(exceptId) {
 }
 
 function initCustomStudentSelectTab4() {
-    for (let i = 1; i <= 5; i++) {
-        const customSelect = document.getElementById(`custom-student-select-${i}`);
-        if (!customSelect) {
-            continue;
-        }
+    const students = document.getElementById('favorite-students');
+    const template = document.getElementById('favorite-student-template');
+    const add = document.getElementById('favorite-student-add');
+    const maxStudents = 6;
+    let sequence = 0;
 
+    function updateRows() {
+        const count = students.children.length;
+        Array.from(students.children).forEach((row, index) => {
+            row.querySelector('label').textContent = `生徒${index + 1}:`;
+            row.querySelector('.favorite-student-remove').disabled = count === 1;
+        });
+        add.disabled = count >= maxStudents;
+    }
+
+    function addRow() {
+        const row = template.content.firstElementChild.cloneNode(true);
+        const i = ++sequence;
+        const customSelect = row.querySelector('.custom-select-wrapper');
         const trigger = customSelect.querySelector(".custom-select-trigger");
         const optionsWrapper = customSelect.querySelector(".custom-options");
         const searchInput = customSelect.querySelector(".custom-option-search");
         const optionsId = `custom-options-${i}`;
         const hiddenInputId = `select-student-name${i}`;
+        customSelect.id = `custom-student-select-${i}`;
+        trigger.id = `favorite-student-trigger-${i}`;
+        row.querySelector('label').htmlFor = trigger.id;
+        optionsWrapper.id = optionsId;
+        row.querySelector('input[type="hidden"]').id = hiddenInputId;
+        row.querySelector('.favorite-student-gifts').id = `student${i}`;
+        students.append(row);
+        renderCustomStudentOptions(optionsId, studentOptionsTab4);
 
         trigger.addEventListener("click", function (event) {
             event.stopPropagation();
@@ -281,12 +300,25 @@ function initCustomStudentSelectTab4() {
                 }
             });
         }
-        document.addEventListener("click", function (event) {
-            if (!customSelect.contains(event.target)) {
-                closeCustomStudentOptions(optionsId);
-            }
+        row.querySelector('.favorite-student-remove').addEventListener('click', () => {
+            row.remove();
+            setAvailableGifts();
+            updateRows();
+            add.focus();
         });
+        updateRows();
+        return trigger;
     }
+
+    addRow();
+    add.addEventListener('click', () => {
+        if (students.children.length < maxStudents) addRow().focus();
+    });
+    document.addEventListener('click', event => {
+        if (!event.target.closest('#favorite-students .custom-select-wrapper')) {
+            students.querySelectorAll('.custom-options.open').forEach(options => options.classList.remove('open'));
+        }
+    });
 }
 
 function addGiftImgTable(listNum, giftCompatibility, student) {
@@ -404,80 +436,24 @@ function createStudentGiftTable(giftCompatibility) {
     return table;
 }
 
-function getSelectedStudentNameFromInput(inputId) {
-    const hiddenInput = document.getElementById(inputId);
-    if (!hiddenInput || !hiddenInput.value || hiddenInput.value === "default") {
-        return null;
-    }
-
-    const studentIndex = Number(hiddenInput.value);
-    if (!Number.isInteger(studentIndex) || studentIndex < 1 || studentIndex >= giftCompatibilityList.length) {
-        return null;
-    }
-
-    return giftCompatibilityList[studentIndex].split(',')[0];
-}
-
 function setAvailableGifts() {
-    const studentNames = [
-        getSelectedStudentNameFromInput("select-student-name1"),
-        getSelectedStudentNameFromInput("select-student-name2"),
-        getSelectedStudentNameFromInput("select-student-name3"),
-        getSelectedStudentNameFromInput("select-student-name4"),
-        getSelectedStudentNameFromInput("select-student-name5")
-    ].filter(Boolean);
+    const selectedIds = Array.from(document.querySelectorAll('#favorite-students input[type="hidden"]'),
+        input => Number(input.value));
+    const selectedGiftCodes = selectedIds
+        .filter(id => Number.isInteger(id) && id > 0 && id < giftCompatibilityList.length)
+        .map(id => giftCompatibilityList[id].trimEnd().split(','));
+    const images = document.createDocumentFragment();
 
-    if (studentNames.length <= 0) {
-        const result = document.getElementById("available-gift");
-        if (result) {
-            result.innerHTML = '';
-        }
-        return;
-    }
-
-    var selecttedStudentGiftList = []
-    for (let i = 1; i < giftCompatibilityList.length; i++) {
-        var tempStudentName = giftCompatibilityList[i].split(',')[0]
-        if (studentNames.includes(tempStudentName)) {
-            selecttedStudentGiftList.push(giftCompatibilityList[i].split('\r')[0].split(','));
+    if (selectedGiftCodes.length > 0) {
+        for (let index = 1; index < giftImgPathList.length; index++) {
+            if (!selectedGiftCodes.every(codes => codes[index] === '1')) continue;
+            const image = document.createElement('img');
+            image.src = giftImgPathList[index];
+            image.className = 'img_gift';
+            images.append(image);
         }
     }
-
-    var selecttedStudentNum = selecttedStudentGiftList.length;
-    var availableGiftsIdxList = [];
-    if (selecttedStudentNum <= 0) {
-        return;
-    }
-    else if (selecttedStudentNum == 1) {
-        for (let idx = 0; idx < selecttedStudentGiftList[0].length; idx++) {
-            if (selecttedStudentGiftList[0][idx] == "1") {
-                availableGiftsIdxList.push(idx)
-            }
-        }
-    }
-    else {
-        for (let i = 0; i < selecttedStudentGiftList[0].length; i++) {
-            const allEqual = selecttedStudentGiftList.every(row => row[i] === "1");
-
-            if (allEqual) {
-                availableGiftsIdxList.push(i);
-            }
-        }
-    }
-    setAvailableGiftsImg(availableGiftsIdxList);
-}
-
-function setAvailableGiftsImg(availableGiftsIdxList) {
-    var form = document.getElementById("available-gift");
-    for (let i=0; i<availableGiftsIdxList.length; i++) {
-        var giftPath = giftImgPathList[availableGiftsIdxList[i]];
-
-        var giftImg = document.createElement("img");
-        giftImg.setAttribute("src", giftPath);
-        giftImg.setAttribute("class", "img_gift");
-
-        form.appendChild(giftImg)
-    }
+    document.getElementById('available-gift').replaceChildren(images);
 }
 
 function changeDetail() {

@@ -96,7 +96,7 @@ nav {
 .allocation-rank-field input { box-sizing: border-box; width: 100%; margin-bottom: 0; }
 .allocation-remove { padding: 0 8px; white-space: nowrap; font-size: 1em; }
 #bond-detail button:disabled { opacity: .6; cursor: default; }
-#allocation-reset, .allocation-remove { background: #818181; }
+#allocation-reset, .allocation-student .allocation-remove { background: #818181; }
 .allocation-file-actions, #allocation-file-status { max-width: calc(100vw - 80px); }
 .allocation-file-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
 .allocation-file-actions button { flex: 1 1 11rem; min-width: 0; min-height: 44px; }
@@ -117,6 +117,19 @@ nav {
   pointer-events: none;
 }
 #bond-detail [aria-invalid="true"] { outline: 2px solid #a13232; }
+
+.favorite-student-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 6px;
+}
+.favorite-student-controls .custom-select-wrapper { min-width: 0; }
+.favorite-student-controls .custom-select-trigger { background: white; color: #333; font: inherit; text-align: left; }
+.favorite-student-controls .custom-select-trigger span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.favorite-student-controls .custom-select-arrow { flex-shrink: 0; }
+.favorite-student-controls .favorite-student-remove { background: #818181; white-space: nowrap; font-size: 1em; }
+#student-gift-type_form button:disabled { opacity: .6; cursor: default; }
 
 form label {
     display: block;
@@ -148,7 +161,9 @@ form button:hover {
   background: #2980b9;
 }
 
-#allocation-reset:enabled:hover {
+#allocation-reset:enabled:hover,
+.allocation-remove:enabled:hover,
+.favorite-student-controls .favorite-student-remove:enabled:hover {
     background: #707070;
 }
 
