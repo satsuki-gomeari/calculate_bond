@@ -61,7 +61,8 @@ export async function allocateGifts(glpk, inventory, caps, experience, deadline)
         solution = await solve(glpk.GLP_MIN, usage);
         constraints.push({ name: 'least_items', vars: usage, bnds: fixed(total(usage, solution)) });
 
-        for (let start = 0; start < decisions.length;) {
+        if (decisions.length <= 30) {
+            for (let start = 0; start < decisions.length;) {
             let end = start;
             let radix = 1;
             while (end < decisions.length && radix * (decisions[end].limit + 1) <= 100000) {
@@ -79,13 +80,12 @@ export async function allocateGifts(glpk, inventory, caps, experience, deadline)
                 });
                 solution = await solve(glpk.GLP_MAX, priorities);
             }
-            group.forEach(({ student, gift, name, bound }) => {
-                const count = countFor(solution, name);
-                allocations[student][gift] = count;
-                Object.assign(bound, fixed(count));
-            });
             start = end;
+            }
         }
+        decisions.forEach(({ student, gift, name }) => {
+            allocations[student][gift] = countFor(solution, name);
+        });
     }
 
     const unused = inventory.map((count, gift) => allocations.reduce((left, row) => left - row[gift], count));

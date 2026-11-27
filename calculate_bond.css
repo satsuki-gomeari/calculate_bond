@@ -97,6 +97,9 @@ nav {
 .allocation-remove { padding: 0 8px; white-space: nowrap; font-size: 1em; }
 #tab5 button:disabled { opacity: .6; cursor: default; }
 #allocation-reset, .allocation-remove { background: #818181; }
+.allocation-file-actions, #allocation-file-status { max-width: calc(100vw - 80px); }
+.allocation-file-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.allocation-file-actions button { flex: 1 1 11rem; min-width: 0; min-height: 44px; }
 .allocation-results-list { padding-left: 1.4em; }
 .allocation-results-list img { vertical-align: middle; margin-right: .4em; }
 .allocation-student-result { min-height: 130px; }

@@ -5,11 +5,15 @@ function initGiftAllocation(dataReady) {
     const add = document.getElementById('allocation-add');
     const calculate = document.getElementById('allocation-calculate');
     const reset = document.getElementById('allocation-reset');
+    const exportButton = document.getElementById('allocation-export');
+    const importButton = document.getElementById('allocation-import');
+    const fileInput = document.getElementById('allocation-file');
+    const fileStatus = document.getElementById('allocation-file-status');
     const status = document.getElementById('allocation-status');
     const results = document.getElementById('allocation-results');
     const pendingMessage = '計算ボタンを押してください。';
     const maxStudents = 5;
-    const timeLimit = 1000000;
+    const timeLimit = 36000000;
     const giftKeys = ['gift_orange_s', 'gift_orange_m', 'gift_orange_l', 'gift_orange_ex_l',
         'gift_purple_s', 'gift_purple_m', 'gift_purple_l', 'gift_purple_ex_l'];
     const rows = [];
@@ -135,11 +139,30 @@ function initGiftAllocation(dataReady) {
         }
         const definitions = giftImgPathList.slice(1).map((src, index) => ({ src, name: titles[index + 1] }));
         definitions.push({ name: '贈り物選択ボックス', src: './img/gift/gift_box.png' });
+        const detailInputs = new Map(Array.from(document.querySelectorAll('#tab1 .grid-gift_detail_input'), input =>
+            [input.previousElementSibling.src, input],
+        ));
         definitions.forEach(({ name, src }, index) => {
             const cell = element('div');
             const input = element('input', { type: 'number', min: '0', max: '9999', value: '0',
                 inputmode: 'numeric', id: `allocation-stock-${index}`, 'aria-label': `${name}の保有数` });
-            cell.append(element('img', { class: 'grid-gift_detail_img', src, alt: name, title: name }), input);
+            const image = element('img', { class: 'grid-gift_detail_img', src, alt: name, title: name });
+            const detailInput = detailInputs.get(image.src);
+            if (detailInput) {
+                const syncStock = () => {
+                    if (input.value === detailInput.value) return;
+                    input.value = detailInput.value;
+                    input.classList.toggle('allocation-stock-filled', input.valueAsNumber > 0);
+                    invalidate();
+                };
+                syncStock();
+                detailInput.addEventListener('input', syncStock);
+                input.addEventListener('input', () => {
+                    detailInput.value = input.value;
+                    updateDetailGiftInputColor(detailInput);
+                });
+            }
+            cell.append(image, input);
             stock.append(cell);
             gifts.push({ name, src, input });
         });
@@ -161,12 +184,73 @@ function initGiftAllocation(dataReady) {
             if (!Number.isInteger(level) || level < 1 || level > 100) reject(rank, `${name}の現在ランクを1〜100の整数で入力してください。`);
             return { student, name, level };
         });
-        const inventory = gifts.map(({ name, input }) => {
+        return { selection, inventory: readInventory(reject) };
+    }
+
+    function validCount(count) {
+        return Number.isInteger(count) && count >= 0 && count <= 9999;
+    }
+
+    function readInventory(reject) {
+        return gifts.map(({ name, input }) => {
             const count = input.value === '' && !input.validity.badInput ? 0 : input.valueAsNumber;
-            if (!Number.isInteger(count) || count < 0 || count > 9999) reject(input, `${name}の保有数を0〜9999の整数で入力してください。`);
+            if (!validCount(count)) reject(input, `${name}の保有数を0〜9999の整数で入力してください。`);
             return count;
         });
-        return { selection, inventory };
+    }
+
+    function setInventory(counts) {
+        gifts.forEach(({ input }, index) => {
+            const value = String(counts[index]);
+            if (input.value === value) return;
+            input.value = value;
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+        invalidate();
+    }
+
+    function exportInventory() {
+        try {
+            const inventory = readInventory((input, message) => {
+                input.focus();
+                throw new Error(message);
+            });
+            const counts = Object.fromEntries(gifts.map(({ src }, index) => [src, inventory[index]]));
+            const data = JSON.stringify({ version: 1, counts }, null, 2);
+            const url = URL.createObjectURL(new Blob([data], { type: 'application/json' }));
+            const link = element('a', { href: url, download: 'gift-inventory.json', hidden: '' });
+            document.body.append(link);
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 30000);
+            fileStatus.textContent = '';
+        } catch (error) {
+            fileStatus.textContent = error.message;
+        }
+    }
+
+    async function importInventory() {
+        const file = fileInput.files[0];
+        fileInput.value = '';
+        if (!file) return;
+        importButton.disabled = true;
+        fileStatus.textContent = '';
+        try {
+            if (file.size > 64 * 1024) throw new Error('Inventory file is too large');
+            const data = JSON.parse(await file.text());
+            const counts = data?.counts;
+            if (data?.version !== 1 || !counts || typeof counts !== 'object' || Array.isArray(counts) ||
+                Object.keys(counts).length !== gifts.length ||
+                !gifts.every(({ src }) => Object.hasOwn(counts, src) && validCount(counts[src]))) {
+                throw new Error('Invalid inventory file');
+            }
+            setInventory(gifts.map(({ src }) => counts[src]));
+            fileStatus.textContent = '贈り物の個数を読み込みました。';
+        } catch (error) {
+            fileStatus.textContent = '個数を読み込めませんでした。このサイトから書き出したJSONファイルを選んでください。';
+        } finally {
+            importButton.disabled = false;
+        }
     }
 
     function listGifts(counts, emptyText) {
@@ -268,12 +352,14 @@ function initGiftAllocation(dataReady) {
         addRow();
         addRow();
         reset.disabled = false;
+        exportButton.disabled = false;
+        importButton.disabled = false;
         invalidate();
         document.addEventListener('click', event => {
             if (!students.contains(event.target)) rows.forEach(row => row.close());
         });
         form.addEventListener('input', event => {
-            if (event.target.matches('.custom-option-search')) return;
+            if (event.target === fileInput || event.target.matches('.custom-option-search')) return;
             if (stock.contains(event.target)) event.target.classList.toggle('allocation-stock-filled', event.target.valueAsNumber > 0);
             invalidate();
         });
@@ -281,10 +367,10 @@ function initGiftAllocation(dataReady) {
             if (event.target.matches('input[type="number"]')) event.target.select();
         });
         add.addEventListener('click', () => { addRow().trigger.focus(); invalidate(); });
-        reset.addEventListener('click', () => {
-            gifts.forEach(({ input }) => { input.value = '0'; input.classList.remove('allocation-stock-filled'); });
-            invalidate();
-        });
+        reset.addEventListener('click', () => setInventory(gifts.map(() => 0)));
+        exportButton.addEventListener('click', exportInventory);
+        importButton.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', importInventory);
         form.addEventListener('submit', event => {
             event.preventDefault();
             invalidate();

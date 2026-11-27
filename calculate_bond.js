@@ -623,17 +623,14 @@ function changeDetail() {
     resultDisplay.innerHTML = `ここに結果が表示されます。<br>計算ボタンを押してください。`;
 }
 
-function resetGiftNum() {
-    for (let i=1; i<giftImgPathList.length; i++) {
-        let gift_name = giftImgPathList[i].split('/')[3].split('.')[0];
-        document.getElementById('input-detail-' + gift_name).value = 0;
-    }
-    document.getElementById('input-detail_gift_box').value = 0;
+function updateDetailGiftInputColor(input) {
+    input.style.backgroundColor = parseInt(input.value) >= 1 ? '#90d7f8' : '';
+}
 
-    // それぞれの要素の背景色もリセット
-    const inputs = document.querySelectorAll('.grid-gift_detail_input');
-    inputs.forEach(input => {
-    input.style.backgroundColor = ''; // 任意の色に変更
+function resetGiftNum() {
+    document.querySelectorAll('#tab1 .grid-gift_detail_input').forEach(input => {
+        input.value = '0';
+        input.dispatchEvent(new Event('input'));
     });
 }
 
@@ -715,7 +712,7 @@ document.addEventListener("DOMContentLoaded", function() {
           // 最大4桁に制限
           this.value = this.value.slice(0, 4);
           // 数値が1以上のときだけ背景色を変更
-          this.style.backgroundColor = (parseInt(this.value) >= 1) ? "#90d7f8" : "";
+          updateDetailGiftInputColor(this);
         });
         
         input.addEventListener("focus", function () {

@@ -555,6 +555,12 @@
                     <div id="allocation-students"></div>
                     <button type="button" id="allocation-add" disabled>生徒を追加</button>
                     <h3 id="allocation-stock-label">贈り物保有数</h3>
+                    <div class="allocation-file-actions">
+                        <button type="button" id="allocation-export" disabled>個数を書き出す</button>
+                        <button type="button" id="allocation-import" disabled>個数を読み込む</button>
+                    </div>
+                    <input type="file" id="allocation-file" accept=".json,application/json" hidden>
+                    <div id="allocation-file-status" role="status"></div>
                     <div class="grid-gift_detail" id="allocation-stock" aria-labelledby="allocation-stock-label" role="group"></div>
                     <div class="grid-form allocation-actions">
                         <button type="submit" id="allocation-calculate" disabled>計算する</button>
