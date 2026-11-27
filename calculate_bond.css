@@ -95,7 +95,7 @@ nav {
 .allocation-student .custom-select-trigger, .allocation-rank-field input, .allocation-remove { height: 42px; }
 .allocation-rank-field input { box-sizing: border-box; width: 100%; margin-bottom: 0; }
 .allocation-remove { padding: 0 8px; white-space: nowrap; font-size: 1em; }
-#tab5 button:disabled { opacity: .6; cursor: default; }
+#bond-detail button:disabled { opacity: .6; cursor: default; }
 #allocation-reset, .allocation-remove { background: #818181; }
 .allocation-file-actions, #allocation-file-status { max-width: calc(100vw - 80px); }
 .allocation-file-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
@@ -116,11 +116,7 @@ nav {
   object-position: right center;
   pointer-events: none;
 }
-#tab5 [aria-invalid="true"] { outline: 2px solid #a13232; }
-
-@media (max-width: 768px) {
-  #tab5 { padding-top: 58px; }
-}
+#bond-detail [aria-invalid="true"] { outline: 2px solid #a13232; }
 
 form label {
     display: block;
@@ -152,18 +148,7 @@ form button:hover {
   background: #2980b9;
 }
 
-#input_reset-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background: #818181;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.2em;
-}
-
-#input_reset-button:hover {
+#allocation-reset:enabled:hover {
     background: #707070;
 }
 
@@ -195,16 +180,6 @@ form button:hover {
   color: black; /* 必要に応じて */
 }
 
-/* 画像を右上に配置、透明度調整 */
-.result-display-tab1-img {
-  position: absolute;
-  top: -15px;
-  right: 0;
-  width: 130px;
-  opacity: 0.6;  /* ←透明度 0.0 ～ 1.0 で調整可能 */
-  z-index: 1;
-}
-
 .grid-form {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -234,18 +209,6 @@ form button:hover {
   gap: 10px;
   flex-wrap: wrap;
   justify-content: flex-start;
-}
-
-#label-student-name-tab1 {
-  display: none;
-}
-
-#select-student-name-tab1 {
-  display: none;
-}
-
-#input_reset-button {
-  display: none;
 }
 
 .result-button-tab1 {

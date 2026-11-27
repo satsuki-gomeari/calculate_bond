@@ -3,7 +3,6 @@ var selectedTab = "tab1";
 var giftCompatibilityList = [];
 var giftImgPathList = [];
 var studentImgPathList = [];
-var studentOptionsTab1 = [];
 var studentOptionsTab4 = [];
 
 const TEMP_IMG_PATH = "./img/peroro.png";
@@ -57,46 +56,24 @@ function openTab(evt, tabName) {
 }
 
 function changeStudentsList(listNum) {
+    const studentNum = document.getElementById("select-student-name" + String(listNum)).value;
 
-    if (listNum != -1) {
-        const studentNum = document.getElementById("select-student-name" + String(listNum)).value;
-    
-        // 現存するテーブルの削除
-        var student = "student" + String(listNum);
-        var form = document.getElementById(student);
-        form.innerHTML = '';
-    
-        var result = document.getElementById("available-gift");
-        result.innerHTML = '';
-    
-        // 新規テーブルの作成
-        if (studentNum != "default") {
-            const giftCompatibility = giftCompatibilityList[Number(studentNum)].split('\r')[0];
-            addGiftImgTable(listNum, giftCompatibility, student)
-        }
-    
-        // 現存するすべてのテーブルから製造に使ってよい贈り物を算出
-        setAvailableGifts()
-    } else {
-        try {
-            // どれだけ上がる(詳細)の生徒リスト変化時の処理
-            const studentNum = document.getElementById("select-student-name-tab1").value;
-            let student_img_path = studentImgPathList[Number(studentNum)]
-            // const imgElement = document.querySelector(".result-display-tab1-img");
-            
-            if (typeof student_img_path === "string") {
-                student_img_path = student_img_path.split('\r')[0];
-            } else {
-                student_img_path = TEMP_IMG_PATH;
-            }
-    
-            // imgElement.src = student_img_path
-    
-            changeImageIfExists(".result-display-tab1-img", student_img_path)
-        } catch (e) {
-            console.error("changeStudentsList の処理中にエラー:", e);
-        }
+    // 現存するテーブルの削除
+    var student = "student" + String(listNum);
+    var form = document.getElementById(student);
+    form.innerHTML = '';
+
+    var result = document.getElementById("available-gift");
+    result.innerHTML = '';
+
+    // 新規テーブルの作成
+    if (studentNum != "default") {
+        const giftCompatibility = giftCompatibilityList[Number(studentNum)].split('\r')[0];
+        addGiftImgTable(listNum, giftCompatibility, student)
     }
+
+    // 現存するすべてのテーブルから製造に使ってよい贈り物を算出
+    setAvailableGifts()
 }
 
 function updateLayout() {
@@ -143,18 +120,15 @@ function parseStudentImgPathCSV(data) {
 }
 
 function addStudentsList() {
-    studentOptionsTab1 = [{ value: "default", text: "生徒を選んでください" }];
     studentOptionsTab4 = [{ value: "default", text: "生徒を選んでください" }];
 
     if (giftCompatibilityList.length > 0) {
         for (let i = 1; i < giftCompatibilityList.length; i++) {
             const studentName = giftCompatibilityList[i].split(',')[0];
-            studentOptionsTab1.push({ value: String(i), text: studentName });
             studentOptionsTab4.push({ value: String(i), text: studentName });
         }
     }
 
-    renderCustomStudentOptions("custom-options-tab1", studentOptionsTab1);
     renderCustomStudentOptionsForTab4();
 }
 
@@ -214,19 +188,6 @@ function filterCustomStudentOptions(optionsId, query) {
     }
 }
 
-function getCustomOptionsId(hiddenInputId) {
-    if (hiddenInputId === "select-student-name-tab1") {
-        return "custom-options-tab1";
-    }
-
-    const match = hiddenInputId.match(/^select-student-name(\d+)$/);
-    if (match) {
-        return `custom-options-${match[1]}`;
-    }
-
-    return hiddenInputId;
-}
-
 function selectCustomStudentOption(hiddenInputId, placeholderSelector, value, text, changeListNum) {
     const hiddenInput = document.getElementById(hiddenInputId);
     const placeholder = document.querySelector(placeholderSelector);
@@ -239,11 +200,7 @@ function selectCustomStudentOption(hiddenInputId, placeholderSelector, value, te
     placeholder.textContent = text;
     // Close all open dropdowns now that a selection was made
     closeAllCustomStudentOptions();
-    if (changeListNum !== null) {
-        changeStudentsList(changeListNum);
-    } else {
-        changeStudentsList(-1);
-    }
+    changeStudentsList(changeListNum);
 }
 
 function closeCustomStudentOptions(optionsId) {
@@ -266,66 +223,6 @@ function closeAllCustomStudentOptions(exceptId) {
     all.forEach(el => {
         if (exceptId && el.id === exceptId) return;
         el.classList.remove('open');
-    });
-}
-
-function initCustomStudentSelectTab1() {
-    const customSelect = document.getElementById("custom-student-select-tab1");
-    if (!customSelect) {
-        return;
-    }
-
-    const trigger = customSelect.querySelector(".custom-select-trigger");
-    const optionsWrapper = customSelect.querySelector(".custom-options");
-    const searchInput = customSelect.querySelector(".custom-option-search");
-
-    trigger.addEventListener("click", function (event) {
-        event.stopPropagation();
-        const isOpen = optionsWrapper.classList.contains("open");
-        if (isOpen) {
-            closeCustomStudentOptions("custom-options-tab1");
-            return;
-        }
-        // Close any other open dropdowns, then open this one
-        closeAllCustomStudentOptions("custom-options-tab1");
-        openCustomStudentOptions("custom-options-tab1");
-        if (searchInput) {
-            searchInput.value = "";
-            filterCustomStudentOptions("custom-options-tab1", "");
-            searchInput.focus();
-        }
-    });
-
-    // Prevent Enter from submitting parent form (which reloads the page)
-    if (searchInput) {
-        searchInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        });
-    }
-
-    searchInput.addEventListener("click", function (event) {
-        event.stopPropagation();
-    });
-
-    searchInput.addEventListener("input", function () {
-        filterCustomStudentOptions("custom-options-tab1", this.value.trim().toLowerCase());
-    });
-
-    optionsWrapper.addEventListener("click", function (event) {
-        const option = event.target.closest(".custom-option");
-        if (!option || option.classList.contains("disabled")) {
-            return;
-        }
-        selectCustomStudentOption("select-student-name-tab1", "#custom-student-select-tab1 .custom-select-placeholder", option.dataset.value, option.textContent, null);
-    });
-
-    document.addEventListener("click", function (event) {
-        if (!customSelect.contains(event.target)) {
-            closeCustomStudentOptions("custom-options-tab1");
-        }
     });
 }
 
@@ -584,74 +481,10 @@ function setAvailableGiftsImg(availableGiftsIdxList) {
 }
 
 function changeDetail() {
-    var detail_change_btn_condition = document.getElementById('checkbox_detail_change_btn').checked;
-    console.log(detail_change_btn_condition);  // checked=true=normal
-    var detail_form = document.getElementsByClassName("grid-gift_detail");
-    var normal_from = document.getElementsByClassName("grid-gift_normal");
-    var normal_detail_from = document.getElementsByClassName("grid-form3");
-    var grid_gift_normal_detail_label = document.getElementsByClassName("grid-gift_normal-detail_label");
-    var result_button_tab1 = document.getElementsByClassName("result-button-tab1");
-    const label_student_name_tab1 = document.getElementById("label-student-name-tab1");
-    const customStudentSelectTab1 = document.getElementById("custom-student-select-tab1");
-    const input_reset_button = document.getElementById("input_reset-button");
-    const resultDisplay = document.getElementById(`result-display-tab1`);
-    const studentImg = document.querySelector('.result-display-tab1-img');
-
-    if (detail_change_btn_condition == true) {
-        result_button_tab1[0].style.gridTemplateColumns = "repeat(1, 1fr)";
-        label_student_name_tab1.style.display = 'none'
-        customStudentSelectTab1.style.display = 'none'
-        input_reset_button.style.display = 'none'
-        studentImg.style.display = "none"
-        detail_form[0].style.display = "none";
-        grid_gift_normal_detail_label[0].style.display = "grid";
-        normal_from[0].style.display = "grid";
-        normal_detail_from[0].style.display = "grid";
-    }
-    else {
-        result_button_tab1[0].style.gridTemplateColumns = "repeat(2, 1fr)";
-        label_student_name_tab1.style.display = 'block'
-        customStudentSelectTab1.style.display = 'block'
-        input_reset_button.style.display = 'block'
-        studentImg.style.display = "block"
-        normal_from[0].style.display = "none";
-        grid_gift_normal_detail_label[0].style.display = "none";
-        detail_form[0].style.display = "flex";
-        normal_detail_from[0].style.display = "grid";
-        
-    }
-    resultDisplay.innerHTML = `ここに結果が表示されます。<br>計算ボタンを押してください。`;
+    const normal = document.getElementById('checkbox_detail_change_btn').checked;
+    document.getElementById('bond-normal').hidden = !normal;
+    document.getElementById('bond-detail').hidden = normal;
 }
-
-function updateDetailGiftInputColor(input) {
-    input.style.backgroundColor = parseInt(input.value) >= 1 ? '#90d7f8' : '';
-}
-
-function resetGiftNum() {
-    document.querySelectorAll('#tab1 .grid-gift_detail_input').forEach(input => {
-        input.value = '0';
-        input.dispatchEvent(new Event('input'));
-    });
-}
-
-function changeImageIfExists(className, newImgPath) {
-    // 画像の読み込みチェック 
-    const testImg = new Image();
-    const imgElement = document.querySelector(className);
-    
-    testImg.onload = function () {
-        // 画像の読み込みに成功した場合
-        imgElement.src = newImgPath;
-    };
-    
-    testImg.onerror = function () {
-        // 画像が存在しない、または読み込みに失敗した場合(絶対に読み込めることが確認できたパスを設定しておく)
-        imgElement.src = TEMP_IMG_PATH;
-    };
-  
-    testImg.src = newImgPath;
-  }
-
 
 // 初期状態で最初のタブを開く
 document.addEventListener("DOMContentLoaded", function() {
@@ -667,8 +500,7 @@ document.addEventListener("DOMContentLoaded", function() {
         studentImageDataReady,
     ]);
     initGiftAllocation(giftDataReady);
-
-    initCustomStudentSelectTab1();
+    changeDetail();
     initCustomStudentSelectTab4();
 
     const menuCheckbox = document.getElementById("menu-btn");
@@ -706,20 +538,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    const inputs = document.querySelectorAll(".grid-gift_detail_input");
-    inputs.forEach(input => {
-        input.addEventListener("input", function () {
-          // 最大4桁に制限
-          this.value = this.value.slice(0, 4);
-          // 数値が1以上のときだけ背景色を変更
-          updateDetailGiftInputColor(this);
-        });
-        
-        input.addEventListener("focus", function () {
-          this.select();
-        });
-      });
-
     menu.querySelectorAll("li").forEach(link => {
         link.addEventListener("click", function () {
             menuCheckbox.checked = false;
@@ -749,95 +567,19 @@ function updateResult(tabId) {
     let number_of_day = 0;
 
     if (tabId === 'tab1') {
-        var detail_change_btn_condition = document.getElementById('checkbox_detail_change_btn').checked;
-        if (detail_change_btn_condition == true) {
-            // 通常モード
-            current_lv = Number(document.getElementById('input1-tab1').value);
-            gift_o_s_num = Number(document.getElementById('input3-tab1').value);
-            gift_o_m_num = Number(document.getElementById('input4-tab1').value);
-            gift_o_l_num = Number(document.getElementById('input5-tab1').value);
-            gift_o_ex_num = Number(document.getElementById('input6-tab1').value);
-            gift_p_s_num = Number(document.getElementById('input7-tab1').value);
-            gift_p_m_num = Number(document.getElementById('input8-tab1').value);
-            gift_p_l_num = Number(document.getElementById('input9-tab1').value);
-            gift_p_ex_num = Number(document.getElementById('input10-tab1').value);
-            cafe_touch_per_day = Number(document.getElementById('input11-tab1').value);
-            schedule_touch_per_day = Number(document.getElementById('input12-tab1').value);
-            number_of_day = Number(document.getElementById('input13-tab1').value);
-        }
-        else {
-            // 詳細モード
-            current_lv = Number(document.getElementById('input1-tab1').value);
-            gift_o_s_num = 0
-            gift_o_m_num = 0
-            gift_o_l_num = 0
-            gift_o_ex_num = 0
-            gift_p_s_num = 0
-            gift_p_m_num = 0
-            gift_p_l_num = 0
-            gift_p_ex_num = 0
-            cafe_touch_per_day = Number(document.getElementById('input11-tab1').value);
-            schedule_touch_per_day = Number(document.getElementById('input12-tab1').value);
-            number_of_day = Number(document.getElementById('input13-tab1').value);
+        current_lv = Number(document.getElementById('input1-tab1').value);
+        gift_o_s_num = Number(document.getElementById('input3-tab1').value);
+        gift_o_m_num = Number(document.getElementById('input4-tab1').value);
+        gift_o_l_num = Number(document.getElementById('input5-tab1').value);
+        gift_o_ex_num = Number(document.getElementById('input6-tab1').value);
+        gift_p_s_num = Number(document.getElementById('input7-tab1').value);
+        gift_p_m_num = Number(document.getElementById('input8-tab1').value);
+        gift_p_l_num = Number(document.getElementById('input9-tab1').value);
+        gift_p_ex_num = Number(document.getElementById('input10-tab1').value);
+        cafe_touch_per_day = Number(document.getElementById('input11-tab1').value);
+        schedule_touch_per_day = Number(document.getElementById('input12-tab1').value);
+        number_of_day = Number(document.getElementById('input13-tab1').value);
 
-            // 選択した生徒ごとの贈り物数を合算する
-            const student_num = document.getElementById("select-student-name-tab1").value;
-            if (student_num != "default") {
-                const personalGiftCompatibility = giftCompatibilityList[Number(student_num)].split('\r')[0].split(',');
-                
-                for (let i=1; i<giftImgPathList.length; i++) {
-                    let gift_name = giftImgPathList[i].split('/')[3].split('.')[0];
-                    let gift_input_num = Number(document.getElementById('input-detail-' + gift_name).value);
-                    let gift_type_num = Number(personalGiftCompatibility[i]);
-
-                    if (gift_type_num == 1) {
-                        gift_o_s_num += gift_input_num;
-                    }
-                    else if(gift_type_num == 2) {
-                        gift_o_m_num += gift_input_num;
-                    }
-                    else if(gift_type_num == 3) {
-                        gift_o_l_num += gift_input_num;
-                    }
-                    else if(gift_type_num == 4) {
-                        gift_o_ex_num += gift_input_num;
-                    }
-                    else if(gift_type_num == 5) {
-                        gift_p_s_num += gift_input_num;
-                    }
-                    else if(gift_type_num == 6) {
-                        gift_p_m_num += gift_input_num;
-                    }
-                    else if(gift_type_num == 7) {
-                        gift_p_l_num += gift_input_num;
-                    }
-                    else if(gift_type_num == 8) {
-                        gift_p_ex_num += gift_input_num;
-                    }
-
-                }
-                // 贈り物選択 box は生徒が好む最もランクの高いものが選択されると想定
-                // 水着ハナコ → BBクリーム = 橙特大 = 4
-                let max_gift_type = 0;
-                const gift_box_num = Number(document.getElementById('input-detail_gift_box').value);
-                max_gift_type = Math.max(...personalGiftCompatibility.slice(ORANGE_GIFT_INDEX_MIN, ORANGE_GIFT_INDEX_MAX).map(Number));
-
-                if(max_gift_type === 4) gift_o_ex_num += gift_box_num;
-                else if(max_gift_type === 3) gift_o_l_num += gift_box_num;
-                else if(max_gift_type === 2) gift_o_m_num += gift_box_num;
-                else if(max_gift_type === 1) gift_o_s_num += gift_box_num;
-
-            }
-            else {
-                result = `
-                    下記の点を確認してください。 <br>
-                    ・生徒を選択してください
-                `;
-                resultDisplay.innerHTML = result;
-                return;
-            }
-        }
-        
         // 経験値の計算
         let gift2ex = calculator.calculateGift2Ex(
             gift_o_s_num,

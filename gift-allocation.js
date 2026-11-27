@@ -11,8 +11,8 @@ function initGiftAllocation(dataReady) {
     const fileStatus = document.getElementById('allocation-file-status');
     const status = document.getElementById('allocation-status');
     const results = document.getElementById('allocation-results');
-    const pendingMessage = '計算ボタンを押してください。';
-    const maxStudents = 5;
+    const minStudents = 1;
+    const maxStudents = 6;
     const giftKeys = ['gift_orange_s', 'gift_orange_m', 'gift_orange_l', 'gift_orange_ex_l',
         'gift_purple_s', 'gift_purple_m', 'gift_purple_l', 'gift_purple_ex_l'];
     const rows = [];
@@ -29,14 +29,14 @@ function initGiftAllocation(dataReady) {
     function invalidate() {
         form.querySelectorAll('[aria-invalid]').forEach(input => input.removeAttribute('aria-invalid'));
         results.replaceChildren();
-        status.textContent = pendingMessage;
+        status.replaceChildren('ここに結果が表示されます。', document.createElement('br'), '計算ボタンを押してください。');
         calculate.disabled = false;
     }
 
     function updateRows() {
         rows.forEach((row, index) => {
-            row.label.textContent = `生徒 ${index + 1}`;
-            row.remove.disabled = rows.length <= 2;
+            row.label.textContent = `生徒${index + 1}:`;
+            row.remove.disabled = rows.length <= minStudents;
         });
         add.disabled = rows.length >= maxStudents;
     }
@@ -60,7 +60,10 @@ function initGiftAllocation(dataReady) {
         const rankField = element('div', { class: 'allocation-rank-field' });
         const rank = element('input', { type: 'number', min: '1', max: '100', value: '1',
             inputmode: 'numeric', id: `${rowId}-rank` });
-        rankField.append(element('label', { for: rank.id }, '現在ランク'), rank);
+        rank.addEventListener('input', () => {
+            if (rank.value.length > 3) rank.value = rank.value.slice(0, 3);
+        });
+        rankField.append(element('label', { for: rank.id }, '現在の絆ランク:'), rank);
         const remove = element('button', { type: 'button', class: 'allocation-remove' }, '削除');
         container.append(wrapper, rankField, remove);
         students.append(container);
@@ -134,29 +137,14 @@ function initGiftAllocation(dataReady) {
         }
         const definitions = giftImgPathList.slice(1).map((src, index) => ({ src, name: titles[index + 1] }));
         definitions.push({ name: '贈り物選択ボックス', src: './img/gift/gift_box.png' });
-        const detailInputs = new Map(Array.from(document.querySelectorAll('#tab1 .grid-gift_detail_input'), input =>
-            [input.previousElementSibling.src, input],
-        ));
         definitions.forEach(({ name, src }, index) => {
             const cell = element('div');
             const input = element('input', { type: 'number', min: '0', max: '9999', value: '0',
                 inputmode: 'numeric', id: `allocation-stock-${index}`, 'aria-label': `${name}の保有数` });
             const image = element('img', { class: 'grid-gift_detail_img', src, alt: name, title: name });
-            const detailInput = detailInputs.get(image.src);
-            if (detailInput) {
-                const syncStock = () => {
-                    if (input.value === detailInput.value) return;
-                    input.value = detailInput.value;
-                    input.classList.toggle('allocation-stock-filled', input.valueAsNumber > 0);
-                    invalidate();
-                };
-                syncStock();
-                detailInput.addEventListener('input', syncStock);
-                input.addEventListener('input', () => {
-                    detailInput.value = input.value;
-                    updateDetailGiftInputColor(detailInput);
-                });
-            }
+            input.addEventListener('input', () => {
+                if (input.value.length > 4) input.value = input.value.slice(0, 4);
+            });
             cell.append(image, input);
             stock.append(cell);
             gifts.push({ name, src, input });
@@ -170,7 +158,7 @@ function initGiftAllocation(dataReady) {
             control.focus();
             throw new Error(message);
         };
-        if (selected.length < 2) reject(rows.find(row => !row.student).trigger, '生徒を2人以上選んでください。');
+        if (selected.length < minStudents) reject(rows[0].trigger, '生徒を1人以上選んでください。');
         const seen = new Set();
         const selection = selected.map(({ student, name, rank, trigger }) => {
             if (seen.has(student)) reject(trigger, `${name}が重複しています。別の生徒を選んでください。`);
@@ -273,19 +261,49 @@ function initGiftAllocation(dataReady) {
             }, { once: true });
             studentImage.src = studentImgPathList[student] || TEMP_IMG_PATH;
             const studentResult = element('div', { class: 'allocation-student-result image-wrapper' });
+            const summary = element('p', { class: 'allocation-result-student-summary' });
+            summary.append(
+                '・絆 ', element('strong', {}, String(level)), 'から', element('strong', {}, String(reached)), 'まで到達できます。',
+                element('br'), '・', element('strong', {}, String(earned[index])), 'の経験値が獲得できます。',
+            );
             studentResult.append(
                 element('h3', {}, name),
-                element('p', { class: 'allocation-result-student-summary' }, `絆ランク ${level} → ${reached}（有効経験値 ${earned[index]}）`),
+                summary,
                 studentImage,
             );
-            results.append(studentResult, listGifts(allocations[index], '割り当てなし'));
+            results.append(studentResult);
         });
-        results.append(element('h3', {}, '未使用在庫'), listGifts(unused, '未使用なし'));
-        status.textContent = '配分結果';
+        const usedGifts = element('section');
+        usedGifts.append(element('h3', {}, '利用した贈り物一覧'));
+        selection.forEach(({ name }, index) => {
+            usedGifts.append(element('h4', {}, name), listGifts(allocations[index], '割り当てなし'));
+        });
+        results.append(usedGifts, element('h3', {}, '未使用在庫'), listGifts(unused, '未使用なし'));
+        status.textContent = '';
+    }
+
+    function readActivityExperience() {
+        const read = (id, message) => {
+            const input = document.getElementById(id);
+            if (!input.validity.valid) {
+                input.setAttribute('aria-invalid', 'true');
+                input.focus();
+                throw new Error(message);
+            }
+            return Number(input.value);
+        };
+        const cafe = read('allocation-cafe', 'カフェタッチ回数を0〜10の整数で入力してください。');
+        const schedule = read('allocation-schedule', 'スケジュール訪問回数を0〜100の範囲で0.1刻みで入力してください。');
+        const days = read('allocation-days', 'タッチ・訪問日数を0〜1000の整数で入力してください。');
+        const experience = calculator.calculateGift2Ex(0, 0, 0, 0, 0, 0, 0, 0, cafe, schedule, days);
+        return Math.round(experience * 2) / 2;
     }
 
     function runAllocation(selection, inventory, allocateGifts) {
         const caps = selection.map(({ level }) => calculator.getCurrentEx(100) - calculator.getCurrentEx(level));
+        const activity = readActivityExperience();
+        const activityEarned = caps.map(cap => Math.min(cap, activity));
+        const giftCaps = caps.map((cap, index) => cap - activityEarned[index]);
         const experience = selection.map(({ student }) => {
             const codes = giftCompatibilityList[student].replace(/\r$/, '').split(',').map(Number);
             const orange = codes.slice(ORANGE_GIFT_INDEX_MIN, ORANGE_GIFT_INDEX_MAX);
@@ -295,12 +313,12 @@ function initGiftAllocation(dataReady) {
             if (values.some(value => !Number.isInteger(value))) throw new Error('贈り物の相性データに不整合があります。');
             return values;
         });
-        render(selection, allocateGifts(inventory, caps, experience));
+        const { allocations, earned, unused } = allocateGifts(inventory, giftCaps, experience);
+        render(selection, { allocations, earned: earned.map((xp, index) => xp + activityEarned[index]), unused });
     }
 
     Promise.all([dataReady, import('./gift-allocation-solver.mjs')]).then(([, { allocateGifts }]) => {
         buildStock();
-        addRow();
         addRow();
         reset.disabled = false;
         exportButton.disabled = false;
