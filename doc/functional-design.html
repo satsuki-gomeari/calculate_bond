@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ブルーアーカイブ 絆ランク計算機 | 現行機能設計書</title>
+    <style>
+        :root { color-scheme: light; --ink: #203140; --accent: #09657b; --line: #cbd9df; }
+        body { margin: 0; color: var(--ink); background: #f5f8fa; font: 1rem/1.7 "Yu Gothic", Meiryo, sans-serif; }
+        main { box-sizing: border-box; max-width: 62rem; margin: auto; padding: 2rem 1rem 4rem; }
+        header { padding-bottom: 1rem; border-bottom: 2px solid var(--accent); }
+        h1, h2, h3 { line-height: 1.4; }
+        h1 { font-size: 1.9rem; margin: .25rem 0; }
+        h2 { font-size: 1.4rem; }
+        h3 { font-size: 1.08rem; margin-bottom: .35rem; }
+        a { color: var(--accent); }
+        section { margin-top: 2rem; padding-top: .5rem; border-top: 1px solid var(--line); }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: .45rem .65rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+        thead { background: #e6f0f3; }
+        code { overflow-wrap: anywhere; }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <p>ブルーアーカイブ 絆ランク計算機</p>
+            <h1>現行機能設計書</h1>
+            <p>現行のHTML・CSS・JavaScript・CSVをもとに、画面の1タブを1機能として整理したものです。未実装の改善案は仕様に含めません。</p>
+        </header>
+
+        <nav aria-label="目次">
+            <h2>目次</h2>
+            <ol>
+                <li><a href="#common">共通仕様</a></li>
+                <li><a href="#tab1">F-01 どれだけ上がる?</a></li>
+                <li><a href="#tab4">F-02 何が好き?</a></li>
+                <li><a href="#tab3">F-03 何日必要?</a></li>
+                <li><a href="#tab2">F-04 何個必要?</a></li>
+            </ol>
+        </nav>
+
+        <section id="common">
+            <h2>共通仕様</h2>
+            <p><a href="../index.html">画面</a>と<a href="../calculate_bond.css">スタイル</a>で表示を構成し、<a href="../calculate_bond.js">JavaScript</a>でタブ切り替え、検索、集計、入力検証を行う。計算はブラウザ内で完結し、結果の保存や送信は行わない。</p>
+            <p>初期表示は「どれだけ上がる?」の通常モード。画面幅768px以下ではハンバーガーメニュー、それより広い画面ではタブを使用する。計算系の3機能は「計算する」を押すと結果欄を更新する。</p>
+            <h3>データ</h3>
+            <ul>
+                <li><a href="../blue_archive_gift.csv">贈り物相性表</a>: 1行が生徒1人、1列目が生徒名、以降が贈り物ごとの相性コード。</li>
+                <li><a href="../blue_archive_gift_img_path.csv">贈り物画像パス表</a>: 相性表の贈り物の列順に対応する。</li>
+                <li><a href="../blue_archive_student_img_path.csv">生徒画像パス表</a>: 相性表の生徒の行順に対応する。</li>
+            </ul>
+            <p>3つのCSVはページ読み込み時に <code>fetch</code> で取得する。画像パス表との照合は名前ではなく行・列の位置に依存する。</p>
+            <h3>経験値</h3>
+            <p><code>CalculateBond</code> が絆ランク1〜100の累積経験値表を保持する。カフェタッチ1回は15経験値、スケジュール訪問1回は25経験値とする。訪問回数には小数を使える。</p>
+            <table aria-label="贈り物の相性コードと1個あたりの経験値">
+                <thead><tr><th scope="col">評価</th><th scope="col">橙（コード / 経験値）</th><th scope="col">紫（コード / 経験値）</th></tr></thead>
+                <tbody>
+                    <tr><th scope="row">小</th><td>1 / 20</td><td>5 / 60</td></tr>
+                    <tr><th scope="row">中</th><td>2 / 40</td><td>6 / 120</td></tr>
+                    <tr><th scope="row">大</th><td>3 / 60</td><td>7 / 180</td></tr>
+                    <tr><th scope="row">特大</th><td>4 / 80</td><td>8 / 240</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="tab1" aria-labelledby="heading-tab1">
+            <h2 id="heading-tab1">F-01 どれだけ上がる?（到達ランク計算）</h2>
+            <p>手持ちの贈り物と今後のカフェタッチ・スケジュール訪問で、どの絆ランクまで到達できるかを求める。</p>
+            <p>通常モードは従来どおりカテゴリ別に計算する。「詳細表示」をオンにすると<a href="gift-allocation-design.html">贈り物配分</a>に切り替わる。通常・詳細の入力と結果はそれぞれ保持し、在庫を同期しない。</p>
+            <h3>通常モードの入力・初期値</h3>
+            <ul>
+                <li>現在の絆ランクは1、1日あたりのカフェタッチは7回、スケジュール訪問は0.2回、タッチ・訪問日数は0日。</li>
+                <li>橙・紫それぞれの小・中・大・特大の保有数はすべて0個。</li>
+            </ul>
+            <h3>処理・表示</h3>
+            <ol>
+                <li>各カテゴリの個数×1個あたりの経験値を合計し、さらに（カフェ回数×15＋訪問回数×25）×日数を加える。</li>
+                <li>獲得経験値を現在ランクの累積経験値に加え、累積経験値がその値以下となる最大のランクを表示する。上限は100。獲得経験値も表示する。</li>
+            </ol>
+            <h3>入力チェック</h3>
+            <p>現在ランクは1〜100の整数。贈り物の個数は8カテゴリそれぞれ0〜9999の整数。カフェ回数・日数は0以上の整数、訪問回数は0以上。不正入力では確認項目を表示する。</p>
+        </section>
+
+        <section id="tab4" aria-labelledby="heading-tab4">
+            <h2 id="heading-tab4">F-02 何が好き?（好み・製造素材一覧）</h2>
+            <p>選んだ生徒ごとの好みと、選んだ全員にとって相性が低い贈り物を画像で確認する。</p>
+            <h3>入力・初期値</h3>
+            <p>検索付きの生徒選択欄を未選択の1枠で開始する。「生徒を追加」と「削除」で1〜6枠を表示できる。検索は生徒名の部分一致で、大文字と小文字を区別しない。</p>
+            <h3>処理・表示</h3>
+            <ol>
+                <li>生徒の選択または解除を契機に、該当枠の一覧と製造素材候補を更新する。計算ボタンはない。</li>
+                <li>生徒別の一覧には特大（コード4・8）、大（3・7）、中（2のみ）の順に贈り物画像を表示する。橙小と紫の小・中は表示対象外。</li>
+                <li>製造素材候補には、選択済みの全生徒に対してコード1（橙小）となる贈り物だけを表示する。誰も選択していない場合や該当する贈り物がない場合、候補欄に画像は表示しない。</li>
+            </ol>
+        </section>
+
+        <section id="tab3" aria-labelledby="heading-tab3">
+            <h2 id="heading-tab3">F-03 何日必要?（必要日数計算）</h2>
+            <p>毎日同じ量の経験値を獲得する前提で、目標絆ランクまでの必要日数を求める。</p>
+            <h3>入力・初期値</h3>
+            <p>現在ランク1、目標ランク100、贈り物の種類は橙大（8カテゴリから1種類）、1日に贈る個数は5個、カフェタッチは7回/日、スケジュール訪問は0.2回/日。</p>
+            <h3>処理・表示</h3>
+            <ol>
+                <li>必要経験値＝目標ランクの累積経験値−現在ランクの累積経験値。</li>
+                <li>1日の経験値＝贈り物の個数×種類別経験値＋カフェ回数×15＋訪問回数×25。</li>
+                <li>必要経験値を1日の経験値で割って切り上げ、必要日数と必要経験値を表示する。</li>
+            </ol>
+            <h3>入力チェック・境界条件</h3>
+            <p>ランクは1〜100で、目標は現在以上。カフェ回数と贈り物個数は0以上の整数、訪問回数は0以上。贈り物個数のHTML入力欄は最小値1だが、計算処理では0も受け付ける。1日の経験値が0の場合の専用処理はなく、必要経験値が正なら <code>Infinity</code> が表示され、必要経験値も0なら入力確認メッセージになる。</p>
+        </section>
+
+        <section id="tab2" aria-labelledby="heading-tab2">
+            <h2 id="heading-tab2">F-04 何個必要?（必要な贈り物の個数計算）</h2>
+            <p>指定日までに目標ランクへ到達するために必要な贈り物の数を、カテゴリ別に求める。</p>
+            <h3>入力・初期値</h3>
+            <p>開始日は端末の当日、目標日は当年の12月10日（当日が12月11日以降なら翌年）。現行実装では、どのタブを開いても日付欄がこの初期値に戻る。現在ランクは1、目標ランクは100、カフェタッチは7回/日、スケジュール訪問は0.2回/日。</p>
+            <h3>処理・表示</h3>
+            <ol>
+                <li>開始日から目標日までの両端を含む日数を求める。同日の場合は1日。</li>
+                <li>目標ランクまでの必要経験値から（カフェ回数×15＋訪問回数×25）×日数を差し引く。</li>
+                <li>残りの経験値をカテゴリごとの1個あたりの経験値で割って切り上げ、0以下は0個にする。さらに、合計個数を日数で割って切り上げ、1日あたりの個数とする。</li>
+                <li>8カテゴリそれぞれについて、その種類だけを贈る場合の1日あたりの個数と合計個数を表示する。差し引き前の必要経験値も表示する。</li>
+            </ol>
+            <h3>入力チェック</h3>
+            <p>終了日は開始日以降。ランクは1〜100で、目標は現在以上。カフェ回数は0以上の整数、訪問回数は0以上。条件を満たさない場合は確認項目を表示する。</p>
+        </section>
+    </main>
+</body>
+</html>

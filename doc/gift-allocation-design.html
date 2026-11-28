@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>F-01 詳細表示: 贈り物配分 | 機能設計書</title>
+    <style>
+        :root { color-scheme: light; --ink: #203140; --accent: #09657b; --line: #cbd9df; }
+        body { margin: 0; color: var(--ink); background: #f5f8fa; font: 1rem/1.7 "Yu Gothic", Meiryo, sans-serif; }
+        main { box-sizing: border-box; max-width: 62rem; margin: auto; padding: 2rem 1rem 4rem; }
+        header { padding-bottom: 1rem; border-bottom: 2px solid var(--accent); }
+        h1, h2, h3 { line-height: 1.4; }
+        h1 { font-size: 1.9rem; margin: .25rem 0; }
+        h2 { font-size: 1.4rem; }
+        h3 { font-size: 1.08rem; margin-bottom: .35rem; }
+        a { color: var(--accent); }
+        section { margin-top: 2rem; padding-top: .5rem; border-top: 1px solid var(--line); }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: .45rem .65rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+        thead { background: #e6f0f3; }
+        code { overflow-wrap: anywhere; }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <p><a href="functional-design.html#tab1">現行機能設計書</a> / 詳細表示</p>
+            <h1>F-01 詳細表示: 贈り物配分</h1>
+            <p>複数の生徒へ手持ちの贈り物をどう分けるかを試算する。</p>
+        </header>
+
+        <nav aria-label="目次">
+            <h2>目次</h2>
+            <ol>
+                <li><a href="#screen">画面・操作</a></li>
+                <li><a href="#allocation">割り当てルール</a></li>
+                <li><a href="#implementation">実装方針・既存機能の流用</a></li>
+                <li><a href="#acceptance">受入条件</a></li>
+            </ol>
+        </nav>
+
+        <section id="screen">
+            <h2>1. 画面・操作</h2>
+            <p>「どれだけ上がる?」の「詳細表示」から開く。初期表示は通常モードで、贈り物配分の独立タブは設けない。</p>
+            <table aria-label="画面項目">
+                <thead><tr><th scope="col">項目</th><th scope="col">仕様</th></tr></thead>
+                <tbody>
+                    <tr><th scope="row">生徒・現在ランク</th><td>検索付きの生徒選択欄を初期1行表示する。行の追加・削除ができ、1〜6人を指定する。選択肢は既存機能と同じ単位で、同じCSV行は重複不可。各行の現在ランクは1〜100の整数、初期値は1。生徒を変更・解除した行はランクを1に戻す。未選択の行は計算対象外。</td></tr>
+                    <tr><th scope="row">贈り物の在庫</th><td>画像パス表の順に、贈り物の種類ごとに全生徒共通の在庫を入力する。選択ボックスも対象。各欄は0〜9999の整数、初期値は0。空欄は0として扱う。</td></tr>
+                    <tr><th scope="row">計算する / リセット</th><td>「計算する」で入力を検証し、配分を試算する。「リセット」は詳細表示の在庫だけを0に戻し、旧結果を消す。生徒と現在ランクは維持する。</td></tr>
+                    <tr><th scope="row">生徒別の結果</th><td>入力順に、生徒名、現在ランクから到達ランクまでの結果、有効経験値を表示し、生徒画像をテキストの背面に重ねて表示する。</td></tr>
+                    <tr><th scope="row">利用した贈り物一覧</th><td>全員の結果の下にまとめて表示する。生徒ごとに、割り当てた贈り物の画像・個数を表示する。配分がない生徒は「割り当てなし」と表示する。選択ボックスは箱の画像と個数で表示する。</td></tr>
+                    <tr><th scope="row">カフェ・スケジュール</th><td>カフェタッチ回数、スケジュール訪問回数、タッチ・訪問日数で計算する。活動経験値は全員に一律加算し、各生徒のランク100までの残り経験値を超えない。</td></tr>
+                    <tr><th scope="row">未使用在庫</th><td>入力数から割当数を差し引き、残りが1個以上の種類と個数を表示する。残りがなければ「未使用なし」。入力欄の在庫は書き換えない。</td></tr>
+                </tbody>
+            </table>
+            <p>生徒が未選択、重複選択、空欄の現在ランク、不正な数値の入力は、対象欄と理由を示して計算しない。在庫がすべて0でも結果を表示する。入力変更時は結果を消し、再計算を促す。目標ランク、途中まで獲得済みの経験値はこの機能の対象外。</p>
+        </section>
+
+        <section id="allocation">
+            <h2>2. 割り当てルール</h2>
+            <h3>配分の優先順位</h3>
+            <ol>
+                <li>ランク100未満の生徒と在庫のある贈り物を対象に、1個あたりの元の経験値が高い組み合わせから配る。</li>
+                <li>同点なら生徒の入力順を優先し、同じ生徒の贈り物は画面表示順に配る。</li>
+                <li>最後の1個でランク100を超える分は有効経験値に含めない。到達後はその生徒には配らず、残った在庫は次の候補に回す。</li>
+            </ol>
+            <p>この基準は、絆ランクの上昇幅の合計や全員への均等配分を最大化するものではない。経験値だけ増えてランクが変わらない場合や、一部の生徒に配分がない場合もある。</p>
+            <h3>配分の制約と経験値換算</h3>
+            <ul>
+                <li>贈り物ごとに、全生徒への割当数の合計は入力在庫以下。1個を分割したり、同じ1個を複数人に割り当てたりしない。余りは未使用とする。</li>
+                <li>生徒ごとの1個あたりの経験値は、<a href="../blue_archive_gift.csv">相性CSV</a>のコードと<a href="functional-design.html#common">既存の経験値表</a>から求める。選択ボックスは受取人ごとに、現行の対象となる橙35種類の中で最高の相性に換算する。同率の贈り物はCSVの列順で先頭を表示する。箱の消費は箱の在庫からのみ差し引く。</li>
+                <li>贈り物は活動経験値を加算した後に配分する。到達ランクは、現在ランクの累積経験値に活動と贈り物の有効経験値を足し、既存のランク逆引きで求める。</li>
+            </ul>
+        </section>
+
+        <section id="implementation">
+            <h2>3. 実装方針・既存機能の流用</h2>
+            <ul>
+                <li><a href="../index.html">画面</a>の「詳細表示」で通常・配分フォームを切り替える。入力状態はモードごとに保持し、在庫の同期処理は持たない。<a href="../calculate_bond.css">既存のCSS</a>のボタン・結果欄・レスポンシブ表示を再利用する。</li>
+                <li><a href="../calculate_bond.js">既存のJavaScript</a>から、読み込み済みのCSV、画像パス、贈り物別経験値表、<code>getCurrentEx</code> と <code>calculateEx2Lv</code> を利用する。在庫上限は贈り物1種類ごとに検証する。カテゴリ合計の上限も検証する <code>calculateGift2Ex</code> には配分結果を通さない。</li>
+                <li>画面処理と配分計算は分離する。計算部は生徒と在庫のスナップショットを受け取り、割当数・有効経験値・未使用数を返す。CSVが準備できるまで計算を無効にし、取得失敗や不整合は結果欄に表示する。既存タブの入力やデータは変更しない。</li>
+                <li><a href="../gift-allocation-solver.mjs">配分関数</a>は候補を優先順に一度並べ、在庫数とランク100に届く個数の小さい方をまとめて配る。在庫数にかかわらず同じルールを適用し、外部ソルバーは使わない。</li>
+            </ul>
+        </section>
+
+        <section id="acceptance">
+            <h2>4. 受入条件</h2>
+            <table aria-label="代表的な受入テスト">
+                <thead><tr><th scope="col">条件</th><th scope="col">期待結果</th></tr></thead>
+                <tbody>
+                    <tr><th scope="row">2人、贈り物1個</th><td>ランク上限の影響がなく、同じ贈り物でAが20、Bが60経験値を得る場合は、Bのみに1個を割り当てる。Aも結果に表示する。</td></tr>
+                    <tr><th scope="row">同点は表示順</th><td>上の生徒Aは残り120。表示順がX、Yで各1個、Aにはどちらも120、Bには順に120、20なら、AにXを、BにYを配る。</td></tr>
+                    <tr><th scope="row">上限超過を許容</th><td>残り経験値がAは160、Bは30で、Aに80・Bに120の品が3個なら、先にBに1個、残り2個をAに配る。有効経験値はAが160、Bが30。</td></tr>
+                    <tr><th scope="row">選択ボックスと通常在庫</th><td>選択ボックス1個と通常の贈り物1個を指定した場合、箱を換算しても通常品の入力在庫と混ざらず、双方の割当数と未使用数がそれぞれ入力数に一致する。</td></tr>
+                    <tr><th scope="row">入力エラー・空在庫</th><td>生徒の未選択、同一生徒の重複、範囲外のランク・在庫はエラー。1〜6人を正しく選び在庫が全て0なら、全員のランクを変えず配分なしと表示する。</td></tr>
+                    <tr><th scope="row">操作と回帰</th><td>同点を含め同じ入力で同じ結果となる。計算中に入力を変更しても古い結果を表示しない。既存4タブの入力・計算・生徒検索と、スマートフォンでのタブ切り替えを維持する。</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>

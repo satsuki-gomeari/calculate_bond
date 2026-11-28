@@ -72,6 +72,84 @@ nav {
     display: block;
 }
 
+#allocation-stock { display: flex; }
+#allocation-stock input { box-sizing: border-box; width: 100%; }
+#allocation-stock .allocation-stock-filled { background: #90d7f8; }
+.allocation-student {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(4.5rem, 24%, 8rem) auto;
+  align-items: end;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.allocation-student .custom-select-wrapper { min-width: 0; margin-bottom: 0; }
+.allocation-student .custom-select-trigger {
+  background: white;
+  box-sizing: border-box;
+  color: #333;
+  font: inherit;
+  text-align: left;
+}
+.allocation-student .custom-select-trigger span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.allocation-student .custom-select-arrow { flex-shrink: 0; }
+.allocation-student .custom-select-trigger, .allocation-rank-field input, .allocation-remove { height: 42px; }
+.allocation-rank-field input { box-sizing: border-box; width: 100%; margin-bottom: 0; }
+.allocation-remove { padding: 0 8px; white-space: nowrap; font-size: 1em; }
+#bond-detail button:disabled { opacity: .6; cursor: default; }
+#allocation-reset, .allocation-student .allocation-remove { background: #818181; }
+.allocation-stock-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 12px 0 8px; }
+#allocation-stock-label { font-size: inherit; margin: 0; }
+#allocation-file-status { max-width: calc(100vw - 80px); }
+.allocation-file-actions { display: flex; flex: none; gap: 8px; }
+button.allocation-icon-button { position: relative; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; }
+.allocation-icon-button > span {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 3;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #333;
+  color: #fff;
+  font-size: .75em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+}
+#allocation-add > span, #favorite-student-add > span { left: 0; right: auto; }
+.allocation-icon-button:enabled:hover > span,
+.allocation-icon-button:focus-visible > span { opacity: 1; }
+.allocation-results-list { padding-left: 1.4em; }
+.allocation-results-list img { vertical-align: middle; margin-right: .4em; }
+.allocation-student-result { min-height: 130px; }
+.allocation-result-student-name, .allocation-result-student-summary { position: relative; z-index: 2; }
+.allocation-result-student-image {
+  position: absolute;
+  top: -15px;
+  right: 0;
+  z-index: 1;
+  width: 130px;
+  height: 130px;
+  opacity: 0.6;
+  object-fit: contain;
+  object-position: right center;
+  pointer-events: none;
+}
+#bond-detail [aria-invalid="true"] { outline: 2px solid #a13232; }
+
+.favorite-student-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 6px;
+}
+.favorite-student-controls .custom-select-wrapper { min-width: 0; }
+.favorite-student-controls .custom-select-trigger { background: white; color: #333; font: inherit; text-align: left; }
+.favorite-student-controls .custom-select-trigger span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.favorite-student-controls .custom-select-arrow { flex-shrink: 0; }
+.favorite-student-controls .favorite-student-remove { background: #818181; white-space: nowrap; font-size: 1em; }
+#student-gift-type_form button:disabled { opacity: .6; cursor: default; }
+
 form label {
     display: block;
     margin: 10px 0 5px;
@@ -85,6 +163,10 @@ form input {
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1em;
+}
+
+.contact-link:link {
+  color: #3498db;
 }
 
 form button {
@@ -102,18 +184,9 @@ form button:hover {
   background: #2980b9;
 }
 
-#input_reset-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background: #818181;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.2em;
-}
-
-#input_reset-button:hover {
+#allocation-reset:enabled:hover,
+.allocation-remove:enabled:hover,
+.favorite-student-controls .favorite-student-remove:enabled:hover {
     background: #707070;
 }
 
@@ -145,16 +218,6 @@ form button:hover {
   color: black; /* 必要に応じて */
 }
 
-/* 画像を右上に配置、透明度調整 */
-.result-display-tab1-img {
-  position: absolute;
-  top: -15px;
-  right: 0;
-  width: 130px;
-  opacity: 0.6;  /* ←透明度 0.0 ～ 1.0 で調整可能 */
-  z-index: 1;
-}
-
 .grid-form {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -184,18 +247,6 @@ form button:hover {
   gap: 10px;
   flex-wrap: wrap;
   justify-content: flex-start;
-}
-
-#label-student-name-tab1 {
-  display: none;
-}
-
-#select-student-name-tab1 {
-  display: none;
-}
-
-#input_reset-button {
-  display: none;
 }
 
 .result-button-tab1 {
